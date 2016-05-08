@@ -6,6 +6,7 @@ test1::test1(QWidget *parent) :
     ui(new Ui::test1)
 {
     ui->setupUi(this);
+    sqlsh_Init();
 
     sqlsh_delete_default();
 
@@ -17,8 +18,6 @@ test1::test1(QWidget *parent) :
     app_add_jenis();
 
     ui->dateTrsTanggal->setDate(QDate::currentDate());
-
-    sqlsh_Init();
 }
 
 test1::~test1()
@@ -166,6 +165,11 @@ void test1::on_btnDbExisting_clicked()
         return;
     }
 
+    if(ui->cmbDbExisting->currentText().isEmpty()){
+        QMessageBox::critical(this,"Database Tidak ada","Nama Database tidak ada");
+        return;
+    }
+
     if(ui->btnDbExisting->text()=="Use"){
         dbase = ui->cmbDbExisting->currentText();
         app_tab_ability(true);
@@ -210,4 +214,11 @@ void test1::on_btnTrsSave_clicked()
 void test1::on_btnTrsNow_clicked()
 {
     ui->dateTrsTanggal->setDate(QDate::currentDate());
+}
+
+void test1::on_actionNewWindow_triggered()
+{
+    QTableView *view = new QTableView;
+    view->setWindowTitle("Databaseview");
+    view->show();
 }

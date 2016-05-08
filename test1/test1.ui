@@ -398,6 +398,7 @@
    <addaction name="actionExit"/>
    <addaction name="actionAbout"/>
    <addaction name="actionAboutQt"/>
+   <addaction name="actionNewWindow"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionExit">
@@ -413,6 +414,11 @@
   <action name="actionAboutQt">
    <property name="text">
     <string>AboutQt</string>
+   </property>
+  </action>
+  <action name="actionNewWindow">
+   <property name="text">
+    <string>newWindow</string>
    </property>
   </action>
  </widget>

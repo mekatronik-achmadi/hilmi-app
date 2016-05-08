@@ -12,6 +12,8 @@
 #include <QTextDocument>
 #include <QtPrintSupport/QPrinter>
 
+#include <QTableView>
+
 namespace Ui {
 class test1;
 }
@@ -64,6 +66,8 @@ private slots:
 
     void on_btnTrsNow_clicked();
 
+    void on_actionNewWindow_triggered();
+
 private:
     Ui::test1 *ui;
 
@@ -74,6 +78,8 @@ private:
     QSqlQuery dbquery;
     QString dbase;
     QString dtable;
+
+    QTableView *view;
 };
 
 #endif // TEST1_H
