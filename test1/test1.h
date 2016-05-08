@@ -6,6 +6,12 @@
 
 #include <QtSql>
 
+#include <QProcess>
+
+#include <QFileDialog>
+#include <QTextDocument>
+#include <QtPrintSupport/QPrinter>
+
 namespace Ui {
 class test1;
 }
@@ -20,17 +26,34 @@ public:
 
 private slots:
 
-    void db_create_connection(void);
+    void sqlProcessOnGoing(void);
+    void sqlProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void sqlProcessError(QProcess::ProcessError error);
+
+    void sqlsh_Init(void);
+    void sqlsh_Args(void);
+    void sqlsh_Exec(void);
+
+    void sqlsh_list_database(void);
+
+    void db_open_database(void);
+    void db_export_pdf(void);
 
     void on_actionExit_triggered();
     void on_actionAboutQt_triggered();
-    void on_pushButton_clicked();
+
+    void on_rbDbNew_clicked();
+
+    void on_rbDbExisting_clicked();
 
 private:
     Ui::test1 *ui;
 
+    QProcess sqlProc;
+    QStringList sqlArgs;
+
     QSqlDatabase db;
-    QSqlQuery myquery;
+    QSqlQuery dbquery;
     QString dbase;
     QString dtable;
 };
