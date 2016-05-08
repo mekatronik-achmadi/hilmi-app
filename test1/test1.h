@@ -35,16 +35,34 @@ private slots:
     void sqlsh_Exec(void);
 
     void sqlsh_list_database(void);
+    void sqlsh_delete_database(QString dbname);
+    void sqlsh_delete_default();
+    void sqlsh_create_database(QString dbname);
+    void sqlsh_create_tables(QString dbname);
+
+    void sqlsh_insert_data(QString dbname, QString deskrip, QString nilai, int jenis, QString tanggal);
 
     void db_open_database(void);
     void db_export_pdf(void);
 
+    void app_manage_db_disable(void);
+    void app_tab_ability(bool ability);
+    void app_add_jenis(void);
+
     void on_actionExit_triggered();
     void on_actionAboutQt_triggered();
-
     void on_rbDbNew_clicked();
-
     void on_rbDbExisting_clicked();
+    void on_rbtDbDelete_clicked();
+    void on_btnDbDelete_clicked();
+    void on_btnDbNew_clicked();
+    void on_btnDbExisting_clicked();
+
+    void on_btnTrsClear_clicked();
+
+    void on_btnTrsSave_clicked();
+
+    void on_btnTrsNow_clicked();
 
 private:
     Ui::test1 *ui;

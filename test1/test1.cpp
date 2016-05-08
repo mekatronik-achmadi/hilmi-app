@@ -7,7 +7,16 @@ test1::test1(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    sqlsh_delete_default();
+
     ui->tabMain->setTabText(0,"Database");
+    ui->tabMain->setTabText(1,"Input");
+
+    app_tab_ability(false);
+
+    app_add_jenis();
+
+    ui->dateTrsTanggal->setDate(QDate::currentDate());
 
     sqlsh_Init();
 }
@@ -15,6 +24,54 @@ test1::test1(QWidget *parent) :
 test1::~test1()
 {
     delete ui;
+}
+
+void test1::app_manage_db_disable(){
+    ui->txtDbNew->setEnabled(false);
+    ui->btnDbNew->setEnabled(false);
+
+    ui->cmbDbExisting->setEnabled(false);
+    ui->btnDbExisting->setEnabled(false);
+
+    ui->cmbDbDelete->setEnabled(false);
+    ui->btnDbDelete->setEnabled(false);
+}
+
+void test1::app_tab_ability(bool ability){
+
+    ui->tabMain->setTabEnabled(1,ability);
+}
+
+void test1::app_add_jenis(){
+    QStringList jenis;
+
+    jenis << "PEMBELIAN BAHAN BAKU TUNAI";
+    jenis << "PEMBELIAN BAHAN BAKU KREDIT";
+    jenis << "RETUR PEMBELIAN TUNAI";
+    jenis << "RETUR PEMBELIAN KREDIT";
+    jenis << "PENJUALAN TUNAI";
+    jenis << "PENJUALAN KREDIT";
+    jenis << "RETUR PENJUALAN TUNAI";
+    jenis << "RETUR PENJUALAN KREDIT";
+    jenis << "PEMBAYARAN GAJI";
+    jenis << "PEMBAYARAN TELP, AIR & LISTRIK";
+    jenis << "PEMBAYARAN UTANG MELALUI KAS DI TANGAN";
+    jenis << "PEMBAYARAN TRANSPORTASI";
+    jenis << "DISETOR MODAL TUNAI";
+    jenis << "PENYETORAN TUNAI KE BANK";
+    jenis << "PINJAMAN DARI BANK";
+    jenis << "PEMBAYARAN UTANG MELALUI BANK";
+    jenis << "DITERIMA PEMBAYARAN PIUTANG";
+    jenis << "DIBELI PERALATAN";
+    jenis << "DEPRESIASI PERALATAN";
+    jenis << "SEWA BANGUNAN DIBAYAR DIMUKA";
+    jenis << "PEMBAYARAN SEWA BANGUNAN";
+    jenis << "BEBAN GARANSI ESTIMASI";
+    jenis << "BEBAN GARANSI REALISASI";
+    jenis << "BEBAN GARANSI TAK TEREALISASI";
+
+    ui->cmbTrsJenis->clear();
+    ui->cmbTrsJenis->insertItems(0,jenis);
 }
 
 void test1::on_actionExit_triggered()
@@ -31,17 +88,19 @@ void test1::on_actionAboutQt_triggered()
 
 void test1::on_rbDbNew_clicked()
 {
+    app_manage_db_disable();
     ui->txtDbNew->setEnabled(true);
     ui->btnDbNew->setEnabled(true);
-
-    ui->cmbDbExisting->setEnabled(false);
-    ui->btnDbExisting->setEnabled(false);
 
     return;
 }
 
 void test1::on_rbDbExisting_clicked()
 {
+    app_manage_db_disable();
+    ui->cmbDbExisting->setEnabled(true);
+    ui->btnDbExisting->setEnabled(true);
+
     sqlsh_list_database();
 
     QStringList strlist = ui->txtSqlOutput->toPlainText().split(QRegExp("\n"),QString::SkipEmptyParts);
@@ -49,11 +108,106 @@ void test1::on_rbDbExisting_clicked()
     ui->cmbDbExisting->clear();
     ui->cmbDbExisting->insertItems(0,strlist);
 
-    ui->txtDbNew->setEnabled(false);
-    ui->btnDbNew->setEnabled(false);
+    return;
+}
 
-    ui->cmbDbExisting->setEnabled(true);
-    ui->btnDbExisting->setEnabled(true);
+void test1::on_rbtDbDelete_clicked()
+{
+    app_manage_db_disable();
+    ui->cmbDbDelete->setEnabled(true);
+    ui->btnDbDelete->setEnabled(true);
+
+    sqlsh_list_database();
+
+    QStringList strlist = ui->txtSqlOutput->toPlainText().split(QRegExp("\n"),QString::SkipEmptyParts);
+
+    ui->cmbDbDelete->clear();
+    ui->cmbDbDelete->insertItems(0,strlist);
 
     return;
+}
+
+void test1::on_btnDbDelete_clicked()
+{
+
+    QString namadb= ui->cmbDbDelete->currentText();
+
+    if(QMessageBox::warning(this,"Yakin?","yakin akan mnghapus data " + namadb + " selamanya ?!!", QMessageBox::Ok | QMessageBox::Cancel)==QMessageBox::Ok){
+
+        sqlsh_delete_database(namadb);
+
+        sqlsh_list_database();
+
+        QStringList strlist = ui->txtSqlOutput->toPlainText().split(QRegExp("\n"),QString::SkipEmptyParts);
+
+        ui->cmbDbDelete->clear();
+        ui->cmbDbDelete->insertItems(0,strlist);
+
+        QMessageBox::information(this,"Terhapus Selamanya", "Data " + namadb + " selamanya !!");
+    }
+
+}
+
+void test1::on_btnDbNew_clicked()
+{
+    QString namadb = ui->txtDbNew->text();
+
+    sqlsh_create_database(namadb);
+    sqlsh_create_tables(namadb);
+
+    QMessageBox::information(this,"Sudah tercipta", "Data " + namadb + " tercipta !!");
+}
+
+void test1::on_btnDbExisting_clicked()
+{
+
+    if(ui->cmbDbExisting->currentText()=="information_schema"){
+        QMessageBox::critical(this,"Database Terlarang","silahkan pilih database lain atau buat baru");
+        return;
+    }
+
+    if(ui->btnDbExisting->text()=="Use"){
+        dbase = ui->cmbDbExisting->currentText();
+        app_tab_ability(true);
+        app_manage_db_disable();
+        ui->btnDbExisting->setEnabled(true);
+        ui->btnDbExisting->setText("Unuse");
+    }
+    else if(ui->btnDbExisting->text()=="Unuse"){
+        dbase = "";
+        app_manage_db_disable();
+        app_tab_ability(false);
+        ui->cmbDbExisting->setEnabled(true);
+        ui->btnDbExisting->setEnabled(true);
+        ui->btnDbExisting->setText("Use");
+    }
+}
+
+void test1::on_btnTrsClear_clicked()
+{
+    ui->txtTrsDeskrip->clear();
+    ui->txtTrsNilai->clear();
+    ui->cmbTrsJenis->setCurrentIndex(0);
+    ui->dateTrsTanggal->setDate(QDate::currentDate());
+}
+
+void test1::on_btnTrsSave_clicked()
+{
+
+    sqlsh_insert_data(dbase,
+                      ui->txtTrsDeskrip->text() ,
+                      ui->txtTrsNilai->text(),
+                      ui->cmbTrsJenis->currentIndex(),
+                      ui->dateTrsTanggal->text()
+                      );
+
+    ui->txtTrsDeskrip->clear();
+    ui->txtTrsNilai->clear();
+    ui->cmbTrsJenis->setCurrentIndex(0);
+
+}
+
+void test1::on_btnTrsNow_clicked()
+{
+    ui->dateTrsTanggal->setDate(QDate::currentDate());
 }

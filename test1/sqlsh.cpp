@@ -38,8 +38,7 @@ void test1::sqlsh_Args(){
     ui->txtSqlOutput->clear();
     sqlArgs.clear();
 
-    sqlArgs << "-N";
-    sqlArgs << "-B";
+    sqlArgs << "-BN";
     sqlArgs << "-uroot";
     sqlArgs << "-e";
 
@@ -62,4 +61,85 @@ void test1::sqlsh_list_database(){
     sqlProc.waitForFinished();
 
     return;
+}
+
+void test1::sqlsh_delete_database(QString dbname){
+    sqlsh_Args();
+
+    QString dbargs;
+    dbargs += "drop database ";
+    dbargs += dbname;
+
+    sqlArgs << dbargs;
+
+    sqlsh_Exec();
+
+    sqlProc.waitForFinished();
+
+    return;
+}
+
+void test1::sqlsh_delete_default(){
+    sqlsh_delete_database("information_schema");
+    sqlsh_delete_database("mysql");
+    sqlsh_delete_database("test");
+}
+
+void test1::sqlsh_create_database(QString dbname){
+    sqlsh_Args();
+
+    QString dbargs;
+    dbargs += "create database ";
+    dbargs += dbname;
+
+    sqlArgs << dbargs;
+
+    sqlsh_Exec();
+
+    sqlProc.waitForFinished();
+
+    return;
+}
+
+void test1::sqlsh_create_tables(QString dbname){
+    sqlsh_Args();
+
+    QString tblargs;
+    tblargs += "use " + dbname +";";
+    tblargs +=  "create table main_data(";
+    tblargs += "id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,";
+    tblargs += "tanggal DATE NOT NULL,";
+    tblargs += "transaksi VARCHAR(32) NOT NULL,";
+    tblargs += "harga VARCHAR(32) NOT NULL,";
+    tblargs += "jenis INT NOT NULL";
+    tblargs += ")";
+
+    sqlArgs << tblargs;
+
+    sqlsh_Exec();
+
+    sqlProc.waitForFinished();
+
+    return;
+}
+
+void test1::sqlsh_insert_data(QString dbname, QString deskrip, QString nilai, int jenis, QString tanggal){
+    sqlsh_Args();
+
+    QString insargs;
+    insargs += "use " + dbname +";";
+    insargs += "insert into `main_data` (`id`,`tanggal`,`transaksi`,`harga`,`jenis`) VALUES (NULL,";
+    insargs += "\"" + tanggal + "\"" + ",";
+    insargs += "\"" + deskrip + "\"" + ",";
+    insargs += "\"" + nilai + "\"" + ",";
+    insargs += "\"" + QString::number(jenis) + "\"" + ")";
+
+    sqlArgs << insargs;
+
+    sqlsh_Exec();
+
+    sqlProc.waitForFinished();
+
+    return;
+
 }
