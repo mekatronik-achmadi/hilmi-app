@@ -33,7 +33,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tabDatabase">
      <attribute name="title">
@@ -197,8 +197,8 @@
      <widget class="QGroupBox" name="grpExportImport">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>160</y>
+        <x>0</x>
+        <y>170</y>
         <width>311</width>
         <height>101</height>
        </rect>
@@ -505,20 +505,6 @@
         <string>PDF</string>
        </property>
       </widget>
-      <zorder>label</zorder>
-      <zorder>txtTrsDeskrip</zorder>
-      <zorder>cmbTrsJenis</zorder>
-      <zorder>label_2</zorder>
-      <zorder>label_3</zorder>
-      <zorder>txtTrsNilai</zorder>
-      <zorder>dateTrsTanggal</zorder>
-      <zorder>label_4</zorder>
-      <zorder>btnTrsSave</zorder>
-      <zorder>btnTrsClear</zorder>
-      <zorder>btnTrsNow</zorder>
-      <zorder>btnTrsView</zorder>
-      <zorder>btnTrsPDF</zorder>
-      <zorder>txtSqlOutput</zorder>
      </widget>
     </widget>
    </widget>

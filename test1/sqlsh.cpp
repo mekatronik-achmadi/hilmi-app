@@ -168,7 +168,23 @@ QStringList test1::sqlsh_get_main_data_one_column(QString dbname,QString field){
 void test1::sqlsh_export_database(QString dbname, QString filedest){
 
     QProcess sqldumproc;
+
+#ifdef ON_LINUX
     sqldumproc.start("bash -c \"mysqldump -uroot " + dbname + " > " + filedest + "\"");
+#endif
+
+#ifdef ON_WINDOWS
+    QStringList sqldumprocargs;
+
+    sqldumprocargs << "/c";
+    sqldumprocargs << "mysqldump";
+    sqldumprocargs << "-uroot";
+    sqldumprocargs << dbname;
+    sqldumprocargs << ">";
+    sqldumprocargs << filedest;
+
+    sqldumproc.start("cmd",sqldumprocargs);
+#endif
 
     sqldumproc.waitForFinished();
     return;
@@ -176,7 +192,23 @@ void test1::sqlsh_export_database(QString dbname, QString filedest){
 
 void test1::sqlsh_import_database(QString dbname, QString filesrc){
     QProcess sqlimportproc;
+
+#ifdef ON_LINUX
     sqlimportproc.start("bash -c \"mysql -uroot " + dbname + " < " + filesrc + "\"");
+#endif
+
+#ifdef ON_WINDOWS
+    QStringList sqlimportprocargs;
+
+        sqlimportprocargs <<  "/c";
+        sqlimportprocargs <<  "mysql";
+        sqlimportprocargs <<  "-uroot";
+        sqlimportprocargs <<  dbname;
+        sqlimportprocargs <<  "<";
+        sqlimportprocargs <<  filesrc;
+
+        sqlimportproc.start("cmd",sqlimportprocargs);
+#endif
 
     sqlimportproc.waitForFinished();
     return;

@@ -6,6 +6,7 @@ test1::test1(QWidget *parent) :
     ui(new Ui::test1)
 {
     ui->setupUi(this);
+    ui->txtSqlOutput->setVisible(false);
     sqlsh_Init();
     sqlsh_delete_default();
 

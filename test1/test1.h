@@ -11,6 +11,9 @@
 #include <QTextDocument>
 #include <QtPrintSupport/QPrinter>
 
+//#define ON_WINDOWS
+#define ON_LINUX
+
 namespace Ui {
 class test1;
 }
