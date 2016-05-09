@@ -6,6 +6,8 @@ void test1::sqlsh_Init(){
     QObject::connect(&sqlProc, SIGNAL(readyReadStandardOutput()),this, SLOT(sqlProcessOnGoing()));
     QObject::connect(&sqlProc, SIGNAL(finished(int, QProcess::ExitStatus)),this,SLOT(sqlProcessFinished(int, QProcess::ExitStatus)));
     QObject::connect(&sqlProc, SIGNAL(error(QProcess::ProcessError)),this,SLOT(sqlProcessError(QProcess::ProcessError)));
+
+    return;
 }
 
 void test1::sqlProcessOnGoing(){
@@ -84,6 +86,7 @@ void test1::sqlsh_delete_default(){
     sqlsh_delete_database("performance_schema");
     sqlsh_delete_database("mysql");
     sqlsh_delete_database("test");
+    return;
 }
 
 void test1::sqlsh_create_database(QString dbname){
@@ -161,3 +164,21 @@ QStringList test1::sqlsh_get_main_data_one_column(QString dbname,QString field){
     QStringList result = ui->txtSqlOutput->toPlainText().split(QRegExp("\n"),QString::SkipEmptyParts);
     return result;
 }
+
+void test1::sqlsh_export_database(QString dbname, QString filedest){
+
+    QProcess sqldumproc;
+    sqldumproc.start("bash -c \"mysqldump -uroot " + dbname + " > " + filedest + "\"");
+
+    sqldumproc.waitForFinished();
+    return;
+}
+
+void test1::sqlsh_import_database(QString dbname, QString filesrc){
+    QProcess sqlimportproc;
+    sqlimportproc.start("bash -c \"mysql -uroot " + dbname + " < " + filesrc + "\"");
+
+    sqlimportproc.waitForFinished();
+    return;
+}
+

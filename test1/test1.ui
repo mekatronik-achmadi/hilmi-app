@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>637</width>
+    <width>586</width>
     <height>457</height>
    </rect>
   </property>
@@ -28,7 +28,7 @@
      <rect>
       <x>10</x>
       <y>0</y>
-      <width>611</width>
+      <width>561</width>
       <height>391</height>
      </rect>
     </property>
@@ -185,6 +185,116 @@
         <rect>
          <x>0</x>
          <y>100</y>
+         <width>311</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="grpExportImport">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>160</y>
+        <width>311</width>
+        <height>101</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Export/Import Data</string>
+      </property>
+      <widget class="QComboBox" name="cmbDbExport">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>20</y>
+         <width>111</width>
+         <height>24</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_5">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>71</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Source</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btnDbExport">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>220</x>
+         <y>20</y>
+         <width>61</width>
+         <height>26</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Export</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btnDbImport">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>220</x>
+         <y>70</y>
+         <width>61</width>
+         <height>26</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Import</string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="cmbDbImport">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>70</y>
+         <width>111</width>
+         <height>24</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_6">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>70</y>
+         <width>71</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Destination</string>
+       </property>
+      </widget>
+      <widget class="Line" name="line_2">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>50</y>
          <width>311</width>
          <height>16</height>
         </rect>
@@ -382,13 +492,40 @@
         <string>View</string>
        </property>
       </widget>
+      <widget class="QPushButton" name="btnTrsPDF">
+       <property name="geometry">
+        <rect>
+         <x>350</x>
+         <y>160</y>
+         <width>85</width>
+         <height>26</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>PDF</string>
+       </property>
+      </widget>
+      <zorder>label</zorder>
+      <zorder>txtTrsDeskrip</zorder>
+      <zorder>cmbTrsJenis</zorder>
+      <zorder>label_2</zorder>
+      <zorder>label_3</zorder>
+      <zorder>txtTrsNilai</zorder>
+      <zorder>dateTrsTanggal</zorder>
+      <zorder>label_4</zorder>
+      <zorder>btnTrsSave</zorder>
+      <zorder>btnTrsClear</zorder>
+      <zorder>btnTrsNow</zorder>
+      <zorder>btnTrsView</zorder>
+      <zorder>btnTrsPDF</zorder>
+      <zorder>txtSqlOutput</zorder>
      </widget>
     </widget>
    </widget>
    <widget class="QPlainTextEdit" name="txtSqlOutput">
     <property name="geometry">
      <rect>
-      <x>400</x>
+      <x>350</x>
       <y>30</y>
       <width>221</width>
       <height>351</height>
@@ -411,7 +548,6 @@
    <addaction name="actionExit"/>
    <addaction name="actionAbout"/>
    <addaction name="actionAboutQt"/>
-   <addaction name="actionNewWindow"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionExit">
@@ -427,11 +563,6 @@
   <action name="actionAboutQt">
    <property name="text">
     <string>AboutQt</string>
-   </property>
-  </action>
-  <action name="actionNewWindow">
-   <property name="text">
-    <string>newWindow</string>
    </property>
   </action>
  </widget>
