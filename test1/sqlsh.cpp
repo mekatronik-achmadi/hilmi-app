@@ -200,14 +200,14 @@ void test1::sqlsh_import_database(QString dbname, QString filesrc){
 #ifdef ON_WINDOWS
     QStringList sqlimportprocargs;
 
-        sqlimportprocargs <<  "/c";
-        sqlimportprocargs <<  "mysql";
-        sqlimportprocargs <<  "-uroot";
-        sqlimportprocargs <<  dbname;
-        sqlimportprocargs <<  "<";
-        sqlimportprocargs <<  filesrc;
+    sqlimportprocargs <<  "/c";
+    sqlimportprocargs <<  "mysql";
+    sqlimportprocargs <<  "-uroot";
+    sqlimportprocargs <<  dbname;
+    sqlimportprocargs <<  "<";
+    sqlimportprocargs <<  filesrc;
 
-        sqlimportproc.start("cmd",sqlimportprocargs);
+    sqlimportproc.start("cmd",sqlimportprocargs);
 #endif
 
     sqlimportproc.waitForFinished();

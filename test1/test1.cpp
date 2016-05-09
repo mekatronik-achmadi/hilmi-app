@@ -10,8 +10,6 @@ test1::test1(QWidget *parent) :
     sqlsh_Init();
     sqlsh_delete_default();
 
-    ui->tabMain->setTabText(0,"Database");
-    ui->tabMain->setTabText(1,"Input");
     app_tab_ability(false);
     app_add_jenis();
     ui->dateTrsTanggal->setDate(QDate::currentDate());
@@ -24,20 +22,12 @@ test1::~test1()
     delete ui;
 }
 
-void test1::app_manage_db_disable(){
-    ui->txtDbNew->setEnabled(false);
-    ui->btnDbNew->setEnabled(false);
-
-    ui->cmbDbExisting->setEnabled(false);
-    ui->btnDbExisting->setEnabled(false);
-
-    ui->cmbDbDelete->setEnabled(false);
-    ui->btnDbDelete->setEnabled(false);
-}
-
 void test1::app_tab_ability(bool ability){
-
     ui->tabMain->setTabEnabled(1,ability);
+    ui->tabMain->setTabEnabled(2,ability);
+    ui->tabMain->setTabEnabled(3,ability);
+    ui->actionMain_Data_as_Table->setEnabled(ability);
+    ui->actionMain_Data_as_PDF->setEnabled(ability);
 }
 
 QString test1::app_text_jenis(int num_jenis){
@@ -102,6 +92,10 @@ void test1::app_add_jenis(){
 
     ui->cmbTrsJenis->clear();
     ui->cmbTrsJenis->insertItems(0,jenis);
+    ui->cmbEditJenis->clear();
+    ui->cmbEditJenis->insertItems(0,jenis);
+    ui->cmbCariJenis->clear();
+    ui->cmbCariJenis->insertItems(0,jenis);
 }
 
 void test1::app_refresh_database(){
@@ -115,6 +109,102 @@ void test1::app_refresh_database(){
     ui->cmbDbImport->insertItems(0,sqlsh_list_database());
 }
 
+void test1::app_table_maindata(){
+    int i;
+
+    QTableWidget *dataview = new QTableWidget;
+    dataview->setColumnCount(5);
+
+    QStringList datid = sqlsh_get_main_data_one_column(dbase,"id");
+    dataview->setRowCount(datid.count());
+    for(i=0;i<datid.count();i++){
+        QTableWidgetItem *isi = new QTableWidgetItem(datid[i]);
+        isi->setFlags(isi->flags() ^ Qt::ItemIsEditable );
+        dataview->setItem(i,0,isi);
+    }
+
+    QStringList dattanggal = sqlsh_get_main_data_one_column(dbase,"tanggal");
+    for(i=0;i<datid.count();i++){
+        QTableWidgetItem *isi = new QTableWidgetItem(dattanggal[i]);
+        isi->setFlags(isi->flags() ^ Qt::ItemIsEditable );
+        dataview->setItem(i,1,isi);
+    }
+
+    QStringList dattransaksi = sqlsh_get_main_data_one_column(dbase,"transaksi");
+    for(i=0;i<datid.count();i++){
+        QTableWidgetItem *isi = new QTableWidgetItem(dattransaksi[i]);
+        isi->setFlags(isi->flags() ^ Qt::ItemIsEditable );
+        dataview->setItem(i,2,isi);;
+    }
+
+    QStringList datharga = sqlsh_get_main_data_one_column(dbase,"harga");
+    for(i=0;i<datid.count();i++){
+        QTableWidgetItem *isi = new QTableWidgetItem(datharga[i]);
+        isi->setFlags(isi->flags() ^ Qt::ItemIsEditable );
+        dataview->setItem(i,3,isi);
+    }
+
+    QStringList datjenis = sqlsh_get_main_data_one_column(dbase,"jenis");
+    for(i=0;i<datid.count();i++){
+        QString jenis_num = datjenis[i];
+        QTableWidgetItem *isi = new QTableWidgetItem(app_text_jenis(jenis_num.toInt()));
+        isi->setFlags(isi->flags() ^ Qt::ItemIsEditable );
+        dataview->setItem(i,4,isi);
+    }
+
+    QStringList tabellabel;
+    tabellabel << "Data ID";
+    tabellabel << "Tanggal";
+    tabellabel << "Transaksi";
+    tabellabel << "Harga";
+    tabellabel << "Jenis";
+    dataview->setHorizontalHeaderLabels(tabellabel);
+    dataview->setWindowTitle("Rekap Data");
+    dataview->setFixedWidth(550);
+    dataview->setFixedHeight(200);
+    dataview->show();
+}
+
+void test1::app_pdf_maindata(){
+    QString fileName = QFileDialog::getSaveFileName(this, "Export PDF", QString(), "*.pdf");
+    if(fileName.isEmpty()){return;}
+    if (QFileInfo(fileName).suffix().isEmpty()) { fileName.append(".pdf"); }
+
+    QStringList datid = sqlsh_get_main_data_one_column(dbase,"id");
+    QStringList dattanggal = sqlsh_get_main_data_one_column(dbase,"tanggal");
+    QStringList dattransaksi = sqlsh_get_main_data_one_column(dbase,"transaksi");
+    QStringList datharga = sqlsh_get_main_data_one_column(dbase,"harga");
+    QStringList datjenis = sqlsh_get_main_data_one_column(dbase,"jenis");
+
+    int i;
+    QString textdata;
+    for(i=0;i<datid.count();i++){
+        QString jenis_num = datjenis[i];
+        textdata +=     dattanggal[i] + " | " +
+                        dattransaksi[i] + " | " +
+                        datharga[i] + " | " +
+                        app_text_jenis(jenis_num.toInt()) + "\n";
+    }
+
+
+    QPrinter printer(QPrinter::PrinterResolution);
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setPaperSize(QPrinter::A4);
+    printer.setOutputFileName(fileName);
+
+    QTextDocument doc;
+    doc.setPlainText(textdata);
+    doc.setPageSize(printer.pageRect().size()); // This is necessary if you want to hide the page number
+    doc.print(&printer);
+}
+
+void test1::app_cari_disable(){
+    ui->txtCariDeskrip->setEnabled(false);
+    ui->txtCariNilai->setEnabled(false);
+    ui->cmbCariJenis->setEnabled(false);
+    ui->dateCariTanggal->setEnabled(false);
+}
+
 void test1::on_actionExit_triggered()
 {
     QApplication::quit();
@@ -126,32 +216,14 @@ void test1::on_actionAboutQt_triggered()
     return;
 }
 
-void test1::on_rbDbNew_clicked()
+void test1::on_actionMain_Data_as_Table_triggered()
 {
-    app_manage_db_disable();
-    ui->txtDbNew->setEnabled(true);
-    ui->txtDbNew->clear();
-    ui->btnDbNew->setEnabled(true);
-
-    return;
+    app_table_maindata();
 }
 
-void test1::on_rbDbExisting_clicked()
+void test1::on_actionMain_Data_as_PDF_triggered()
 {
-    app_manage_db_disable();
-    ui->cmbDbExisting->setEnabled(true);
-    ui->btnDbExisting->setEnabled(true);
-
-    return;
-}
-
-void test1::on_rbtDbDelete_clicked()
-{
-    app_manage_db_disable();
-    ui->cmbDbDelete->setEnabled(true);
-    ui->btnDbDelete->setEnabled(true);
-
-    return;
+    app_pdf_maindata();
 }
 
 void test1::on_btnDbDelete_clicked()
@@ -203,16 +275,13 @@ void test1::on_btnDbExisting_clicked()
     if(ui->btnDbExisting->text()=="Use"){
         dbase = ui->cmbDbExisting->currentText();
         app_tab_ability(true);
-        app_manage_db_disable();
-        ui->btnDbExisting->setEnabled(true);
+        ui->cmbDbExisting->setEnabled(false);
         ui->btnDbExisting->setText("Unuse");
     }
     else if(ui->btnDbExisting->text()=="Unuse"){
         dbase = "";
-        app_manage_db_disable();
         app_tab_ability(false);
         ui->cmbDbExisting->setEnabled(true);
-        ui->btnDbExisting->setEnabled(true);
         ui->btnDbExisting->setText("Use");
     }
 }
@@ -276,87 +345,40 @@ void test1::on_btnTrsNow_clicked()
     ui->dateTrsTanggal->setDate(QDate::currentDate());
 }
 
-void test1::on_btnTrsView_clicked()
+
+void test1::on_rbtCariDeskrip_clicked()
 {
-    int i;
-
-    QTableWidget *dataview = new QTableWidget;
-    dataview->setColumnCount(4);
-
-    QStringList datid = sqlsh_get_main_data_one_column(dbase,"id");
-    dataview->setRowCount(datid.count());
-
-    QStringList dattanggal = sqlsh_get_main_data_one_column(dbase,"tanggal");
-    for(i=0;i<datid.count();i++){
-        QTableWidgetItem *isi = new QTableWidgetItem(dattanggal[i]);
-        isi->setFlags(isi->flags() ^ Qt::ItemIsEditable );
-        dataview->setItem(i,0,isi);
-    }
-
-    QStringList dattransaksi = sqlsh_get_main_data_one_column(dbase,"transaksi");
-    for(i=0;i<datid.count();i++){
-        QTableWidgetItem *isi = new QTableWidgetItem(dattransaksi[i]);
-        isi->setFlags(isi->flags() ^ Qt::ItemIsEditable );
-        dataview->setItem(i,1,isi);;
-    }
-
-    QStringList datharga = sqlsh_get_main_data_one_column(dbase,"harga");
-    for(i=0;i<datid.count();i++){
-        QTableWidgetItem *isi = new QTableWidgetItem(datharga[i]);
-        isi->setFlags(isi->flags() ^ Qt::ItemIsEditable );
-        dataview->setItem(i,2,isi);
-    }
-
-    QStringList datjenis = sqlsh_get_main_data_one_column(dbase,"jenis");
-    for(i=0;i<datid.count();i++){
-        QString jenis_num = datjenis[i];
-        QTableWidgetItem *isi = new QTableWidgetItem(app_text_jenis(jenis_num.toInt()));
-        isi->setFlags(isi->flags() ^ Qt::ItemIsEditable );
-        dataview->setItem(i,3,isi);
-    }
-
-    QStringList tabellabel;
-    tabellabel << "Tanggal";
-    tabellabel << "Transaksi";
-    tabellabel << "Harga";
-    tabellabel << "Jenis";
-    dataview->setHorizontalHeaderLabels(tabellabel);
-    dataview->setWindowTitle("Rekap Data");
-    dataview->setFixedHeight(200);
-    dataview->setFixedWidth(450);
-    dataview->show();
+    app_cari_disable();
+    ui->txtCariDeskrip->setEnabled(true);
 }
 
-void test1::on_btnTrsPDF_clicked()
+void test1::on_rbtCariNilai_clicked()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, "Export PDF", QString(), "*.pdf");
-    if(fileName.isEmpty()){return;}
-    if (QFileInfo(fileName).suffix().isEmpty()) { fileName.append(".pdf"); }
+    app_cari_disable();
+    ui->txtCariNilai->setEnabled(true);
+}
 
-    QStringList datid = sqlsh_get_main_data_one_column(dbase,"id");
-    QStringList dattanggal = sqlsh_get_main_data_one_column(dbase,"tanggal");
-    QStringList dattransaksi = sqlsh_get_main_data_one_column(dbase,"transaksi");
-    QStringList datharga = sqlsh_get_main_data_one_column(dbase,"harga");
-    QStringList datjenis = sqlsh_get_main_data_one_column(dbase,"jenis");
+void test1::on_rbtCariJenis_clicked()
+{
+    app_cari_disable();
+    ui->cmbCariJenis->setEnabled(true);
+}
 
-    int i;
-    QString textdata;
-    for(i=0;i<datid.count();i++){
-        QString jenis_num = datjenis[i];
-        textdata +=     dattanggal[i] + " | " +
-                        dattransaksi[i] + " | " +
-                        datharga[i] + " | " +
-                        app_text_jenis(jenis_num.toInt()) + "\n";
-    }
+void test1::on_rbtCariTanggal_clicked()
+{
+    app_cari_disable();
+    ui->dateCariTanggal->setEnabled(true);
+}
 
+void test1::on_btnCariNow_clicked()
+{
+    ui->dateCariTanggal->setDate(QDate::currentDate());
+}
 
-    QPrinter printer(QPrinter::PrinterResolution);
-    printer.setOutputFormat(QPrinter::PdfFormat);
-    printer.setPaperSize(QPrinter::A4);
-    printer.setOutputFileName(fileName);
-
-    QTextDocument doc;
-    doc.setPlainText(textdata);
-    doc.setPageSize(printer.pageRect().size()); // This is necessary if you want to hide the page number
-    doc.print(&printer);
+void test1::on_btnCariClear_clicked()
+{
+    ui->txtCariDeskrip->clear();
+    ui->txtCariNilai->clear();
+    ui->cmbCariJenis->setCurrentIndex(0);
+    ui->dateTrsTanggal->setDate(QDate::currentDate());
 }
