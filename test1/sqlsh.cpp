@@ -51,7 +51,7 @@ void test1::sqlsh_Exec(){
     return;
 }
 
-void test1::sqlsh_list_database(){
+QStringList test1::sqlsh_list_database(){
     sqlsh_Args();
 
     sqlArgs << "show databases;";
@@ -60,7 +60,8 @@ void test1::sqlsh_list_database(){
 
     sqlProc.waitForFinished();
 
-    return;
+    QStringList result = ui->txtSqlOutput->toPlainText().split(QRegExp("\n"),QString::SkipEmptyParts);
+    return result;
 }
 
 void test1::sqlsh_delete_database(QString dbname){
@@ -80,7 +81,7 @@ void test1::sqlsh_delete_database(QString dbname){
 }
 
 void test1::sqlsh_delete_default(){
-    sqlsh_delete_database("information_schema");
+    sqlsh_delete_database("performance_schema");
     sqlsh_delete_database("mysql");
     sqlsh_delete_database("test");
 }
@@ -142,4 +143,21 @@ void test1::sqlsh_insert_data(QString dbname, QString deskrip, QString nilai, in
 
     return;
 
+}
+
+QStringList test1::sqlsh_get_main_data_one_column(QString dbname,QString field){
+    sqlsh_Args();
+
+    QString getargs;
+    getargs += "use " + dbname +";";
+    getargs += "select " + field + " from main_data";
+
+    sqlArgs << getargs;
+
+    sqlsh_Exec();
+
+    sqlProc.waitForFinished();
+
+    QStringList result = ui->txtSqlOutput->toPlainText().split(QRegExp("\n"),QString::SkipEmptyParts);
+    return result;
 }

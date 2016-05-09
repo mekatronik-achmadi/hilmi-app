@@ -369,6 +369,19 @@
         <string>Now</string>
        </property>
       </widget>
+      <widget class="QPushButton" name="btnTrsView">
+       <property name="geometry">
+        <rect>
+         <x>240</x>
+         <y>160</y>
+         <width>85</width>
+         <height>26</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>View</string>
+       </property>
+      </widget>
      </widget>
     </widget>
    </widget>

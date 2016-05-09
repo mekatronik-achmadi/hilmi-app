@@ -12,7 +12,7 @@
 #include <QTextDocument>
 #include <QtPrintSupport/QPrinter>
 
-#include <QTableView>
+#include <QTableWidget>
 
 namespace Ui {
 class test1;
@@ -36,13 +36,14 @@ private slots:
     void sqlsh_Args(void);
     void sqlsh_Exec(void);
 
-    void sqlsh_list_database(void);
+    QStringList sqlsh_list_database(void);
     void sqlsh_delete_database(QString dbname);
     void sqlsh_delete_default();
     void sqlsh_create_database(QString dbname);
     void sqlsh_create_tables(QString dbname);
 
     void sqlsh_insert_data(QString dbname, QString deskrip, QString nilai, int jenis, QString tanggal);
+    QStringList sqlsh_get_main_data_one_column(QString dbname,QString field);
 
     void db_open_database(void);
     void db_export_pdf(void);
@@ -53,6 +54,7 @@ private slots:
 
     void on_actionExit_triggered();
     void on_actionAboutQt_triggered();
+
     void on_rbDbNew_clicked();
     void on_rbDbExisting_clicked();
     void on_rbtDbDelete_clicked();
@@ -61,12 +63,10 @@ private slots:
     void on_btnDbExisting_clicked();
 
     void on_btnTrsClear_clicked();
-
     void on_btnTrsSave_clicked();
-
     void on_btnTrsNow_clicked();
 
-    void on_actionNewWindow_triggered();
+    void on_btnTrsView_clicked();
 
 private:
     Ui::test1 *ui;

@@ -100,12 +100,8 @@ void test1::on_rbDbExisting_clicked()
     ui->cmbDbExisting->setEnabled(true);
     ui->btnDbExisting->setEnabled(true);
 
-    sqlsh_list_database();
-
-    QStringList strlist = ui->txtSqlOutput->toPlainText().split(QRegExp("\n"),QString::SkipEmptyParts);
-
     ui->cmbDbExisting->clear();
-    ui->cmbDbExisting->insertItems(0,strlist);
+    ui->cmbDbExisting->insertItems(0,sqlsh_list_database());
 
     return;
 }
@@ -116,12 +112,8 @@ void test1::on_rbtDbDelete_clicked()
     ui->cmbDbDelete->setEnabled(true);
     ui->btnDbDelete->setEnabled(true);
 
-    sqlsh_list_database();
-
-    QStringList strlist = ui->txtSqlOutput->toPlainText().split(QRegExp("\n"),QString::SkipEmptyParts);
-
     ui->cmbDbDelete->clear();
-    ui->cmbDbDelete->insertItems(0,strlist);
+    ui->cmbDbDelete->insertItems(0,sqlsh_list_database());
 
     return;
 }
@@ -130,6 +122,11 @@ void test1::on_btnDbDelete_clicked()
 {
 
     QString namadb= ui->cmbDbDelete->currentText();
+
+    if(namadb=="information_schema"){
+        QMessageBox::critical(this,"Database Terlarang","silahkan pilih database lain");
+        return;
+    }
 
     if(QMessageBox::warning(this,"Yakin?","yakin akan mnghapus data " + namadb + " selamanya ?!!", QMessageBox::Ok | QMessageBox::Cancel)==QMessageBox::Ok){
 
@@ -216,9 +213,52 @@ void test1::on_btnTrsNow_clicked()
     ui->dateTrsTanggal->setDate(QDate::currentDate());
 }
 
-void test1::on_actionNewWindow_triggered()
+void test1::on_btnTrsView_clicked()
 {
-    QTableView *view = new QTableView;
-    view->setWindowTitle("Databaseview");
-    view->show();
+    int i;
+
+    QTableWidget *dataview = new QTableWidget;
+    dataview->setColumnCount(4);
+
+    QStringList datid = sqlsh_get_main_data_one_column(dbase,"id");
+    dataview->setRowCount(datid.count());
+
+    QStringList dattanggal = sqlsh_get_main_data_one_column(dbase,"tanggal");
+    for(i=0;i<dattanggal.count();i++){
+        QTableWidgetItem *isi = new QTableWidgetItem(dattanggal[i]);
+        isi->setFlags(isi->flags() ^ Qt::ItemIsEditable );
+        dataview->setItem(i,0,isi);
+    }
+
+    QStringList dattransaksi = sqlsh_get_main_data_one_column(dbase,"transaksi");
+    for(i=0;i<dattransaksi.count();i++){
+        QTableWidgetItem *isi = new QTableWidgetItem(dattransaksi[i]);
+        isi->setFlags(isi->flags() ^ Qt::ItemIsEditable );
+        dataview->setItem(i,1,isi);;
+    }
+
+    QStringList datharga = sqlsh_get_main_data_one_column(dbase,"harga");
+    for(i=0;i<datharga.count();i++){
+        QTableWidgetItem *isi = new QTableWidgetItem(datharga[i]);
+        isi->setFlags(isi->flags() ^ Qt::ItemIsEditable );
+        dataview->setItem(i,2,isi);
+    }
+
+    QStringList datjenis = sqlsh_get_main_data_one_column(dbase,"jenis");
+    for(i=0;i<datjenis.count();i++){
+        QTableWidgetItem *isi = new QTableWidgetItem(datjenis[i]);
+        isi->setFlags(isi->flags() ^ Qt::ItemIsEditable );
+        dataview->setItem(i,3,isi);
+    }
+
+    QStringList tabellabel;
+    tabellabel << "Tanggal";
+    tabellabel << "Transaksi";
+    tabellabel << "Harga";
+    tabellabel << "Jenis";
+    dataview->setHorizontalHeaderLabels(tabellabel);
+    dataview->setWindowTitle("Rekap Data");
+    dataview->setFixedHeight(200);
+    dataview->setFixedWidth(450);
+    dataview->show();
 }
