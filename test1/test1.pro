@@ -14,7 +14,8 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         test1.cpp \
-        sqlsh.cpp
+        sqlsh.cpp \
+        app.cpp
 
 HEADERS  += test1.h
 

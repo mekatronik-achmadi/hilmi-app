@@ -116,6 +116,8 @@ void test1::sqlsh_create_tables(QString dbname){
     tblargs += "transaksi VARCHAR(32) NOT NULL,";
     tblargs += "harga VARCHAR(32) NOT NULL,";
     tblargs += "jenis INT NOT NULL";
+    tblargs += "debet INT NOT NULL";
+    tblargs += "kredit INT NOT NULL";
     tblargs += ")";
 
     sqlArgs << tblargs;
@@ -127,16 +129,18 @@ void test1::sqlsh_create_tables(QString dbname){
     return;
 }
 
-void test1::sqlsh_insert_data(QString dbname, QString deskrip, QString nilai, int jenis, QString tanggal){
+void test1::sqlsh_insert_data(QString dbname, QString tanggal, QString deskrip, QString nilai, int jenis, int debet, int kredit){
     sqlsh_Args();
 
     QString insargs;
     insargs += "use " + dbname +";";
-    insargs += "insert into `main_data` (`id`,`tanggal`,`transaksi`,`harga`,`jenis`) VALUES (NULL,";
+    insargs += "insert into `main_data` (`id`,`tanggal`,`transaksi`,`harga`,`jenis`,`debet`,`kredit`) VALUES (NULL,";
     insargs += "\"" + tanggal + "\"" + ",";
     insargs += "\"" + deskrip + "\"" + ",";
     insargs += "\"" + nilai + "\"" + ",";
     insargs += "\"" + QString::number(jenis) + "\"" + ")";
+    insargs += "\"" + QString::number(debet) + "\"" + ",";
+    insargs += "\"" + QString::number(kredit) + "\"" + ",";
 
     sqlArgs << insargs;
 

@@ -44,27 +44,29 @@ private slots:
     void sqlsh_import_database(QString dbname,QString filesrc);
     void sqlsh_create_tables(QString dbname);
 
-    void sqlsh_insert_data(QString dbname, QString deskrip, QString nilai, int jenis, QString tanggal);
+    void sqlsh_insert_data(QString dbname, QString tanggal, QString deskrip, QString nilai, int jenis, int debet, int kredit);
     QStringList sqlsh_get_main_data_one_column(QString dbname,QString field);
 
-    void app_tab_ability(bool ability);
-    void app_add_jenis(void);
-    QString app_text_jenis(int num_jenis);
-    void app_refresh_database(void);
     void app_table_maindata(void);
     void app_pdf_maindata(void);
-    void app_cari_disable(void);
-
     void on_actionExit_triggered();
     void on_actionAboutQt_triggered();
     void on_actionMain_Data_as_Table_triggered();
     void on_actionMain_Data_as_PDF_triggered();
 
+    void app_tab_ability(bool ability);
+    void app_refresh_database(void);
+    void app_cari_disable(void);
     void on_btnDbDelete_clicked();
     void on_btnDbNew_clicked();
     void on_btnDbExisting_clicked();
     void on_btnDbExport_clicked();
     void on_btnDbImport_clicked();
+
+    void app_add_jenis(void);
+    QString app_text_jenis(int num_jenis);
+    int app_jenis_debet(int num_jenis);
+    int app_jenis_kredit(int num_jenis);
 
     void on_btnTrsClear_clicked();
     void on_btnTrsSave_clicked();
@@ -74,11 +76,7 @@ private slots:
     void on_rbtCariNilai_clicked();
     void on_rbtCariJenis_clicked();
     void on_rbtCariTanggal_clicked();
-
-
-
     void on_btnCariNow_clicked();
-
     void on_btnCariClear_clicked();
 
 private:
