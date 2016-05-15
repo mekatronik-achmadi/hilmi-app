@@ -5,6 +5,8 @@ test1::test1(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::test1)
 {
+    app_version = "1.0";
+
     ui->setupUi(this);
     ui->txtSqlOutput->setVisible(false);
     sqlsh_Init();
@@ -41,19 +43,33 @@ void test1::on_actionAbout_triggered()
     QString mysqlver = sqlsh_sqlVer();
 
     QString aboutmsg;
-    aboutmsg += "using: \n";
+
+    aboutmsg += "Simple Accounting Program \n";
+    aboutmsg += "version " + app_version + "\n";
+    aboutmsg += "\n";
+
+    aboutmsg += "Credit: \n";
+    aboutmsg += "Accounting Scheme written by Hilmi F. \n";
+    aboutmsg += "GUI Program written by Achmadi \n";
+    aboutmsg += "\n";
+
+    aboutmsg += "Using: \n";
     aboutmsg += "Qt version " + qtver + "\n";
     aboutmsg += "MySQL version " + mysqlver;
 
 #if (defined (Q_OS_LINUX))
-    QString bashver = app_cmdver();
-    aboutmsg += "BASH version " + bashver;
+    QString bashver = app_bashver();
+    aboutmsg += "Bash version " + bashver;
 
     QString osver = app_osver();
     aboutmsg += "Linux version " + osver;
 
     aboutmsg += "\n";
 #elif (defined (Q_OS_WIN))
+    QString osver = app_osver();
+    aboutmsg += "OS version " + osver;
+
+    aboutmsg += "\n";
 #endif
 
     QMessageBox::information(this,"About Me",aboutmsg);

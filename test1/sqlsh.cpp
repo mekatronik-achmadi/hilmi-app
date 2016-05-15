@@ -1,8 +1,6 @@
 #include "test1.h"
 #include "ui_test1.h"
 
-//======================================================================================================
-
 void test1::sqlProcessOnGoing(){
     QByteArray newData = sqlProc.readAllStandardOutput();
     ui->txtSqlOutput->appendPlainText(QString::fromLocal8Bit(newData));
@@ -129,24 +127,24 @@ void test1::sqlsh_create_database(QString dbname){
 
 void test1::sqlsh_export_database(QString dbname, QString filedest){
 
-    QProcess sqldumproc;
+    QProcess sqldumpproc;
 
 #if (defined (Q_OS_LINUX))
-    sqldumproc.start("bash -c \"mysqldump -uroot " + dbname + " > " + filedest + "\"");
+    sqldumpproc.start("bash -c \"mysqldump -uroot " + dbname + " > " + filedest + "\"");
 #elif (defined (Q_OS_WIN))
-    QStringList sqldumprocargs;
+    QStringList sqldumpprocargs;
 
-    sqldumprocargs << "/c";
-    sqldumprocargs << "mysqldump";
-    sqldumprocargs << "-uroot";
-    sqldumprocargs << dbname;
-    sqldumprocargs << ">";
-    sqldumprocargs << filedest;
+    sqldumpprocargs << "/c";
+    sqldumpprocargs << "mysqldump";
+    sqldumpprocargs << "-uroot";
+    sqldumpprocargs << dbname;
+    sqldumpprocargs << ">";
+    sqldumpprocargs << filedest;
 
-    sqldumproc.start("cmd",sqldumprocargs);
+    sqldumpproc.start("cmd",sqldumpprocargs);
 #endif
 
-    sqldumproc.waitForFinished();
+    sqldumpproc.waitForFinished();
     return;
 }
 

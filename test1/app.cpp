@@ -1,13 +1,10 @@
 #include "test1.h"
 #include "ui_test1.h"
 
-QString test1::app_cmdver(){
+QString test1::app_bashver(){
     ui->txtSqlOutput->clear();
 
-#if (defined (Q_OS_LINUX))
     sqlProc.start("bash -c \"echo $BASH_VERSION\"");
-#elif (defined (Q_OS_WIN))
-#endif
 
     sqlProc.waitForFinished();
 
@@ -16,16 +13,29 @@ QString test1::app_cmdver(){
 }
 
 QString test1::app_osver(){
+    QString result;
+
     ui->txtSqlOutput->clear();
 
 #if (defined (Q_OS_LINUX))
     sqlProc.start("bash -c \"uname -r\"");
-#elif (defined (Q_OS_WIN))
-#endif
 
     sqlProc.waitForFinished();
 
-    QString result = ui->txtSqlOutput->toPlainText();
+    QString result_linux = ui->txtSqlOutput->toPlainText();
+
+    result = result_linux;
+#elif (defined (Q_OS_WIN))
+
+    sqlProc.start("cmd /c ver");
+
+    sqlProc.waitForFinished();
+
+    QStringList result_win = ui->txtSqlOutput->toPlainText().split(QRegExp("\n"),QString::SkipEmptyParts);;
+
+    result = result_win[0];
+#endif
+
     return result;
 }
 
