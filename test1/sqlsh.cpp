@@ -131,7 +131,7 @@ void test1::sqlsh_export_database(QString dbname, QString filedest){
 
     QProcess sqldumproc;
 
-#if (defined (Q_OS_UNIX))
+#if (defined (Q_OS_LINUX))
     sqldumproc.start("bash -c \"mysqldump -uroot " + dbname + " > " + filedest + "\"");
 #elif (defined (Q_OS_WIN))
     QStringList sqldumprocargs;
@@ -153,7 +153,7 @@ void test1::sqlsh_export_database(QString dbname, QString filedest){
 void test1::sqlsh_import_database(QString dbname, QString filesrc){
     QProcess sqlimportproc;
 
-#if (defined (Q_OS_UNIX))
+#if (defined (Q_OS_LINUX))
     sqlimportproc.start("bash -c \"mysql -uroot " + dbname + " < " + filesrc + "\"");
 #elif (defined (Q_OS_WIN))
     QStringList sqlimportprocargs;

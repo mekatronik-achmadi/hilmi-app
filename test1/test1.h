@@ -45,6 +45,8 @@ private slots:
     void sqlsh_insert_data(QString dbname, QString tanggal, QString deskrip, QString nilai, int jenis, int debet, int kredit);
     QStringList sqlsh_get_main_data_one_column(QString dbname,QString field);
 
+    QString app_cmdver(void);
+    QString app_osver(void);
     void app_table_maindata(void);
     void app_pdf_maindata(void);
     void on_actionExit_triggered();

@@ -1,6 +1,34 @@
 #include "test1.h"
 #include "ui_test1.h"
 
+QString test1::app_cmdver(){
+    ui->txtSqlOutput->clear();
+
+#if (defined (Q_OS_LINUX))
+    sqlProc.start("bash -c \"echo $BASH_VERSION\"");
+#elif (defined (Q_OS_WIN))
+#endif
+
+    sqlProc.waitForFinished();
+
+    QString result = ui->txtSqlOutput->toPlainText();
+    return result;
+}
+
+QString test1::app_osver(){
+    ui->txtSqlOutput->clear();
+
+#if (defined (Q_OS_LINUX))
+    sqlProc.start("bash -c \"uname -r\"");
+#elif (defined (Q_OS_WIN))
+#endif
+
+    sqlProc.waitForFinished();
+
+    QString result = ui->txtSqlOutput->toPlainText();
+    return result;
+}
+
 void test1::app_table_maindata(){
     int i;
 

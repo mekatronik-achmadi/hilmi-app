@@ -43,7 +43,18 @@ void test1::on_actionAbout_triggered()
     QString aboutmsg;
     aboutmsg += "using: \n";
     aboutmsg += "Qt version " + qtver + "\n";
-    aboutmsg += "MySQL version " + mysqlver + "\n";
+    aboutmsg += "MySQL version " + mysqlver;
+
+#if (defined (Q_OS_LINUX))
+    QString bashver = app_cmdver();
+    aboutmsg += "BASH version " + bashver;
+
+    QString osver = app_osver();
+    aboutmsg += "Linux version " + osver;
+
+    aboutmsg += "\n";
+#elif (defined (Q_OS_WIN))
+#endif
 
     QMessageBox::information(this,"About Me",aboutmsg);
 }
