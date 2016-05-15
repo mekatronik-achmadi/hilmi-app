@@ -10,11 +10,17 @@ test1::test1(QWidget *parent) :
     sqlsh_Init();
     sqlsh_delete_default();
 
-    app_tab_ability(false);
-    app_add_jenis();
-    ui->dateTrsTanggal->setDate(QDate::currentDate());
-
     app_refresh_database();
+
+    app_tab_ability(false);
+
+    app_cmb_jenis();
+    app_cmb_debet();
+    app_cmb_kredit();
+
+    ui->dateTrsTanggal->setDate(QDate::currentDate());
+    ui->dateCariTanggal->setDate(QDate::currentDate());
+    ui->dateEditTanggal->setDate(QDate::currentDate());
 }
 
 test1::~test1()
@@ -22,15 +28,24 @@ test1::~test1()
     delete ui;
 }
 
+//======================================================================================================
+
 void test1::on_actionExit_triggered()
 {
     QApplication::quit();
 }
 
-void test1::on_actionAboutQt_triggered()
+void test1::on_actionAbout_triggered()
 {
-    QApplication::aboutQt();
-    return;
+    QString qtver= QT_VERSION_STR;
+    QString mysqlver = sqlsh_sqlVer();
+
+    QString aboutmsg;
+    aboutmsg += "using: \n";
+    aboutmsg += "Qt version " + qtver + "\n";
+    aboutmsg += "MySQL version " + mysqlver + "\n";
+
+    QMessageBox::information(this,"About Me",aboutmsg);
 }
 
 void test1::on_actionMain_Data_as_Table_triggered()
@@ -42,6 +57,8 @@ void test1::on_actionMain_Data_as_PDF_triggered()
 {
     app_pdf_maindata();
 }
+
+//======================================================================================================
 
 void test1::on_btnDbDelete_clicked()
 {
@@ -133,6 +150,8 @@ void test1::on_btnDbImport_clicked()
     }
 }
 
+//======================================================================================================
+
 void test1::on_btnTrsClear_clicked()
 {
     ui->txtTrsDeskrip->clear();
@@ -164,6 +183,7 @@ void test1::on_btnTrsNow_clicked()
     ui->dateTrsTanggal->setDate(QDate::currentDate());
 }
 
+//======================================================================================================
 
 void test1::on_rbtCariDeskrip_clicked()
 {
@@ -181,6 +201,18 @@ void test1::on_rbtCariJenis_clicked()
 {
     app_cari_disable();
     ui->cmbCariJenis->setEnabled(true);
+}
+
+void test1::on_rbtCariDebet_clicked()
+{
+    app_cari_disable();
+    ui->cmbCariDebet->setEnabled(true);
+}
+
+void test1::on_rbtCariKredit_clicked()
+{
+    app_cari_disable();
+    ui->cmbCariKredit->setEnabled(true);
 }
 
 void test1::on_rbtCariTanggal_clicked()

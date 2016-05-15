@@ -35,6 +35,7 @@ private slots:
     void sqlsh_Init(void);
     void sqlsh_Args(void);
     void sqlsh_Exec(void);
+    QString sqlsh_sqlVer(void);
 
     QStringList sqlsh_list_database(void);
     void sqlsh_delete_default();
@@ -50,7 +51,7 @@ private slots:
     void app_table_maindata(void);
     void app_pdf_maindata(void);
     void on_actionExit_triggered();
-    void on_actionAboutQt_triggered();
+    void on_actionAbout_triggered();
     void on_actionMain_Data_as_Table_triggered();
     void on_actionMain_Data_as_PDF_triggered();
 
@@ -63,10 +64,12 @@ private slots:
     void on_btnDbExport_clicked();
     void on_btnDbImport_clicked();
 
-    void app_add_jenis(void);
-    QString app_text_jenis(int num_jenis);
+    void app_cmb_jenis(void);
+    void app_cmb_debet(void);
+    void app_cmb_kredit(void);
     int app_jenis_debet(int num_jenis);
     int app_jenis_kredit(int num_jenis);
+    QString app_text_jenis(int num_jenis);
 
     void on_btnTrsClear_clicked();
     void on_btnTrsSave_clicked();
@@ -75,6 +78,8 @@ private slots:
     void on_rbtCariDeskrip_clicked();
     void on_rbtCariNilai_clicked();
     void on_rbtCariJenis_clicked();
+    void on_rbtCariDebet_clicked();
+    void on_rbtCariKredit_clicked();
     void on_rbtCariTanggal_clicked();
     void on_btnCariNow_clicked();
     void on_btnCariClear_clicked();

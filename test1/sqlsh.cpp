@@ -1,14 +1,7 @@
 #include "test1.h"
 #include "ui_test1.h"
 
-void test1::sqlsh_Init(){
-
-    QObject::connect(&sqlProc, SIGNAL(readyReadStandardOutput()),this, SLOT(sqlProcessOnGoing()));
-    QObject::connect(&sqlProc, SIGNAL(finished(int, QProcess::ExitStatus)),this,SLOT(sqlProcessFinished(int, QProcess::ExitStatus)));
-    QObject::connect(&sqlProc, SIGNAL(error(QProcess::ProcessError)),this,SLOT(sqlProcessError(QProcess::ProcessError)));
-
-    return;
-}
+//======================================================================================================
 
 void test1::sqlProcessOnGoing(){
     QByteArray newData = sqlProc.readAllStandardOutput();
@@ -36,6 +29,17 @@ void test1::sqlProcessError(QProcess::ProcessError error){
     return;
 }
 
+//======================================================================================================
+
+void test1::sqlsh_Init(){
+
+    QObject::connect(&sqlProc, SIGNAL(readyReadStandardOutput()),this, SLOT(sqlProcessOnGoing()));
+    QObject::connect(&sqlProc, SIGNAL(finished(int, QProcess::ExitStatus)),this,SLOT(sqlProcessFinished(int, QProcess::ExitStatus)));
+    QObject::connect(&sqlProc, SIGNAL(error(QProcess::ProcessError)),this,SLOT(sqlProcessError(QProcess::ProcessError)));
+
+    return;
+}
+
 void test1::sqlsh_Args(){
     ui->txtSqlOutput->clear();
     sqlArgs.clear();
@@ -53,6 +57,24 @@ void test1::sqlsh_Exec(){
     return;
 }
 
+QString test1::sqlsh_sqlVer(){
+    sqlsh_Args();
+
+    QString verargs;
+    verargs += "select version()";
+
+    sqlArgs << verargs;
+
+    sqlsh_Exec();
+
+    sqlProc.waitForFinished();
+
+    QString result = ui->txtSqlOutput->toPlainText();
+    return result;
+}
+
+//======================================================================================================
+
 QStringList test1::sqlsh_list_database(){
     sqlsh_Args();
 
@@ -64,6 +86,13 @@ QStringList test1::sqlsh_list_database(){
 
     QStringList result = ui->txtSqlOutput->toPlainText().split(QRegExp("\n"),QString::SkipEmptyParts);
     return result;
+}
+
+void test1::sqlsh_delete_default(){
+    sqlsh_delete_database("performance_schema");
+    sqlsh_delete_database("mysql");
+    sqlsh_delete_database("test");
+    return;
 }
 
 void test1::sqlsh_delete_database(QString dbname){
@@ -82,13 +111,6 @@ void test1::sqlsh_delete_database(QString dbname){
     return;
 }
 
-void test1::sqlsh_delete_default(){
-    sqlsh_delete_database("performance_schema");
-    sqlsh_delete_database("mysql");
-    sqlsh_delete_database("test");
-    return;
-}
-
 void test1::sqlsh_create_database(QString dbname){
     sqlsh_Args();
 
@@ -103,70 +125,6 @@ void test1::sqlsh_create_database(QString dbname){
     sqlProc.waitForFinished();
 
     return;
-}
-
-void test1::sqlsh_create_tables(QString dbname){
-    sqlsh_Args();
-
-    QString tblargs;
-    tblargs += "use " + dbname +";";
-    tblargs +=  "create table main_data(";
-    tblargs += "id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,";
-    tblargs += "tanggal DATE NOT NULL,";
-    tblargs += "transaksi VARCHAR(32) NOT NULL,";
-    tblargs += "harga VARCHAR(32) NOT NULL,";
-    tblargs += "jenis INT NOT NULL";
-    tblargs += "debet INT NOT NULL";
-    tblargs += "kredit INT NOT NULL";
-    tblargs += ")";
-
-    sqlArgs << tblargs;
-
-    sqlsh_Exec();
-
-    sqlProc.waitForFinished();
-
-    return;
-}
-
-void test1::sqlsh_insert_data(QString dbname, QString tanggal, QString deskrip, QString nilai, int jenis, int debet, int kredit){
-    sqlsh_Args();
-
-    QString insargs;
-    insargs += "use " + dbname +";";
-    insargs += "insert into `main_data` (`id`,`tanggal`,`transaksi`,`harga`,`jenis`,`debet`,`kredit`) VALUES (NULL,";
-    insargs += "\"" + tanggal + "\"" + ",";
-    insargs += "\"" + deskrip + "\"" + ",";
-    insargs += "\"" + nilai + "\"" + ",";
-    insargs += "\"" + QString::number(jenis) + "\"" + ")";
-    insargs += "\"" + QString::number(debet) + "\"" + ",";
-    insargs += "\"" + QString::number(kredit) + "\"" + ",";
-
-    sqlArgs << insargs;
-
-    sqlsh_Exec();
-
-    sqlProc.waitForFinished();
-
-    return;
-
-}
-
-QStringList test1::sqlsh_get_main_data_one_column(QString dbname,QString field){
-    sqlsh_Args();
-
-    QString getargs;
-    getargs += "use " + dbname +";";
-    getargs += "select " + field + " from main_data";
-
-    sqlArgs << getargs;
-
-    sqlsh_Exec();
-
-    sqlProc.waitForFinished();
-
-    QStringList result = ui->txtSqlOutput->toPlainText().split(QRegExp("\n"),QString::SkipEmptyParts);
-    return result;
 }
 
 void test1::sqlsh_export_database(QString dbname, QString filedest){
@@ -218,3 +176,68 @@ void test1::sqlsh_import_database(QString dbname, QString filesrc){
     return;
 }
 
+void test1::sqlsh_create_tables(QString dbname){
+    sqlsh_Args();
+
+    QString tblargs;
+    tblargs += "use " + dbname +";";
+    tblargs +=  "create table main_data(";
+    tblargs += "id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,";
+    tblargs += "tanggal DATE NOT NULL,";
+    tblargs += "transaksi VARCHAR(32) NOT NULL,";
+    tblargs += "harga VARCHAR(32) NOT NULL,";
+    tblargs += "jenis INT NOT NULL";
+    tblargs += "debet INT NOT NULL";
+    tblargs += "kredit INT NOT NULL";
+    tblargs += ")";
+
+    sqlArgs << tblargs;
+
+    sqlsh_Exec();
+
+    sqlProc.waitForFinished();
+
+    return;
+}
+
+//======================================================================================================
+
+void test1::sqlsh_insert_data(QString dbname, QString tanggal, QString deskrip, QString nilai, int jenis, int debet, int kredit){
+    sqlsh_Args();
+
+    QString insargs;
+    insargs += "use " + dbname +";";
+    insargs += "insert into `main_data` (`id`,`tanggal`,`transaksi`,`harga`,`jenis`,`debet`,`kredit`) VALUES (NULL,";
+    insargs += "\"" + tanggal + "\"" + ",";
+    insargs += "\"" + deskrip + "\"" + ",";
+    insargs += "\"" + nilai + "\"" + ",";
+    insargs += "\"" + QString::number(jenis) + "\"" + ")";
+    insargs += "\"" + QString::number(debet) + "\"" + ",";
+    insargs += "\"" + QString::number(kredit) + "\"" + ",";
+
+    sqlArgs << insargs;
+
+    sqlsh_Exec();
+
+    sqlProc.waitForFinished();
+
+    return;
+
+}
+
+QStringList test1::sqlsh_get_main_data_one_column(QString dbname,QString field){
+    sqlsh_Args();
+
+    QString getargs;
+    getargs += "use " + dbname +";";
+    getargs += "select " + field + " from main_data";
+
+    sqlArgs << getargs;
+
+    sqlsh_Exec();
+
+    sqlProc.waitForFinished();
+
+    QStringList result = ui->txtSqlOutput->toPlainText().split(QRegExp("\n"),QString::SkipEmptyParts);
+    return result;
+}
