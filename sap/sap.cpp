@@ -127,3 +127,32 @@ void sap::on_btnDbImport_clicked()
         mysql->import_database(ui->cmbDbImport->currentText(),fileName);
     }
 }
+
+void sap::on_btnTrsSave_clicked()
+{
+    mysql->data_insert( ui->cmbDbExisting->currentText(),
+                        ui->dateTrsTanggal->text(),
+                        ui->txtTrsDeskrip->text() ,
+                        ui->txtTrsNilai->text(),
+                        ui->cmbTrsJenis->currentIndex(),
+                        mydata->jenis2debet(ui->cmbTrsJenis->currentIndex()),
+                        mydata->jenis2kredit(ui->cmbTrsJenis->currentIndex())
+                      );
+
+    ui->txtTrsDeskrip->clear();
+    ui->txtTrsNilai->clear();
+    ui->cmbTrsJenis->setCurrentIndex(0);
+}
+
+void sap::on_btnTrsClear_clicked()
+{
+    ui->txtTrsDeskrip->clear();
+    ui->txtTrsNilai->clear();
+    ui->cmbTrsJenis->setCurrentIndex(0);
+    ui->dateTrsTanggal->setDate(QDate::currentDate());
+}
+
+void sap::on_btnTrsNow_clicked()
+{
+    ui->dateTrsTanggal->setDate(QDate::currentDate());
+}

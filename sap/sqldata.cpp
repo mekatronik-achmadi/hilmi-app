@@ -34,6 +34,7 @@ int sqldata::jenis2debet(int num_jenis){
     case 22: result=14;break;
     case 23: result=14;break;
     }
+
     return result;
 }
 
@@ -66,6 +67,7 @@ int sqldata::jenis2kredit(int num_jenis){
     case 22: result=0;break;
     case 23: result=3;break;
     }
+
     return result;
 }
 
@@ -100,6 +102,50 @@ QString sqldata::jenis2text(int num_jenis){
     case 22: result="BEBAN GARANSI REALISASI";break;
     case 23: result="BEBAN GARANSI TAK TEREALISASI";break;
     }
+
+    return result;
+}
+
+QString sqldata::debet2text(int num_jenis){
+    QString result;
+
+    switch(num_jenis){
+    case 0: result="PEMBELIAN";break;
+    case 1: result="KAS DI TANGAN";break;
+    case 2: result="UTANG USAHA";break;
+    case 3: result="PIUTANG USAHA";break;
+    case 4: result="RETUR PENJUALAN";break;
+    case 5: result="BEBAN GAJI";break;
+    case 6: result="BEBAN TELP, AIR & LISTRIK";break;
+    case 7: result="BEBAN TRANSPORTASI";break;
+    case 8: result="KAS DI BANK";break;
+    case 9: result="PERALATAN";break;
+    case 10: result="BEBAN PENYUSUTAN PERALATAN";break;
+    case 11: result="SEWA BANGUNAN DI BAYAR DIMUKA";break;
+    case 12: result="BEBAN SEWA BANGUNAN";break;
+    case 13: result="BEBAN GARANSI ";break;
+    case 14: result="CADANGAN GARANSI ";break;
+    }
+
+    return result;
+}
+
+QString sqldata::kredit2text(int num_jenis){
+    QString result;
+
+    switch(num_jenis){
+    case 0: result="KAS DI TANGAN";break;
+    case 1: result="UTANG USAHA ";break;
+    case 2: result="RETUR PEMBELIAN ";break;
+    case 3: result="PENJUALAN ";break;
+    case 4: result="PIUTANG USAHA";break;
+    case 5: result="MODAL PEMILIK ";break;
+    case 6: result="KAS DI BANK";break;
+    case 7: result="AKUMULASI PENYUSUTAN PERALATAN";break;
+    case 8: result="SEWA BANGUNAN DIBAYAR DI MUKA";break;
+    case 9: result="CADANGAN GARANSI";break;
+    }
+
     return result;
 }
 
@@ -150,14 +196,16 @@ void sqldata::view_table(QString dbase){
 
     QStringList datdebet = mysql->data_get_one_column(dbase,"debet");
     for(i=0;i<datid.count();i++){
-        QTableWidgetItem *isi = new QTableWidgetItem(datdebet[i]);
+        QString debet_num = datdebet[i];
+        QTableWidgetItem *isi = new QTableWidgetItem(debet2text(debet_num.toInt()));
         isi->setFlags(isi->flags() ^ Qt::ItemIsEditable );
         dataview->setItem(i,5,isi);
     }
 
     QStringList datkredit = mysql->data_get_one_column(dbase,"kredit");
     for(i=0;i<datid.count();i++){
-        QTableWidgetItem *isi = new QTableWidgetItem(datkredit[i]);
+        QString kredit_num = datkredit[i];
+        QTableWidgetItem *isi = new QTableWidgetItem(kredit2text(kredit_num.toInt()));
         isi->setFlags(isi->flags() ^ Qt::ItemIsEditable );
         dataview->setItem(i,6,isi);
     }
@@ -194,12 +242,14 @@ void sqldata::view_pdf(QString dbase){
     QString textdata;
     for(i=0;i<datid.count();i++){
         QString jenis_num = datjenis[i];
+        QString debet_num = datdebet[i];
+        QString kredit_num = datkredit[i];
         textdata +=     dattanggal[i] + " | " +
                         dattransaksi[i] + " | " +
                         datharga[i] + " | " +
                         jenis2text(jenis_num.toInt()) + " | " +
-                        datdebet[i] + " | " +
-                        datkredit[i] + "\n";
+                        debet2text(debet_num.toInt()) + " | " +
+                        kredit2text(kredit_num.toInt()) + "\n";
     }
 
 

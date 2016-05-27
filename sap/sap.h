@@ -39,6 +39,12 @@ private slots:
     void on_btnDbExport_clicked();
     void on_btnDbImport_clicked();
 
+    void on_btnTrsSave_clicked();
+
+    void on_btnTrsClear_clicked();
+
+    void on_btnTrsNow_clicked();
+
 private:
     Ui::sap *ui;
     sqlsh *mysql;

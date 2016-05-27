@@ -22,6 +22,8 @@ public slots:
     int jenis2kredit(int num_jenis);
 
     QString jenis2text(int num_jenis);
+    QString debet2text(int num_jenis);
+    QString kredit2text(int num_jenis);
 
     void view_table(QString dbase);
     void view_pdf(QString dbase);
