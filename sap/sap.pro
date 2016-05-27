@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -12,14 +12,14 @@ TARGET = sap
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
+SOURCES +=  main.cpp\
             sap.cpp \
-    sqlsh.cpp \
-    app.cpp
+            sqlsh.cpp \
+            app.cpp \
+    sqldata.cpp
 
 HEADERS  += sap.h \
-    sqlsh.h \
-    app.h \
-    inclusion.h
+            sqlsh.h \
+    sqldata.h
 
 FORMS    += sap.ui
