@@ -1,14 +1,24 @@
-#include "test1.h"
-#include "ui_test1.h"
+#include "sqlsh.h"
 
-void test1::sqlProcessOnGoing(){
+sqlsh::sqlsh(QWidget *parent) : QMainWindow(parent)
+{
+    txtProcOutput = new QPlainTextEdit;
+
+    QObject::connect(&sqlProc, SIGNAL(readyReadStandardOutput()),this, SLOT(processOnGoing()));
+    QObject::connect(&sqlProc, SIGNAL(finished(int, QProcess::ExitStatus)),this,SLOT(processFinished(int, QProcess::ExitStatus)));
+    QObject::connect(&sqlProc, SIGNAL(error(QProcess::ProcessError)),this,SLOT(processError(QProcess::ProcessError)));
+}
+
+//======================================================================================================
+
+void sqlsh::processOnGoing(){
     QByteArray newData = sqlProc.readAllStandardOutput();
-    ui->txtSqlOutput->appendPlainText(QString::fromLocal8Bit(newData));
+    txtProcOutput->appendPlainText(QString::fromLocal8Bit(newData));
 
     return;
 }
 
-void test1::sqlProcessFinished(int exitCode, QProcess::ExitStatus exitStatus){
+void sqlsh::processFinished(int exitCode, QProcess::ExitStatus exitStatus){
     (void) exitCode;
 
     if (exitStatus == QProcess::CrashExit) {
@@ -18,7 +28,7 @@ void test1::sqlProcessFinished(int exitCode, QProcess::ExitStatus exitStatus){
     return;
 }
 
-void test1::sqlProcessError(QProcess::ProcessError error){
+void sqlsh::processError(QProcess::ProcessError error){
 
     if (error == QProcess::FailedToStart) {
         QMessageBox::critical(this,"Not Found","Database Driver not found");
@@ -29,17 +39,8 @@ void test1::sqlProcessError(QProcess::ProcessError error){
 
 //======================================================================================================
 
-void test1::sqlsh_Init(){
-
-    QObject::connect(&sqlProc, SIGNAL(readyReadStandardOutput()),this, SLOT(sqlProcessOnGoing()));
-    QObject::connect(&sqlProc, SIGNAL(finished(int, QProcess::ExitStatus)),this,SLOT(sqlProcessFinished(int, QProcess::ExitStatus)));
-    QObject::connect(&sqlProc, SIGNAL(error(QProcess::ProcessError)),this,SLOT(sqlProcessError(QProcess::ProcessError)));
-
-    return;
-}
-
-void test1::sqlsh_Args(){
-    ui->txtSqlOutput->clear();
+void sqlsh::procArgs(){
+    txtProcOutput->clear();
     sqlArgs.clear();
 
     sqlArgs << "-BN";
@@ -49,68 +50,69 @@ void test1::sqlsh_Args(){
     return;
 }
 
-void test1::sqlsh_Exec(){
+void sqlsh::procExec(){
     sqlProc.start("mysql",sqlArgs);
-
+    sqlProc.waitForFinished();
     return;
 }
 
-QString test1::sqlsh_sqlVer(){
-    sqlsh_Args();
+//======================================================================================================
+
+QString sqlsh::procSqlVersion(){
+    procArgs();
 
     QString verargs;
     verargs += "select version()";
 
     sqlArgs << verargs;
+    procExec();
 
-    sqlsh_Exec();
+    QString result = txtProcOutput->toPlainText();
+    return result;
+}
+
+QString sqlsh::procCmdVersion(){
+    txtProcOutput->clear();
+
+    sqlProc.start("bash -c \"echo $BASH_VERSION\"");
 
     sqlProc.waitForFinished();
 
-    QString result = ui->txtSqlOutput->toPlainText();
+    QString result = txtProcOutput->toPlainText();
+    return result;
+}
+
+QString sqlsh::procOsVersion(){
+    QString result;
+
+    txtProcOutput->clear();
+
+#if (defined (Q_OS_LINUX))
+    sqlProc.start("bash -c \"uname -r\"");
+
+    sqlProc.waitForFinished();
+
+    QString result_linux = txtProcOutput->toPlainText();
+
+    result = result_linux;
+#elif (defined (Q_OS_WIN))
+
+    sqlProc.start("cmd /c ver");
+
+    sqlProc.waitForFinished();
+
+    QStringList result_win = txtProcOutput->toPlainText().split(QRegExp("\n"),QString::SkipEmptyParts);;
+
+    result = result_win[0];
+#endif
+
     return result;
 }
 
 //======================================================================================================
 
-QStringList test1::sqlsh_list_database(){
-    sqlsh_Args();
-
-    sqlArgs << "show databases;";
-
-    sqlsh_Exec();
-
-    sqlProc.waitForFinished();
-
-    QStringList result = ui->txtSqlOutput->toPlainText().split(QRegExp("\n"),QString::SkipEmptyParts);
-    return result;
-}
-
-void test1::sqlsh_delete_default(){
-    sqlsh_delete_database("performance_schema");
-    sqlsh_delete_database("mysql");
-    sqlsh_delete_database("test");
-    return;
-}
-
-void test1::sqlsh_delete_database(QString dbname){
-    sqlsh_Args();
-
-    QString dbargs;
-    dbargs += "drop database ";
-    dbargs += dbname;
-
-    sqlArgs << dbargs;
-
-    sqlsh_Exec();
-
-    sqlProc.waitForFinished();
-
-    return;
-}
-
-void test1::sqlsh_create_database(QString dbname){
-    sqlsh_Args();
+void sqlsh::create_database(QString dbname){
+    procArgs();
 
     QString dbargs;
     dbargs += "create database ";
@@ -118,14 +120,26 @@ void test1::sqlsh_create_database(QString dbname){
 
     sqlArgs << dbargs;
 
-    sqlsh_Exec();
-
-    sqlProc.waitForFinished();
+    procExec();
 
     return;
 }
 
-void test1::sqlsh_export_database(QString dbname, QString filedest){
+void sqlsh::delete_database(QString dbname){
+    procArgs();
+
+    QString dbargs;
+    dbargs += "drop database ";
+    dbargs += dbname;
+
+    sqlArgs << dbargs;
+
+    procExec();
+
+    return;
+}
+
+void sqlsh::export_database(QString dbname, QString filedest){
 
     QProcess sqldumpproc;
 
@@ -148,7 +162,7 @@ void test1::sqlsh_export_database(QString dbname, QString filedest){
     return;
 }
 
-void test1::sqlsh_import_database(QString dbname, QString filesrc){
+void sqlsh::import_database(QString dbname, QString filesrc){
     QProcess sqlimportproc;
 
 #if (defined (Q_OS_LINUX))
@@ -170,8 +184,26 @@ void test1::sqlsh_import_database(QString dbname, QString filesrc){
     return;
 }
 
-void test1::sqlsh_create_tables(QString dbname){
-    sqlsh_Args();
+QStringList sqlsh::list_database(){
+    procArgs();
+
+    sqlArgs << "show databases;";
+
+    procExec();
+
+    QStringList result = txtProcOutput->toPlainText().split(QRegExp("\n"),QString::SkipEmptyParts);
+    return result;
+}
+
+void sqlsh::delete_default(){
+    delete_database("performance_schema");
+    delete_database("mysql");
+    delete_database("test");
+    return;
+}
+
+void sqlsh::create_table(QString dbname){
+    procArgs();
 
     QString tblargs;
     tblargs += "use " + dbname +";";
@@ -187,17 +219,15 @@ void test1::sqlsh_create_tables(QString dbname){
 
     sqlArgs << tblargs;
 
-    sqlsh_Exec();
-
-    sqlProc.waitForFinished();
+    procExec();
 
     return;
 }
 
 //======================================================================================================
 
-void test1::sqlsh_insert_data(QString dbname, QString tanggal, QString deskrip, QString nilai, int jenis, int debet, int kredit){
-    sqlsh_Args();
+void sqlsh::data_insert(QString dbname, QString tanggal, QString deskrip, QString nilai, int jenis, int debet, int kredit){
+    procArgs();
 
     QString insargs;
     insargs += "use " + dbname +";";
@@ -211,16 +241,13 @@ void test1::sqlsh_insert_data(QString dbname, QString tanggal, QString deskrip, 
 
     sqlArgs << insargs;
 
-    sqlsh_Exec();
-
-    sqlProc.waitForFinished();
+    procExec();
 
     return;
-
 }
 
-QStringList test1::sqlsh_get_main_data_one_column(QString dbname,QString field){
-    sqlsh_Args();
+QStringList sqlsh::data_get_one_column(QString dbname, QString field){
+    procArgs();
 
     QString getargs;
     getargs += "use " + dbname +";";
@@ -228,10 +255,9 @@ QStringList test1::sqlsh_get_main_data_one_column(QString dbname,QString field){
 
     sqlArgs << getargs;
 
-    sqlsh_Exec();
+    procExec();
 
-    sqlProc.waitForFinished();
-
-    QStringList result = ui->txtSqlOutput->toPlainText().split(QRegExp("\n"),QString::SkipEmptyParts);
+    QStringList result = txtProcOutput->toPlainText().split(QRegExp("\n"),QString::SkipEmptyParts);
     return result;
 }
+
