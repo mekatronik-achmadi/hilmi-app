@@ -40,10 +40,20 @@ private slots:
     void on_btnDbImport_clicked();
 
     void on_btnTrsSave_clicked();
-
     void on_btnTrsClear_clicked();
-
     void on_btnTrsNow_clicked();
+
+    void app_cari_disable(void);
+    void on_rbtCariDeskrip_clicked();
+    void on_rbtCariNilai_clicked();
+    void on_rbtCariJenis_clicked();
+    void on_rbtCariDebet_clicked();
+    void on_rbtCariKredit_clicked();
+    void on_rbtCariTanggal_clicked();
+
+    void on_btnCariClear_clicked();
+
+    void on_btnCariNow_clicked();
 
 private:
     Ui::sap *ui;

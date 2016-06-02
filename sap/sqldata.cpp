@@ -157,6 +157,28 @@ void sqldata::view_table(QString dbase){
     QTableWidget *dataview = new QTableWidget;
     dataview->setColumnCount(7);
 
+    dataview->setColumnWidth(0,50);
+    dataview->setColumnWidth(1,100);
+    dataview->setColumnWidth(2,200);
+    dataview->setColumnWidth(3,100);
+    dataview->setColumnWidth(4,200);
+    dataview->setColumnWidth(5,150);
+    dataview->setColumnWidth(6,150);
+
+    dataview->setFixedWidth(1000);
+    dataview->setFixedHeight(500);
+
+    QStringList tabellabel;
+    tabellabel << "ID";
+    tabellabel << "Tanggal";
+    tabellabel << "Transaksi";
+    tabellabel << "Harga";
+    tabellabel << "Jenis";
+    tabellabel << "Debet";
+    tabellabel << "Kredit";
+    dataview->setHorizontalHeaderLabels(tabellabel);
+    dataview->setWindowTitle("Rekap Data");
+
     QStringList datid = mysql->data_get_one_column(dbase,"id");
     dataview->setRowCount(datid.count());
     for(i=0;i<datid.count();i++){
@@ -210,18 +232,6 @@ void sqldata::view_table(QString dbase){
         dataview->setItem(i,6,isi);
     }
 
-    QStringList tabellabel;
-    tabellabel << "Data ID";
-    tabellabel << "Tanggal";
-    tabellabel << "Transaksi";
-    tabellabel << "Harga";
-    tabellabel << "Jenis";
-    tabellabel << "Debet";
-    tabellabel << "Kredit";
-    dataview->setHorizontalHeaderLabels(tabellabel);
-    dataview->setWindowTitle("Rekap Data");
-    dataview->setFixedWidth(720);
-    dataview->setFixedHeight(200);
     dataview->show();
 }
 

@@ -22,6 +22,9 @@ sap::sap(QWidget *parent) :
     ui->dateTrsTanggal->setDate(QDate::currentDate());
     ui->dateCariTanggal->setDate(QDate::currentDate());
     ui->dateEditTanggal->setDate(QDate::currentDate());
+
+    app_cari_disable();
+    ui->txtCariDeskrip->setEnabled(true);
 }
 
 sap::~sap()
@@ -155,4 +158,55 @@ void sap::on_btnTrsClear_clicked()
 void sap::on_btnTrsNow_clicked()
 {
     ui->dateTrsTanggal->setDate(QDate::currentDate());
+}
+
+void sap::on_rbtCariDeskrip_clicked()
+{
+    app_cari_disable();
+    ui->txtCariDeskrip->setEnabled(true);
+}
+
+void sap::on_rbtCariNilai_clicked()
+{
+    app_cari_disable();
+    ui->txtCariNilai->setEnabled(true);
+}
+
+void sap::on_rbtCariJenis_clicked()
+{
+    app_cari_disable();
+    ui->cmbCariJenis->setEnabled(true);
+}
+
+void sap::on_rbtCariDebet_clicked()
+{
+    app_cari_disable();
+    ui->cmbCariDebet->setEnabled(true);
+}
+
+void sap::on_rbtCariKredit_clicked()
+{
+    app_cari_disable();
+    ui->cmbCariKredit->setEnabled(true);
+}
+
+void sap::on_rbtCariTanggal_clicked()
+{
+    app_cari_disable();
+    ui->dateCariTanggal->setEnabled(true);
+}
+
+void sap::on_btnCariClear_clicked()
+{
+    ui->txtCariDeskrip->clear();
+    ui->dateTrsTanggal->setDate(QDate::currentDate());
+    ui->txtCariNilai->clear();
+    ui->cmbCariJenis->setCurrentIndex(0);
+    ui->cmbCariDebet->setCurrentIndex(0);
+    ui->cmbCariKredit->setCurrentIndex(0);
+}
+
+void sap::on_btnCariNow_clicked()
+{
+    ui->dateCariTanggal->setDate(QDate::currentDate());
 }

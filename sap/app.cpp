@@ -138,3 +138,12 @@ void sap::app_cmb_kredit(){
     ui->cmbCariKredit->clear();
     ui->cmbCariKredit->insertItems(0,kredit);
 }
+
+void sap::app_cari_disable(){
+    ui->txtCariDeskrip->setEnabled(false);
+    ui->txtCariNilai->setEnabled(false);
+    ui->cmbCariJenis->setEnabled(false);
+    ui->cmbCariDebet->setEnabled(false);
+    ui->cmbCariKredit->setEnabled(false);
+    ui->dateCariTanggal->setEnabled(false);
+}
