@@ -28,6 +28,8 @@ public slots:
     void view_table(QString dbase);
     void view_pdf(QString dbase);
 
+    void view_search(QString dbase, QString search_field, QString search_string);
+
 private:
     sqlsh *mysql;
 };

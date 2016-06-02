@@ -147,3 +147,30 @@ void sap::app_cari_disable(){
     ui->cmbCariKredit->setEnabled(false);
     ui->dateCariTanggal->setEnabled(false);
 }
+
+void sap::app_cari_data(){
+
+    if(ui->rbtCariDeskrip->isChecked()){
+        mydata->view_search(ui->cmbDbExisting->currentText(),"transaksi",ui->txtCariDeskrip->text());
+    }
+
+    if(ui->rbtCariNilai->isChecked()){
+        mydata->view_search(ui->cmbDbExisting->currentText(),"harga",ui->txtCariNilai->text());
+    }
+
+    if(ui->rbtCariJenis->isChecked()){
+        mydata->view_search(ui->cmbDbExisting->currentText(),"jenis",QString::number(ui->cmbCariJenis->currentIndex()));
+    }
+
+    if(ui->rbtCariDebet->isChecked()){
+        mydata->view_search(ui->cmbDbExisting->currentText(),"debet",QString::number(ui->cmbCariDebet->currentIndex()));
+    }
+
+    if(ui->rbtCariKredit->isChecked()){
+        mydata->view_search(ui->cmbDbExisting->currentText(),"kredit",QString::number(ui->cmbCariKredit->currentIndex()));
+    }
+
+    if(ui->rbtCariTanggal->isChecked()){
+        mydata->view_search(ui->cmbDbExisting->currentText(),"tanggal",ui->dateCariTanggal->text());
+    }
+}

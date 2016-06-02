@@ -210,3 +210,8 @@ void sap::on_btnCariNow_clicked()
 {
     ui->dateCariTanggal->setDate(QDate::currentDate());
 }
+
+void sap::on_btnCari_clicked()
+{
+    app_cari_data();
+}

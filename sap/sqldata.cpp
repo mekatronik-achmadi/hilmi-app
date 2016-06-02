@@ -98,7 +98,7 @@ QString sqldata::jenis2text(int num_jenis){
     case 18: result="DEPRESIASI PERALATAN";break;
     case 19: result="SEWA BANGUNAN DIBAYAR DIMUKA";break;
     case 20: result="PEMBAYARAN SEWA BANGUNAN";break;
-    case 21: result="BEBAN GARANSI ESTIMASI";break;
+    case 21: result="BEBAN GARANSI ESTIMASI                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ";break;
     case 22: result="BEBAN GARANSI REALISASI";break;
     case 23: result="BEBAN GARANSI TAK TEREALISASI";break;
     }
@@ -272,4 +272,90 @@ void sqldata::view_pdf(QString dbase){
     doc.setPlainText(textdata);
     doc.setPageSize(printer.pageRect().size()); // This is necessary if you want to hide the page number
     doc.print(&printer);
+}
+
+//======================================================================================================
+
+void sqldata::view_search(QString dbase, QString search_field, QString search_string){
+    int i;
+
+    QTableWidget *dataview = new QTableWidget;
+    dataview->setColumnCount(7);
+
+    dataview->setColumnWidth(0,50);
+    dataview->setColumnWidth(1,100);
+    dataview->setColumnWidth(2,200);
+    dataview->setColumnWidth(3,100);
+    dataview->setColumnWidth(4,200);
+    dataview->setColumnWidth(5,150);
+    dataview->setColumnWidth(6,150);
+
+    dataview->setFixedWidth(1000);
+    dataview->setFixedHeight(500);
+
+    QStringList tabellabel;
+    tabellabel << "ID";
+    tabellabel << "Tanggal";
+    tabellabel << "Transaksi";
+    tabellabel << "Harga";
+    tabellabel << "Jenis";
+    tabellabel << "Debet";
+    tabellabel << "Kredit";
+    dataview->setHorizontalHeaderLabels(tabellabel);
+    dataview->setWindowTitle("Hasil Cari");
+
+    QStringList datid = mysql->data_get_one_column_search(dbase,"id",search_field,search_string);
+    dataview->setRowCount(datid.count());
+    for(i=0;i<datid.count();i++){
+        QTableWidgetItem *isi = new QTableWidgetItem(datid[i]);
+        isi->setFlags(isi->flags() ^ Qt::ItemIsEditable );
+        dataview->setItem(i,0,isi);
+    }
+
+    QStringList dattanggal = mysql->data_get_one_column_search(dbase,"tanggal",search_field,search_string);
+    for(i=0;i<datid.count();i++){
+        QTableWidgetItem *isi = new QTableWidgetItem(dattanggal[i]);
+        isi->setFlags(isi->flags() ^ Qt::ItemIsEditable );
+        dataview->setItem(i,1,isi);
+    }
+
+    QStringList dattransaksi = mysql->data_get_one_column_search(dbase,"transaksi",search_field,search_string);
+    for(i=0;i<datid.count();i++){
+        QTableWidgetItem *isi = new QTableWidgetItem(dattransaksi[i]);
+        isi->setFlags(isi->flags() ^ Qt::ItemIsEditable );
+        dataview->setItem(i,2,isi);;
+    }
+
+    QStringList datharga = mysql->data_get_one_column_search(dbase,"harga",search_field,search_string);
+    for(i=0;i<datid.count();i++){
+        QTableWidgetItem *isi = new QTableWidgetItem(datharga[i]);
+        isi->setFlags(isi->flags() ^ Qt::ItemIsEditable );
+        dataview->setItem(i,3,isi);
+    }
+
+    QStringList datjenis = mysql->data_get_one_column_search(dbase,"jenis",search_field,search_string);
+    for(i=0;i<datid.count();i++){
+        QString jenis_num = datjenis[i];
+        QTableWidgetItem *isi = new QTableWidgetItem(jenis2text(jenis_num.toInt()));
+        isi->setFlags(isi->flags() ^ Qt::ItemIsEditable );
+        dataview->setItem(i,4,isi);
+    }
+
+    QStringList datdebet = mysql->data_get_one_column_search(dbase,"debet",search_field,search_string);
+    for(i=0;i<datid.count();i++){
+        QString debet_num = datdebet[i];
+        QTableWidgetItem *isi = new QTableWidgetItem(debet2text(debet_num.toInt()));
+        isi->setFlags(isi->flags() ^ Qt::ItemIsEditable );
+        dataview->setItem(i,5,isi);
+    }
+
+    QStringList datkredit = mysql->data_get_one_column_search(dbase,"kredit",search_field,search_string);
+    for(i=0;i<datid.count();i++){
+        QString kredit_num = datkredit[i];
+        QTableWidgetItem *isi = new QTableWidgetItem(kredit2text(kredit_num.toInt()));
+        isi->setFlags(isi->flags() ^ Qt::ItemIsEditable );
+        dataview->setItem(i,6,isi);
+    }
+
+    dataview->show();
 }

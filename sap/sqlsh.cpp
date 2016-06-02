@@ -261,3 +261,17 @@ QStringList sqlsh::data_get_one_column(QString dbname, QString field){
     return result;
 }
 
+QStringList sqlsh::data_get_one_column_search(QString dbname,QString field,QString search_field,QString search_string){
+    procArgs();
+
+    QString searchargs;
+    searchargs += "use " + dbname +";";
+    searchargs += "select " + field + " from main_data where " + search_field + "=" + "\"" + search_string + "\"";
+
+    sqlArgs << searchargs;
+
+    procExec();
+
+    QStringList result = txtProcOutput->toPlainText().split(QRegExp("\n"),QString::SkipEmptyParts);
+    return result;
+}

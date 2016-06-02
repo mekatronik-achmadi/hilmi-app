@@ -36,6 +36,7 @@ public slots:
 
     void data_insert(QString dbname, QString tanggal, QString deskrip, QString nilai, int jenis, int debet, int kredit);
     QStringList data_get_one_column(QString dbname,QString field);
+    QStringList data_get_one_column_search(QString dbname,QString field,QString search_field,QString search_string);
 
 
 private:

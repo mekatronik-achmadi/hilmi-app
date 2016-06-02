@@ -44,16 +44,16 @@ private slots:
     void on_btnTrsNow_clicked();
 
     void app_cari_disable(void);
+    void app_cari_data(void);
     void on_rbtCariDeskrip_clicked();
     void on_rbtCariNilai_clicked();
     void on_rbtCariJenis_clicked();
     void on_rbtCariDebet_clicked();
     void on_rbtCariKredit_clicked();
     void on_rbtCariTanggal_clicked();
-
     void on_btnCariClear_clicked();
-
     void on_btnCariNow_clicked();
+    void on_btnCari_clicked();
 
 private:
     Ui::sap *ui;
