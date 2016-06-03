@@ -25,6 +25,8 @@ sap::sap(QWidget *parent) :
 
     app_cari_disable();
     ui->txtCariDeskrip->setEnabled(true);
+
+    app_edit_ability(false);
 }
 
 sap::~sap()
@@ -194,6 +196,7 @@ void sap::on_rbtCariTanggal_clicked()
 {
     app_cari_disable();
     ui->dateCariTanggal->setEnabled(true);
+    ui->btnCariNow->setEnabled(true);
 }
 
 void sap::on_btnCariClear_clicked()
@@ -214,4 +217,56 @@ void sap::on_btnCariNow_clicked()
 void sap::on_btnCari_clicked()
 {
     app_cari_data();
+}
+
+void sap::on_btnEditNow_clicked()
+{
+    ui->dateEditTanggal->setDate(QDate::currentDate());
+}
+
+void sap::on_btnEditShow_clicked()
+{
+    app_show_one_data(ui->txtEditID->text());
+
+    app_edit_ability(true);
+    ui->btnEditShow->setEnabled(false);
+    ui->txtEditID->setEnabled(false);
+}
+
+void sap::on_btnEditChange_clicked()
+{
+    mysql->data_update( ui->cmbDbExisting->currentText(),
+                        ui->txtEditID->text(),
+                        ui->dateEditTanggal->text(),
+                        ui->txtEditDeskrip->text(),
+                        ui->txtEditNilai->text(),
+                        ui->cmbEditJenis->currentIndex(),
+                        mydata->jenis2debet(ui->cmbEditJenis->currentIndex()),
+                        mydata->jenis2kredit(ui->cmbEditJenis->currentIndex())
+                    );
+
+    ui->txtEditID->clear();
+    ui->txtEditDeskrip->clear();
+    ui->txtEditNilai->clear();
+    ui->dateEditTanggal->setDate(QDate::currentDate());
+    ui->cmbEditJenis->setCurrentIndex(0);
+
+    app_edit_ability(false);
+    ui->btnEditShow->setEnabled(true);
+    ui->txtEditID->setEnabled(true);
+}
+
+void sap::on_btnEditDelete_clicked()
+{
+    mysql->data_delete(ui->cmbDbExisting->currentText(),ui->txtEditID->text());
+
+    ui->txtEditID->clear();
+    ui->txtEditDeskrip->clear();
+    ui->txtEditNilai->clear();
+    ui->dateEditTanggal->setDate(QDate::currentDate());
+    ui->cmbEditJenis->setCurrentIndex(0);
+
+    app_edit_ability(false);
+    ui->btnEditShow->setEnabled(true);
+    ui->txtEditID->setEnabled(true);
 }

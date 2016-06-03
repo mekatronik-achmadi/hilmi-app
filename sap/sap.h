@@ -55,6 +55,13 @@ private slots:
     void on_btnCariNow_clicked();
     void on_btnCari_clicked();
 
+    void app_show_one_data(QString dataid);
+    void app_edit_ability(bool ability);
+    void on_btnEditNow_clicked();
+    void on_btnEditShow_clicked();
+    void on_btnEditChange_clicked();
+    void on_btnEditDelete_clicked();
+
 private:
     Ui::sap *ui;
     sqlsh *mysql;

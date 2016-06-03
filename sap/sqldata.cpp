@@ -106,10 +106,10 @@ QString sqldata::jenis2text(int num_jenis){
     return result;
 }
 
-QString sqldata::debet2text(int num_jenis){
+QString sqldata::debet2text(int num_debet){
     QString result;
 
-    switch(num_jenis){
+    switch(num_debet){
     case 0: result="PEMBELIAN";break;
     case 1: result="KAS DI TANGAN";break;
     case 2: result="UTANG USAHA";break;
@@ -130,10 +130,10 @@ QString sqldata::debet2text(int num_jenis){
     return result;
 }
 
-QString sqldata::kredit2text(int num_jenis){
+QString sqldata::kredit2text(int num_kredit){
     QString result;
 
-    switch(num_jenis){
+    switch(num_kredit){
     case 0: result="KAS DI TANGAN";break;
     case 1: result="UTANG USAHA ";break;
     case 2: result="RETUR PEMBELIAN ";break;

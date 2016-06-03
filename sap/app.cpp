@@ -146,6 +146,7 @@ void sap::app_cari_disable(){
     ui->cmbCariDebet->setEnabled(false);
     ui->cmbCariKredit->setEnabled(false);
     ui->dateCariTanggal->setEnabled(false);
+    ui->btnCariNow->setEnabled(false);
 }
 
 void sap::app_cari_data(){
@@ -173,4 +174,22 @@ void sap::app_cari_data(){
     if(ui->rbtCariTanggal->isChecked()){
         mydata->view_search(ui->cmbDbExisting->currentText(),"tanggal",ui->dateCariTanggal->text());
     }
+}
+
+void sap::app_show_one_data(QString dataid){
+    ui->txtEditDeskrip->setText(mysql->data_get_one(ui->cmbDbExisting->currentText(),"transaksi",dataid));
+    ui->txtEditNilai->setText(mysql->data_get_one(ui->cmbDbExisting->currentText(),"harga",dataid));
+    ui->cmbEditJenis->setCurrentIndex(mysql->data_get_one(ui->cmbDbExisting->currentText(),"jenis",dataid).toInt());
+    ui->dateEditTanggal->setDate(QDate::fromString(mysql->data_get_one(ui->cmbDbExisting->currentText(),"tanggal",dataid),"yyyy-MM-dd"));
+}
+
+void sap::app_edit_ability(bool ability){
+    ui->txtEditDeskrip->setEnabled(ability);
+    ui->txtEditNilai->setEnabled(ability);
+    ui->cmbEditJenis->setEnabled(ability);
+    ui->dateEditTanggal->setEnabled(ability);
+
+    ui->btnEditNow->setEnabled(ability);
+    ui->btnEditChange->setEnabled(ability);
+    ui->btnEditDelete->setEnabled(ability);
 }

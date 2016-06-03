@@ -33,7 +33,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="tabDatabase">
      <attribute name="title">
@@ -706,7 +706,7 @@
        </rect>
       </property>
       <property name="title">
-       <string>EditTransaksi</string>
+       <string>Edit Transaksi</string>
       </property>
       <widget class="QLabel" name="label_7">
        <property name="geometry">
@@ -828,6 +828,9 @@
        </property>
       </widget>
       <widget class="QPushButton" name="btnEditChange">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>20</x>
@@ -837,20 +840,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Change</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="btnEditClear">
-       <property name="geometry">
-        <rect>
-         <x>220</x>
-         <y>200</y>
-         <width>85</width>
-         <height>26</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Clear</string>
+        <string>Update</string>
        </property>
       </widget>
       <widget class="QPushButton" name="btnEditNow">
@@ -906,6 +896,9 @@
        </property>
       </widget>
       <widget class="QPushButton" name="btnEditDelete">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>120</x>

@@ -35,9 +35,11 @@ public slots:
     void create_table(QString dbname);
 
     void data_insert(QString dbname, QString tanggal, QString deskrip, QString nilai, int jenis, int debet, int kredit);
+    void data_update(QString dbname, QString dataid, QString tanggal, QString deskrip, QString nilai, int jenis, int debet, int kredit);
+    void data_delete(QString dbname, QString dataid);
     QStringList data_get_one_column(QString dbname,QString field);
     QStringList data_get_one_column_search(QString dbname,QString field,QString search_field,QString search_string);
-
+    QString data_get_one(QString dbname,QString field,QString dataid);
 
 private:
     QPlainTextEdit *txtProcOutput;

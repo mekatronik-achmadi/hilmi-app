@@ -246,6 +246,44 @@ void sqlsh::data_insert(QString dbname, QString tanggal, QString deskrip, QStrin
     return;
 }
 
+void sqlsh::data_update(QString dbname, QString dataid, QString tanggal, QString deskrip, QString nilai, int jenis, int debet, int kredit){
+    procArgs();
+
+    QString updargs;
+    updargs += "use " + dbname +";";
+    updargs += "update main_data set ";
+    updargs += "tanggal=\"" + tanggal + "\"" + ",";
+    updargs += "transaksi=\"" + deskrip + "\"" + ",";
+    updargs += "harga=\"" + nilai + "\"" + ",";
+    updargs += "jenis=\"" + QString::number(jenis) + "\"" + ",";
+    updargs += "debet=\"" + QString::number(debet) + "\"" + ",";
+    updargs += "kredit=\"" + QString::number(kredit) + "\"" + " ";
+    updargs += "where id=\"" + dataid  + "\"";
+
+    sqlArgs << updargs;
+
+    procExec();
+
+    return;
+}
+
+void sqlsh::data_delete(QString dbname, QString dataid){
+    procArgs();
+
+    QString delargs;
+    delargs += "use " + dbname +";";
+    delargs += "delete from main_data ";
+    delargs += "where id=\"" + dataid  + "\"";
+
+    sqlArgs << delargs;
+
+    procExec();
+
+    return;
+}
+
+//======================================================================================================
+
 QStringList sqlsh::data_get_one_column(QString dbname, QString field){
     procArgs();
 
@@ -266,12 +304,28 @@ QStringList sqlsh::data_get_one_column_search(QString dbname,QString field,QStri
 
     QString searchargs;
     searchargs += "use " + dbname +";";
-    searchargs += "select " + field + " from main_data where " + search_field + "=" + "\"" + search_string + "\"";
+    searchargs += "select " + field + " from main_data where " + search_field + " like " + "\"%" + search_string + "%\"";
 
     sqlArgs << searchargs;
 
     procExec();
 
     QStringList result = txtProcOutput->toPlainText().split(QRegExp("\n"),QString::SkipEmptyParts);
+    return result;
+}
+
+QString sqlsh::data_get_one(QString dbname, QString field, QString dataid){
+    procArgs();
+
+    QString getargs;
+    getargs += "use " + dbname +";";
+    getargs += "select " + field + " from main_data where id=" + "\"" + dataid + "\"";
+
+    sqlArgs << getargs;
+
+    procExec();
+
+    QStringList result_sum = txtProcOutput->toPlainText().split(QRegExp("\n"),QString::SkipEmptyParts);;
+    QString result = result_sum[0];
     return result;
 }
