@@ -101,7 +101,7 @@ QString sqlsh::procOsVersion(){
 
     sqlProc.waitForFinished();
 
-    QStringList result_win = txtProcOutput->toPlainText().split(QRegExp("\n"),QString::SkipEmptyParts);;
+    QStringList result_win = txtProcOutput->toPlainText().split(QRegExp("\n"),QString::SkipEmptyParts);
 
     result = result_win[0];
 #endif
