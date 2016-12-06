@@ -48,8 +48,8 @@ class SQLsh(object):
         self.sqlArgs.append( "-e")
         
     def procExec(self):
-        self.sqlProc.start("mysql",self.sqlArgs);
-        self.sqlProc.waitForFinished();
+        self.sqlProc.start("mysql",self.sqlArgs)
+        self.sqlProc.waitForFinished()
         
 #======================================================================================================
 
@@ -275,9 +275,10 @@ class SQLsh(object):
         
         self.sqlArgs.append(getargs)
         self.procExec()
-        
+
         result_sum=QtCore.QStringList()
         result=QtCore.QString()
         result_sum=self.txtProcOutput.toPlainText().split(QtCore.QRegExp("\n"),QtCore.QString.SkipEmptyParts)
+
         result=result_sum[0]        
         return result

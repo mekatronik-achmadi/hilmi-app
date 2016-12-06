@@ -46,7 +46,8 @@ class SAPprog(QtGui.QMainWindow):
         self.mydata.view_table(self.ui.cmbDbExisting.currentText())
         
     def actionMain_Data_as_PDF_triggered(self):
-        self.mydata.view_pdf(self.uicmbDbExisting.currentText())
+        pass
+#        self.mydata.view_pdf(self.ui.cmbDbExisting.currentText())
         
     def btnDbExisting_clicked(self):
         if self.ui.cmbDbExisting.currentText()=="information_schema": 
@@ -72,7 +73,7 @@ class SAPprog(QtGui.QMainWindow):
             self.ui.cmbDbExisting.setEnabled(False)
             self.ui.btnDbExisting.setText("Unuse")
         elif self.ui.btnDbExisting.text()=="Unuse":
-            self.tab_ability(False);
+            self.tab_ability(False)
             self.ui.cmbDbExisting.setEnabled(True)
             self.ui.btnDbExisting.setText("Use")
             

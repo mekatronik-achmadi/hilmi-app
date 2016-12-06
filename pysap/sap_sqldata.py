@@ -129,87 +129,15 @@ class SQLdata(object):
 #======================================================================================================
 
     def view_table(self, dbase):
-        dataview = QtGui.QTableWidget()
-        dataview.setColumnCount(7)
-
-        dataview.setColumnWidth(0,50)
-        dataview.setColumnWidth(1,100)
-        dataview.setColumnWidth(2,200)
-        dataview.setColumnWidth(3,100)
-        dataview.setColumnWidth(4,200)
-        dataview.setColumnWidth(5,150)
-        dataview.setColumnWidth(6,150)
-
-        dataview.setFixedWidth(1000)
-        dataview.setFixedHeight(500)
+        tblview=QtCore.QProcess()
+        tblviewarg=QtCore.QStringList()
         
-        tabellabel=QtCore.QStringList()
-        tabellabel.append("ID")
-        tabellabel.append("Tanggal")
-        tabellabel.append("Transaksi")
-        tabellabel.append("Harga")
-        tabellabel.append("Jenis")
-        tabellabel.append("Debet")
-        tabellabel.append("Kredit")
-        
-        dataview.setHorizontalHeaderLabels(tabellabel)
-        dataview.setWindowTitle("Rekap Data")
-        
-        datid=QtCore.QStringList()
-        datid=self.mysql.data_get_one_column(dbase,"id")
-        dataview.setRowCount(datid.count())
-        for i in range(datid.count()):
-            isi = QtGui.QTableWidgetItem(datid[i])
-            isi.setFlags(isi.flags() ^ QtCore.Qt.ItemIsEditable );
-            dataview.setItem(i,0,isi)
-            
-        dattanggal=QtCore.QStringList()
-        dattanggal=self.mysql.data_get_one_column(dbase,"tanggal")
-        for i in range(datid.count()):
-            isi = QtGui.QTableWidgetItem(dattanggal[i])
-            isi.setFlags(isi.flags() ^ QtCore.Qt.ItemIsEditable );
-            dataview.setItem(i,1,isi)
-            
-        dattransaksi=QtCore.QStringList()
-        dattransaksi=self.mysql.data_get_one_column(dbase,"transaksi")
-        for i in range(datid.count()):
-            isi = QtGui.QTableWidgetItem(dattransaksi[i])
-            isi.setFlags(isi.flags() ^ QtCore.Qt.ItemIsEditable );
-            dataview.setItem(i,2,isi)
-        
-        datharga=QtCore.QStringList()
-        datharga=self.mysql.data_get_one_column(dbase,"harga")
-        for i in range(datid.count()):
-            isi = QtGui.QTableWidgetItem(datharga[i])
-            isi.setFlags(isi.flags() ^ QtCore.Qt.ItemIsEditable );
-            dataview.setItem(i,3,isi)
-            
-        datjenis=QtCore.QStringList()
-        datjenis=self.mysql.data_get_one_column(dbase,"jenis")
-        for i in range(datid.count()):
-            isi = QtGui.QTableWidgetItem(datjenis[i])
-            isi.setFlags(isi.flags() ^ QtCore.Qt.ItemIsEditable );
-            dataview.setItem(i,4,isi)
-            
-        datdebet=QtCore.QStringList()
-        datdebet=self.mysql.data_get_one_column(dbase,"debet")
-        for i in range(datid.count()):
-            isi = QtGui.QTableWidgetItem(datdebet[i])
-            isi.setFlags(isi.flags() ^ QtCore.Qt.ItemIsEditable );
-            dataview.setItem(i,5,isi)
-            
-        datkredit=QtCore.QStringList()
-        datkredit=self.mysql.data_get_one_column(dbase,"kredit")
-        for i in range(datid.count()):
-            isi = QtGui.QTableWidgetItem(datkredit[i])
-            isi.setFlags(isi.flags() ^ QtCore.Qt.ItemIsEditable );
-            dataview.setItem(i,6,isi)
-            
-        dataview.show()
+        tblviewarg.append(dbase)
+        tblview.startDetached("./sap_tblview.py",tblviewarg)
         
     def view_pdf(self,  dbase):
-        fileName=QtCore.QtString()
-        fileName=QtGui.QFileDialog.getSaveFileName(self,"export PDF","Data.pdf",filter ="pdf (*.pdf *.)")
+        fileName=QtCore.QString()
+        fileName=QtGui.QFileDialog.getSaveFileName(None,"export PDF",QtCore.QString(),"*.pdf")
         if fileName.isEmpty():
             return
         if QtCore.QFileInfo(fileName).suffix().isEmpty():
@@ -332,5 +260,3 @@ class SQLdata(object):
             isi = QtGui.QTableWidgetItem(datkredit[i])
             isi.setFlags(isi.flags() ^ QtCore.Qt.ItemIsEditable );
             dataview.setItem(i,6,isi)
-        
-        dataview.show()
