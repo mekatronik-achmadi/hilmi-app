@@ -127,7 +127,7 @@ class SQL_driver(object):
         elif platform.system() == "Windows":
             sqlimportprocargs=QtCore.QStringList()
             sqlimportprocargs.append("/c")
-            sqlimportprocargs.append("mysqldump")
+            sqlimportprocargs.append("mysql")
             sqlimportprocargs.append("-uroot")
             sqlimportprocargs.append(dbname)
             sqlimportprocargs.append("<")

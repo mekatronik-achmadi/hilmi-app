@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import platform
 from PyQt4 import QtCore, QtGui
 from sql_driver import SQL_driver
 
@@ -131,18 +132,30 @@ class SAP_data(object):
     def view_table(self, dbase):
         tblview=QtCore.QProcess()
         tblviewarg=QtCore.QStringList()
-        
-        tblviewarg.append(dbase)
-        tblview.startDetached("./sap_tblview.py",tblviewarg)
+    
+        if platform.system() == "Linux":
+            tblviewarg.append(dbase)
+            tblview.startDetached("./sap_tblview.py",tblviewarg)
+        elif platform.system() == "Windows":
+            tblviewarg.append("sap_tblview.py")
+            tblviewarg.append(dbase)
+            tblview.startDetached("pythonw",tblviewarg)
         
     def view_search(self,  dbase, search_field, search_string):
         tblsearch=QtCore.QProcess()
         tblsearcharg=QtCore.QStringList()
         
-        tblsearcharg.append(dbase)
-        tblsearcharg.append(search_field)
-        tblsearcharg.append(search_string)
-        tblsearch.startDetached("./sap_tblsearch.py",tblsearcharg)
+        if platform.system() == "Linux":
+            tblsearcharg.append(dbase)
+            tblsearcharg.append(search_field)
+            tblsearcharg.append(search_string)
+            tblsearch.startDetached("./sap_tblsearch.py",tblsearcharg)
+        elif platform.system() == "Windows":
+            tblsearcharg.append("sap_tblsearch.py")
+            tblsearcharg.append(dbase)
+            tblsearcharg.append(search_field)
+            tblsearcharg.append(search_string)
+            tblsearch.startDetached("pythonw",tblsearcharg)
         
     def print_csv(self, dbase):
         fileName=QtGui.QFileDialog.getSaveFileName(None,"export CSV",QtCore.QString(),"*.csv")
