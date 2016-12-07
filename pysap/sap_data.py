@@ -135,7 +135,16 @@ class SAP_data(object):
         tblviewarg.append(dbase)
         tblview.startDetached("./sap_tblview.py",tblviewarg)
         
-    def view_pdf(self,  dbase):
+    def view_search(self,  dbase, search_field, search_string):
+        tblsearch=QtCore.QProcess()
+        tblsearcharg=QtCore.QStringList()
+        
+        tblsearcharg.append(dbase)
+        tblsearcharg.append(search_field)
+        tblsearcharg.append(search_string)
+        tblsearch.startDetached("./sap_tblsearch.py",tblsearcharg)
+        
+    def print_pdf(self,  dbase):
         fileName=QtCore.QString()
         fileName=QtGui.QFileDialog.getSaveFileName(None,"export PDF",QtCore.QString(),"*.pdf")
         if fileName.isEmpty():
@@ -180,83 +189,3 @@ class SAP_data(object):
         doc.setPlainText(textdata)
         doc.setPageSize(printer.pageRect().size())
         doc.print_(printer)
-        
-#======================================================================================================
-
-    def view_search(self,  dbase, search_field, search_string):
-        dataview = QtGui.QTableWidget()
-        dataview.setColumnCount(7)
-
-        dataview.setColumnWidth(0,50)
-        dataview.setColumnWidth(1,100)
-        dataview.setColumnWidth(2,200)
-        dataview.setColumnWidth(3,100)
-        dataview.setColumnWidth(4,200)
-        dataview.setColumnWidth(5,150)
-        dataview.setColumnWidth(6,150)
-
-        dataview.setFixedWidth(1000)
-        dataview.setFixedHeight(500)
-        
-        tabellabel=QtCore.QStringList()
-        
-        tabellabel.append("ID")
-        tabellabel.append("Tanggal")
-        tabellabel.append("Transaksi")
-        tabellabel.append("Harga")
-        tabellabel.append("Jenis")
-        tabellabel.append("Debet")
-        tabellabel.append("Kredit")
-        
-        dataview.setHorizontalHeaderLabels(tabellabel)
-        dataview.setWindowTitle("Hasil Cari")
-        
-        datid=QtCore.QStringList()
-        datid=self.mysql.data_get_one_column_search(dbase,"id",search_field,search_string)
-        dataview.setRowCount(datid.count())
-        for i in range(datid.count()):
-            isi = QtGui.QTableWidgetItem(datid[i])
-            isi.setFlags(isi.flags() ^ QtCore.Qt.ItemIsEditable );
-            dataview.setItem(i,0,isi)
-            
-        dattanggal=QtCore.QStringList()
-        dattanggal=self.mysql.data_get_one_column_search(dbase,"tanggal",search_field,search_string)
-        for i in range(datid.count()):
-            isi = QtGui.QTableWidgetItem(dattanggal[i])
-            isi.setFlags(isi.flags() ^ QtCore.Qt.ItemIsEditable );
-            dataview.setItem(i,1,isi)
-            
-        dattransaksi=QtCore.QStringList()
-        dattransaksi=self.mysql.data_get_one_column_search(dbase,"transaksi",search_field,search_string)
-        for i in range(datid.count()):
-            isi = QtGui.QTableWidgetItem(dattransaksi[i])
-            isi.setFlags(isi.flags() ^ QtCore.Qt.ItemIsEditable );
-            dataview.setItem(i,2,isi)
-        
-        datharga=QtCore.QStringList()
-        datharga=self.mysql.data_get_one_column_search(dbase,"harga",search_field,search_string)
-        for i in range(datid.count()):
-            isi = QtGui.QTableWidgetItem(datharga[i])
-            isi.setFlags(isi.flags() ^ QtCore.Qt.ItemIsEditable );
-            dataview.setItem(i,3,isi)
-            
-        datjenis=QtCore.QStringList()
-        datjenis=self.mysql.data_get_one_column_search(dbase,"jenis",search_field,search_string)
-        for i in range(datid.count()):
-            isi = QtGui.QTableWidgetItem(datjenis[i])
-            isi.setFlags(isi.flags() ^ QtCore.Qt.ItemIsEditable );
-            dataview.setItem(i,4,isi)
-            
-        datdebet=QtCore.QStringList()
-        datdebet=self.mysql.data_get_one_column_search(dbase,"debet",search_field,search_string)
-        for i in range(datid.count()):
-            isi = QtGui.QTableWidgetItem(datdebet[i])
-            isi.setFlags(isi.flags() ^ QtCore.Qt.ItemIsEditable );
-            dataview.setItem(i,5,isi)
-            
-        datkredit=QtCore.QStringList()
-        datkredit=self.mysql.data_get_one_column_search(dbase,"kredit",search_field,search_string)
-        for i in range(datid.count()):
-            isi = QtGui.QTableWidgetItem(datkredit[i])
-            isi.setFlags(isi.flags() ^ QtCore.Qt.ItemIsEditable );
-            dataview.setItem(i,6,isi)

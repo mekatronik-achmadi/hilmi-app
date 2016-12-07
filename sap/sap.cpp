@@ -202,7 +202,7 @@ void sap::on_rbtCariTanggal_clicked()
 void sap::on_btnCariClear_clicked()
 {
     ui->txtCariDeskrip->clear();
-    ui->dateTrsTanggal->setDate(QDate::currentDate());
+    ui->dateCariTanggal->setDate(QDate::currentDate());
     ui->txtCariNilai->clear();
     ui->cmbCariJenis->setCurrentIndex(0);
     ui->cmbCariDebet->setCurrentIndex(0);

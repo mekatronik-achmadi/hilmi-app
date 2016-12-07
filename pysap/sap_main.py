@@ -20,6 +20,10 @@ class SAP_main(QtGui.QMainWindow):
         self.refresh_databases()
         self.tab_ability(False)
         
+        self.cmb_jenis()
+        self.cmb_debet()
+        self.cmb_kredit()
+        
         self.ui.dateTrsTanggal.setDate(QtCore.QDate.currentDate ())
         self.ui.dateCariTanggal.setDate(QtCore.QDate.currentDate ())
         self.ui.dateEditTanggal.setDate(QtCore.QDate.currentDate ())
@@ -32,9 +36,31 @@ class SAP_main(QtGui.QMainWindow):
         QtCore.QObject.connect(self.ui.actionExit, QtCore.SIGNAL("triggered()"), self.actionExit_triggered)
         QtCore.QObject.connect(self.ui.actionMain_Data_as_Table, QtCore.SIGNAL("triggered()"), self.actionMain_Data_as_Table_triggered)
         QtCore.QObject.connect(self.ui.actionMain_Data_as_PDF, QtCore.SIGNAL("triggered()"), self.actionMain_Data_as_PDF_triggered)
+        
         QtCore.QObject.connect(self.ui.btnDbExisting, QtCore.SIGNAL("clicked()"), self.btnDbExisting_clicked)
         QtCore.QObject.connect(self.ui.btnDbNew, QtCore.SIGNAL("clicked()"), self.btnDbNew_clicked)
         QtCore.QObject.connect(self.ui.btnDbDelete, QtCore.SIGNAL("clicked()"), self.btnDbDelete_clicked)
+        QtCore.QObject.connect(self.ui.btnDbExport, QtCore.SIGNAL("clicked()"), self.btnDbExport_clicked)
+        QtCore.QObject.connect(self.ui.btnDbImport, QtCore.SIGNAL("clicked()"), self.btnDbImport_clicked)
+        
+        QtCore.QObject.connect(self.ui.btnTrsSave, QtCore.SIGNAL("clicked()"), self.btnTrsSave_clicked)
+        QtCore.QObject.connect(self.ui.btnTrsClear, QtCore.SIGNAL("clicked()"), self.btnTrsClear_clicked)
+        QtCore.QObject.connect(self.ui.btnTrsNow, QtCore.SIGNAL("clicked()"), self.btnTrsNow_clicked)
+        
+        QtCore.QObject.connect(self.ui.rbtCariDeskrip, QtCore.SIGNAL("clicked()"), self.rbtCariDeskrip_clicked)
+        QtCore.QObject.connect(self.ui.rbtCariNilai, QtCore.SIGNAL("clicked()"), self.rbtCariNilai_clicked)
+        QtCore.QObject.connect(self.ui.rbtCariJenis, QtCore.SIGNAL("clicked()"), self.rbtCariJenis_clicked)
+        QtCore.QObject.connect(self.ui.rbtCariDebet, QtCore.SIGNAL("clicked()"), self.rbtCariDebet_clicked)
+        QtCore.QObject.connect(self.ui.rbtCariKredit, QtCore.SIGNAL("clicked()"), self.rbtCariKredit_clicked)
+        QtCore.QObject.connect(self.ui.rbtCariTanggal, QtCore.SIGNAL("clicked()"), self.rbtCariTanggal_clicked)
+        QtCore.QObject.connect(self.ui.btnCariClear, QtCore.SIGNAL("clicked()"), self.btnCariClear_clicked)
+        QtCore.QObject.connect(self.ui.btnCariNow, QtCore.SIGNAL("clicked()"), self.btnCariNow_clicked)
+        QtCore.QObject.connect(self.ui.btnCari, QtCore.SIGNAL("clicked()"), self.btnCari_clicked)
+        
+        QtCore.QObject.connect(self.ui.btnEditNow, QtCore.SIGNAL("clicked()"), self.btnEditNow_clicked)
+        QtCore.QObject.connect(self.ui.btnEditShow, QtCore.SIGNAL("clicked()"), self.btnEditShow_clicked)
+        
+#======================================================================================================
         
     def actionAbout_triggered(self):
         self.msg_about()
@@ -51,87 +77,168 @@ class SAP_main(QtGui.QMainWindow):
         
     def btnDbExisting_clicked(self):
         if self.ui.cmbDbExisting.currentText()=="information_schema": 
-            msg = QtGui.QMessageBox(self)
-            msg.setStandardButtons(QtGui.QMessageBox.Ok)
-            msg.setIcon(QtGui.QMessageBox.Critical)
-            msg.setWindowTitle("Database Terlarang")
-            msg.setText("silahkan pilih database lain atau buat baru")
+            msg = QtGui.QMessageBox(QtGui.QMessageBox.Critical,"Database Terlarang",  "silahkan pilih database lain atau buat baru",QtGui.QMessageBox.Ok, self )
             msg.show()
             return
             
         if self.ui.cmbDbExisting.currentText().isEmpty():
-            msg = QtGui.QMessageBox(self)
-            msg.setStandardButtons(QtGui.QMessageBox.Ok)
-            msg.setIcon(QtGui.QMessageBox.Critical)
-            msg.setWindowTitle("Database Tidak ada")
-            msg.setText("Nama Database tidak ada")
+            msg = QtGui.QMessageBox(QtGui.QMessageBox.Critical,"Database Tidak ada","Nama Database tidak ada",QtGui.QMessageBox.Ok, self )
             msg.show()
             return
             
         if self.ui.btnDbExisting.text()=="Use":
             self.tab_ability(True)
             self.ui.cmbDbExisting.setEnabled(False)
+            self.ui.btnDbDelete.setEnabled(False)
+            self.ui.cmbDbDelete.setEnabled(False)
             self.ui.btnDbExisting.setText("Unuse")
         elif self.ui.btnDbExisting.text()=="Unuse":
             self.tab_ability(False)
             self.ui.cmbDbExisting.setEnabled(True)
+            self.ui.btnDbDelete.setEnabled(True)
+            self.ui.cmbDbDelete.setEnabled(True)
             self.ui.btnDbExisting.setText("Use")
             
     def btnDbNew_clicked(self):
-        namadb = QtCore.QString()
         namadb = self.ui.txtDbNew.text()
         self.mysql.create_database(namadb)
         self.mysql.create_table(namadb)
         self.refresh_databases()
         
-        msg = QtGui.QMessageBox(self)
-        msg.setStandardButtons(QtGui.QMessageBox.Ok)
-        msg.setIcon(QtGui.QMessageBox.Information)
-        msg.setWindowTitle("Sudah tercipta")
-        msg.setText("Data " + namadb + " tercipta !!")
+        msg = QtGui.QMessageBox(QtGui.QMessageBox.Information,"Sudah tercipta","Data " + namadb + " tercipta !!",QtGui.QMessageBox.Ok, self )
         msg.show()
         
     def btnDbDelete_clicked(self):
-        namadb=QtCore.QString()
         namadb=self.ui.cmbDbDelete.currentText()
         
         if namadb=="information_schema":
-            msg = QtGui.QMessageBox(self)
-            msg.setStandardButtons(QtGui.QMessageBox.Ok)
-            msg.setIcon(QtGui.QMessageBox.Critical)
-            msg.setWindowTitle("Database Terlarang")
-            msg.setText("silahkan pilih database lain atau buat baru")
+            msg = QtGui.QMessageBox(QtGui.QMessageBox.Critical,"Database Terlarang",  "silahkan pilih database lain atau buat baru",QtGui.QMessageBox.Ok, self )
             msg.show()
             return
             
-        msg = QtGui.QMessageBox(self)
-        msg.setStandardButtons(QtGui.QMessageBox.Ok | QtGui.QMessageBox.Cancel)
-        msg.setIcon(QtGui.QMessageBox.Warning)
-        msg.setWindowTitle("Yakin?")
-        msg.setText("yakin akan mnghapus data " + namadb + " selamanya ?!!")
+        msg = QtGui.QMessageBox(QtGui.QMessageBox.Warning,"Yakin?", "yakin akan mnghapus data " + namadb + " selamanya ?!!",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Cancel, self )
         retval = msg.exec_()
         if retval == QtGui.QMessageBox.Ok:
             self.mysql.delete_database(namadb)
             self.refresh_databases()
             
-            msg = QtGui.QMessageBox(self)
-            msg.setStandardButtons(QtGui.QMessageBox.Ok)
-            msg.setIcon(QtGui.QMessageBox.Information)
-            msg.setWindowTitle("Terhapus Selamanya")
-            msg.setText("Data " + namadb + " selamanya !!")
+            msg = QtGui.QMessageBox(QtGui.QMessageBox.Information,"Terhapus Selamanya","Data " + namadb + " selamanya !!",QtGui.QMessageBox.Ok, self )
             msg.show()
             
+    def btnDbExport_clicked(self):
+        namadb=self.ui.cmbDbExport.currentText()
+        
+        if namadb=="information_schema":
+            msg = QtGui.QMessageBox(QtGui.QMessageBox.Critical,"Database Terlarang",  "silahkan pilih database lain atau buat baru",QtGui.QMessageBox.Ok, self )
+            msg.show()
+            return
+
+        fileName=QtGui.QFileDialog.getSaveFileName(None,"Export Database",QtCore.QString(),"*.sql")
+        if fileName.isEmpty():
+            return
+        if QtCore.QFileInfo(fileName).suffix().isEmpty():
+            fileName.append(".sql")
+            
+        self.mysql.export_database(namadb, fileName)
+        
+    def btnDbImport_clicked(self):
+        namadb=self.ui.cmbDbImport.currentText()
+        
+        if namadb=="information_schema":
+            msg = QtGui.QMessageBox(QtGui.QMessageBox.Critical,"Database Terlarang",  "silahkan pilih database lain atau buat baru",QtGui.QMessageBox.Ok, self )
+            msg.show()
+            return
+            
+        fileName=QtGui.QFileDialog.getOpenFileName(self,"Import Data", QtCore.QString(), "*.sql")
+        if fileName.isEmpty():
+            return
+        
+        msg = QtGui.QMessageBox(QtGui.QMessageBox.Warning,"Yakin?", "seluruh isi data " + namadb + " akan ditimpa data baru, lanjutkan ?!!",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Cancel, self )
+        retval = msg.exec_()
+        if retval == QtGui.QMessageBox.Ok:
+            self.mysql.import_database(namadb,fileName)
+            
+    def btnTrsSave_clicked(self):
+        namadb=self.ui.cmbDbExisting.currentText()
+        strTgl=self.ui.dateTrsTanggal.text()
+        strDesk=self.ui.txtTrsDeskrip.text()
+        strNilai=self.ui.txtTrsNilai.text()
+        intJenis=self.ui.cmbTrsJenis.currentIndex()
+        strDebet=self.mydata.jenis2debet(intJenis)
+        strKredit=self.mydata.jenis2kredit(intJenis)
+        
+        self.mysql.data_insert(namadb, strTgl, strDesk, strNilai, intJenis, strDebet, strKredit)
+        self.ui.txtTrsDeskrip.clear()
+        self.ui.txtTrsNilai.clear()
+        self.ui.cmbTrsJenis.setCurrentIndex(0)
+        
+    def btnTrsClear_clicked(self):
+        self.ui.txtTrsDeskrip.clear()
+        self.ui.txtTrsNilai.clear()
+        self.ui.cmbTrsJenis.setCurrentIndex(0)
+        self.ui.dateTrsTanggal.setDate(QtCore.QDate.currentDate ())
+    
+    def btnTrsNow_clicked(self):
+        self.ui.dateTrsTanggal.setDate(QtCore.QDate.currentDate ())
+        
+    def rbtCariDeskrip_clicked(self):
+        self.cari_disable()
+        self.ui.txtCariDeskrip.setEnabled(True)
+        
+    def rbtCariNilai_clicked(self):
+        self.cari_disable()
+        self.ui.txtCariNilai.setEnabled(True)
+        
+    def rbtCariJenis_clicked(self):
+        self.cari_disable()
+        self.ui.cmbCariJenis.setEnabled(True)
+        
+    def rbtCariDebet_clicked(self):
+        self.cari_disable()
+        self.ui.cmbCariDebet.setEnabled(True)
+        
+    def rbtCariKredit_clicked(self):
+        self.cari_disable()
+        self.ui.cmbCariKredit.setEnabled(True)
+        
+    def rbtCariTanggal_clicked(self):
+        self.cari_disable()
+        self.ui.dateCariTanggal.setEnabled(True)
+        self.ui.btnCariNow.setEnabled(True)
+        
+    def btnCariClear_clicked(self):
+        self.ui.txtCariDeskrip.clear()
+        self.ui.dateCariTanggal.setDate(QtCore.QDate.currentDate())
+        self.ui.txtCariNilai.clear()
+        self.ui.cmbCariJenis.setCurrentIndex(0)
+        self.ui.cmbCariDebet.setCurrentIndex(0)
+        self.ui.cmbCariKredit.setCurrentIndex(0)
+    
+    def btnCariNow_clicked(self):
+        self.ui.dateCariTanggal.setDate(QtCore.QDate.currentDate())
+        
+    def btnCari_clicked(self):
+        self.cari_data()
+        
+    def btnEditNow_clicked(self):
+        self.ui.dateEditTanggal.setDate(QtCore.QDate.currentDate())
+        
+    def btnEditShow_clicked(self):
+        txtID=self.ui.txtEditID.text()
+        self.show_one_data(txtID)
+        
+        self.edit_ability(True)
+        self.ui.btnEditShow.setEnabled(False)
+        self.ui.txtEditID.setEnabled(False)
+        
 #======================================================================================================
 
     def msg_about(self):
-        qtver=QtCore.QString()
-        qtver+= QtCore.QT_VERSION_STR
-         
-        mysqlver=QtCore.QString()
+        qtver= QtCore.QT_VERSION_STR
+        pyver=platform.python_version()
         mysqlver= self.mysql.procSqlVersion()
-         
-        aboutmsg=QtCore.QString()
-        aboutmsg += "Simple Accounting Program \n"
+
+        aboutmsg = "Simple Accounting Program \n"
         aboutmsg += "\n"
         aboutmsg += "Credit: \n"
         aboutmsg += "Accounting Scheme written by Hilmi F. \n"
@@ -139,29 +246,23 @@ class SAP_main(QtGui.QMainWindow):
         aboutmsg += "\n"
         aboutmsg += "Using: \n"
         aboutmsg += "Qt version " + qtver + "\n"
+        aboutmsg += "Python version " + pyver + "\n"
         aboutmsg += "MySQL version " + mysqlver
         
         if platform.system() == "Linux":
-            bashver = QtCore.QString()
             bashver = self.mysql.procCmdVersion()
             aboutmsg += "Bash version " + bashver
             
-            bashver = QtCore.QString()
             osver = self.mysql.procOsVersion()
             aboutmsg += "Linux version " + osver
             
         elif platform.system() == "Windows":
-            osver=QtCore.QString()
             osver = self.mysql.procOsVersion()
             aboutmsg += "OS version " + osver
             
         aboutmsg += "\n"
         
-        msg = QtGui.QMessageBox(self)
-        msg.setStandardButtons(QtGui.QMessageBox.Ok)
-        msg.setIcon(QtGui.QMessageBox.Information)
-        msg.setWindowTitle("About Me")
-        msg.setText(aboutmsg)
+        msg = QtGui.QMessageBox(QtGui.QMessageBox.Information,"About Me",aboutmsg,QtGui.QMessageBox.Ok, self )
         msg.show()
         
     def refresh_databases(self):
@@ -266,18 +367,26 @@ class SAP_main(QtGui.QMainWindow):
         self.ui.dateCariTanggal.setEnabled(False)
         self.ui.btnCariNow.setEnabled(False)
         
-    def app_cari_data(self):
-        if self.ui.rbtCariDeskrip.isChecked():self.mydata.view_search(self.ui.cmbDbExisting.currentText(),"transaksi",self.ui.txtCariDeskrip.text())
-        if self.ui.rbtCariNilai.isChecked():self.mydata.view_search(self.ui.cmbDbExisting.currentText(),"harga",self.ui.txtCariNilai.text())
-        if self.ui.rbtCariJenis.isChecked():self.mydata.view_search(self.ui.cmbDbExisting.currentText(),"jenis",QtCore.QString.number(self.ui.cmbCariJenis.currentIndex()))
-        if self.ui.rbtCariDebet.isChecked():self.mydata.view_search(self.ui.cmbDbExisting.currentText(),"debet",QtCore.QString.number(self.ui.cmbCariDebet.currentIndex()))
-        if self.ui.rbtCariKredit.isChecked():self.mydata.view_search(self.ui.cmbDbExisting.currentText(),"kredit",QtCore.QString.number(self.ui.cmbCariKredit.currentIndex()))
-        if self.ui.rbtCariTanggal.isChecked():self.mydata.view_search(self.ui.cmbDbExisting.currentText(),"tanggal",self.ui.dateCariTanggal.text())
+    def cari_data(self):
+        namadb=self.ui.cmbDbExisting.currentText()
+        strDesk=self.ui.txtCariDeskrip.text()
+        strNilai=self.ui.txtCariNilai.text()
+        strJenis=QtCore.QString.number(self.ui.cmbCariJenis.currentIndex())
+        strDebet=QtCore.QString.number(self.ui.cmbCariDebet.currentIndex())
+        strKredit=QtCore.QString.number(self.ui.cmbCariKredit.currentIndex())
+        strDate=self.ui.dateCariTanggal.text()
+        
+        if self.ui.rbtCariDeskrip.isChecked():self.mydata.view_search(namadb,"transaksi",strDesk)
+        if self.ui.rbtCariNilai.isChecked():self.mydata.view_search(namadb,"harga",strNilai)
+        if self.ui.rbtCariJenis.isChecked():self.mydata.view_search(namadb,"jenis",strJenis)
+        if self.ui.rbtCariDebet.isChecked():self.mydata.view_search(namadb,"debet",strDebet)
+        if self.ui.rbtCariKredit.isChecked():self.mydata.view_search(namadb,"kredit",strKredit)
+        if self.ui.rbtCariTanggal.isChecked():self.mydata.view_search(namadb,"tanggal",strDate)
         
     def show_one_data(self, dataid):
         self.ui.txtEditDeskrip.setText(self.mysql.data_get_one(self.ui.cmbDbExisting.currentText(),"transaksi",dataid))
         self.ui.txtEditNilai.setText(self.mysql.data_get_one(self.ui.cmbDbExisting.currentText(),"harga",dataid))
-        self.ui.cmbEditJenis.setCurrentIndex(self.mysql.data_get_one(self.ui.cmbDbExisting.currentText(),"jenis",dataid).toInt())
+        self.ui.cmbEditJenis.setCurrentIndex(self.mysql.data_get_one(self.ui.cmbDbExisting.currentText(),"jenis",dataid).toInt()[0])
         self.ui.dateEditTanggal.setDate(QtCore.QDate.fromString(self.mysql.data_get_one(self.ui.cmbDbExisting.currentText(),"tanggal",dataid),"yyyy-MM-dd"))
         
     def edit_ability(self,  ability):

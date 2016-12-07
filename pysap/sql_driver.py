@@ -11,31 +11,11 @@ class SQL_driver(object):
         self.sqlArgs=QtCore.QStringList()
         
         QtCore.QObject.connect(self.sqlProc, QtCore.SIGNAL("readyReadStandardOutput()"), self.processOnGoing)
-#        QtCore.QObject.connect(self.sqlProc, QtCore.SIGNAL("finished(int, QProcess::ExitStatus)"), self.processFinished)
-#        QtCore.QObject.connect(self.sqlProc, QtCore.SIGNAL("error(QProcess::ProcessError)"), self.processError)
          
     def processOnGoing(self):
         newData= QtCore.QByteArray()
         newData= self.sqlProc.readAllStandardOutput()
         self.txtProcOutput.appendPlainText(QtCore.QString.fromLocal8Bit(newData))
-        
-#    def processFinished(self, exitCode,  exitStatus):
-#        if exitStatus == QtCore.QProcess.CrashExit:
-#            msg = QtGui.QMessageBox(self)
-#            msg.setStandardButtons(QtGui.QMessageBox.Ok)
-#            msg.setIcon(QtGui.QMessageBox.Crititcal)
-#            msg.setWindowTitle("Crash")
-#            msg.setText("Database Service Crashed")
-#            msg.show()
-#        
-#    def processError(self, error):
-#        if error == QtCore.QProcess.FailedToStart:
-#            msg = QtGui.QMessageBox(self)
-#            msg.setStandardButtons(QtGui.QMessageBox.Ok)
-#            msg.setIcon(QtGui.QMessageBox.Crititcal)
-#            msg.setWindowTitle("Not Found")
-#            msg.setText("Database Service not found")
-#            msg.show()
             
 #======================================================================================================
             
