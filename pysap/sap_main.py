@@ -59,6 +59,8 @@ class SAP_main(QtGui.QMainWindow):
         
         QtCore.QObject.connect(self.ui.btnEditNow, QtCore.SIGNAL("clicked()"), self.btnEditNow_clicked)
         QtCore.QObject.connect(self.ui.btnEditShow, QtCore.SIGNAL("clicked()"), self.btnEditShow_clicked)
+        QtCore.QObject.connect(self.ui.btnEditChange, QtCore.SIGNAL("clicked()"), self.btnEditChange_clicked)
+        QtCore.QObject.connect(self.ui.btnEditDelete, QtCore.SIGNAL("clicked()"), self.btnEditDelete_clicked)
         
 #======================================================================================================
         
@@ -230,6 +232,44 @@ class SAP_main(QtGui.QMainWindow):
         self.edit_ability(True)
         self.ui.btnEditShow.setEnabled(False)
         self.ui.txtEditID.setEnabled(False)
+        
+    def btnEditChange_clicked(self):
+        namadb=self.ui.cmbDbExisting.currentText()
+        strID=self.ui.txtEditID.text()
+        strTgl=self.ui.dateEditTanggal.text()
+        strDesk=self.ui.txtEditDeskrip.text()
+        strNilai=self.ui.txtEditNilai.text()
+        intJenis=self.ui.cmbEditJenis.currentIndex()
+        strDebet=self.mydata.jenis2debet(intJenis)
+        strKredit=self.mydata.jenis2kredit(intJenis)
+        
+        self.mysql.data_update(namadb, strID, strTgl, strDesk, strNilai, intJenis, strDebet, strKredit)
+        
+        self.ui.txtEditID.clear()
+        self.ui.txtEditDeskrip.clear()
+        self.ui.txtEditNilai.clear()
+        self.ui.dateEditTanggal.setDate(QtCore.QDate.currentDate())
+        self.ui.cmbEditJenis.setCurrentIndex(0)
+        
+        self.edit_ability(False)
+        self.ui.btnEditShow.setEnabled(True)
+        self.ui.txtEditID.setEnabled(True)
+        
+    def btnEditDelete_clicked(self):
+        namadb=self.ui.cmbDbExisting.currentText()
+        strID=self.ui.txtEditID.text()
+        
+        self.mysql.data_delete(namadb, strID)
+        
+        self.ui.txtEditID.clear()
+        self.ui.txtEditDeskrip.clear()
+        self.ui.txtEditNilai.clear()
+        self.ui.dateEditTanggal.setDate(QtCore.QDate.currentDate())
+        self.ui.cmbEditJenis.setCurrentIndex(0)
+        
+        self.edit_ability(False)
+        self.ui.btnEditShow.setEnabled(True)
+        self.ui.txtEditID.setEnabled(True)
         
 #======================================================================================================
 
