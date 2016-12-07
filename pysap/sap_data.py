@@ -144,14 +144,13 @@ class SAP_data(object):
         tblsearcharg.append(search_string)
         tblsearch.startDetached("./sap_tblsearch.py",tblsearcharg)
         
-    def print_pdf(self,  dbase):
-        fileName=QtCore.QString()
-        fileName=QtGui.QFileDialog.getSaveFileName(None,"export PDF",QtCore.QString(),"*.pdf")
+    def print_csv(self, dbase):
+        fileName=QtGui.QFileDialog.getSaveFileName(None,"export CSV",QtCore.QString(),"*.csv")
         if fileName.isEmpty():
             return
         if QtCore.QFileInfo(fileName).suffix().isEmpty():
-            fileName.append(".pdf")
-        
+            fileName.append(".csv")
+            
         datid = QtCore.QStringList()
         dattanggal = QtCore.QStringList()
         dattransaksi = QtCore.QStringList()
@@ -159,7 +158,7 @@ class SAP_data(object):
         datjenis = QtCore.QStringList()
         datdebet = QtCore.QStringList()
         datkredit = QtCore.QStringList()
-
+        
         datid = self.mysql.data_get_one_column(dbase,"id")
         dattanggal = self.mysql.data_get_one_column(dbase,"tanggal")
         dattransaksi = self.mysql.data_get_one_column(dbase,"transaksi")
@@ -167,25 +166,20 @@ class SAP_data(object):
         datjenis = self.mysql.data_get_one_column(dbase,"jenis")
         datdebet = self.mysql.data_get_one_column(dbase,"debet")
         datkredit = self.mysql.data_get_one_column(dbase,"kredit")
-
-        textdata=QtCore.QString()
-        for i in range(datid.count()):
-            jenis_num = QtCore.QString()
-            debet_num = QtCore.QString()
-            kredit_num = QtCore.QString()
-            
+        
+        csvfile = open(fileName, "w")
+        jenis_num = datjenis[0]
+        debet_num = datdebet[0]
+        kredit_num = datkredit[0]
+        strData='\"' + datid[0]  + '\",\"' + dattanggal[0] + '\",\"' + dattransaksi[0] + '\",\"' + datharga[0] + '\",\"' + self.jenis2text(jenis_num.toInt()[0]) + '\",\"' + self.debet2text(debet_num.toInt()[0]) + '\",\"' + self.kredit2text(kredit_num.toInt()[0]) + '\"' + '\r'
+        csvfile.write(strData)
+        csvfile.close()
+        
+        csvfile = open(fileName, "a")
+        for i in range(1, datid.count()):
             jenis_num = datjenis[i]
             debet_num = datdebet[i]
             kredit_num = datkredit[i]
-            
-            textdata +=     dattanggal[i] + " | " + dattransaksi[i] + " | " + datharga[i] + " | " + self.jenis2text(jenis_num.toInt()) + " | " + self.debet2text(debet_num.toInt()) + " | " + self.kredit2text(kredit_num.toInt()) + "\n"
-        
-        printer=QtGui.QPrinter (QtGui.QPrinter.PrinterResolution)
-        printer.setOutputFormat(QtGui.QPrinter.PdfFormat)
-        printer.setPaperSize(QtGui.QPrinter.A4)
-        printer.setOutputFileName(fileName)
-        
-        doc = QtGui.QTextDocument()
-        doc.setPlainText(textdata)
-        doc.setPageSize(printer.pageRect().size())
-        doc.print_(printer)
+            strData='\"' + datid[i]  + '\",\"' + dattanggal[i] + '\",\"' + dattransaksi[i] + '\",\"' + datharga[i] + '\",\"' + self.jenis2text(jenis_num.toInt()[0]) + '\",\"' + self.debet2text(debet_num.toInt()[0]) + '\",\"' + self.kredit2text(kredit_num.toInt()[0]) + '\"' + '\r'
+            csvfile.write(strData)
+        csvfile.close()

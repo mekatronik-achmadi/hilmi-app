@@ -388,14 +388,14 @@
        <property name="readOnly">
         <bool>false</bool>
        </property>
-       <property name="showGroupSeparator" stdset="0">
-        <bool>false</bool>
-       </property>
        <property name="displayFormat">
         <string>yyyy-M-d</string>
        </property>
        <property name="calendarPopup">
         <bool>true</bool>
+       </property>
+       <property name="showGroupSeparator" stdset="0">
+        <bool>false</bool>
        </property>
       </widget>
       <widget class="QLabel" name="label_4">
@@ -534,14 +534,14 @@
        <property name="readOnly">
         <bool>false</bool>
        </property>
-       <property name="showGroupSeparator" stdset="0">
-        <bool>false</bool>
-       </property>
        <property name="displayFormat">
         <string>yyyy-M-d</string>
        </property>
        <property name="calendarPopup">
         <bool>true</bool>
+       </property>
+       <property name="showGroupSeparator" stdset="0">
+        <bool>false</bool>
        </property>
       </widget>
       <widget class="QPushButton" name="btnCari">
@@ -804,14 +804,14 @@
        <property name="readOnly">
         <bool>false</bool>
        </property>
-       <property name="showGroupSeparator" stdset="0">
-        <bool>false</bool>
-       </property>
        <property name="displayFormat">
         <string>yyyy-M-d</string>
        </property>
        <property name="calendarPopup">
         <bool>true</bool>
+       </property>
+       <property name="showGroupSeparator" stdset="0">
+        <bool>false</bool>
        </property>
       </widget>
       <widget class="QLabel" name="label_10">
@@ -946,7 +946,7 @@
      <string>View</string>
     </property>
     <addaction name="actionMain_Data_as_Table"/>
-    <addaction name="actionMain_Data_as_PDF"/>
+    <addaction name="actionMain_Data_as_CSV"/>
     <addaction name="separator"/>
    </widget>
    <addaction name="menuFile"/>
@@ -967,9 +967,9 @@
     <string>Main Data as Table</string>
    </property>
   </action>
-  <action name="actionMain_Data_as_PDF">
+  <action name="actionMain_Data_as_CSV">
    <property name="text">
-    <string>Main Data as PDF</string>
+    <string>Main Data as CSV</string>
    </property>
   </action>
  </widget>

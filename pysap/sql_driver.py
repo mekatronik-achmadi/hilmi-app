@@ -117,7 +117,7 @@ class SQL_driver(object):
             sqldumpproc.start("cmd",sqldumpprocargs)
         
         sqldumpproc.waitForFinished()
-        
+    
     def import_database(self, dbname, filesrc):
         sqlimportproc=QtCore.QProcess()
         

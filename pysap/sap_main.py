@@ -35,7 +35,7 @@ class SAP_main(QtGui.QMainWindow):
         QtCore.QObject.connect(self.ui.actionAbout, QtCore.SIGNAL("triggered()"), self.actionAbout_triggered)
         QtCore.QObject.connect(self.ui.actionExit, QtCore.SIGNAL("triggered()"), self.actionExit_triggered)
         QtCore.QObject.connect(self.ui.actionMain_Data_as_Table, QtCore.SIGNAL("triggered()"), self.actionMain_Data_as_Table_triggered)
-        QtCore.QObject.connect(self.ui.actionMain_Data_as_PDF, QtCore.SIGNAL("triggered()"), self.actionMain_Data_as_PDF_triggered)
+        QtCore.QObject.connect(self.ui.actionMain_Data_as_CSV, QtCore.SIGNAL("triggered()"), self.actionMain_Data_as_CSV_triggered)
         
         QtCore.QObject.connect(self.ui.btnDbExisting, QtCore.SIGNAL("clicked()"), self.btnDbExisting_clicked)
         QtCore.QObject.connect(self.ui.btnDbNew, QtCore.SIGNAL("clicked()"), self.btnDbNew_clicked)
@@ -73,9 +73,8 @@ class SAP_main(QtGui.QMainWindow):
     def actionMain_Data_as_Table_triggered(self):
         self.mydata.view_table(self.ui.cmbDbExisting.currentText())
         
-    def actionMain_Data_as_PDF_triggered(self):
-        pass
-#        self.mydata.view_pdf(self.ui.cmbDbExisting.currentText())
+    def actionMain_Data_as_CSV_triggered(self):
+        self.mydata.print_csv(self.ui.cmbDbExisting.currentText())
         
     def btnDbExisting_clicked(self):
         if self.ui.cmbDbExisting.currentText()=="information_schema": 
@@ -323,7 +322,7 @@ class SAP_main(QtGui.QMainWindow):
         self.ui.tabMain.setTabEnabled(2,ability)
         self.ui.tabMain.setTabEnabled(3,ability)
         self.ui.actionMain_Data_as_Table.setEnabled(ability)
-        self.ui.actionMain_Data_as_PDF.setEnabled(ability)
+        self.ui.actionMain_Data_as_CSV.setEnabled(ability)
         
     def cmb_jenis(self):
         jenis=QtCore.QStringList()
