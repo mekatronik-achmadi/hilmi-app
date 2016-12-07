@@ -3,15 +3,15 @@
 
 import sys
 from PyQt4 import QtCore, QtGui
-from sap_sqldata import SQLdata
-from sap_sqlsh import SQLsh
+from sql_driver import SQL_driver
+from sap_data import SAP_data
 
-class ViewTable(QtGui.QTableWidget):
+class Table_View(QtGui.QTableWidget):
     def __init__(self, dbase, *args):
         QtGui.QTableWidget.__init__(self, *args)
         
-        self.mysql= SQLsh()
-        self.mydata=SQLdata()
+        self.mysql= SQL_driver()
+        self.mydata=SAP_data()
         
         self.setColumnCount(7)
 
@@ -99,6 +99,6 @@ class ViewTable(QtGui.QTableWidget):
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
-    tabelview =ViewTable(sys.argv[1])
+    tabelview =Table_View(sys.argv[1])
     tabelview.show()
     sys.exit(app.exec_())

@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from PyQt4 import QtCore, QtGui
-from sap_sqlsh import SQLsh
+from sql_driver import SQL_driver
 
-class SQLdata(object):
+class SAP_data(object):
     def __init__ (self):
-        self.mysql=SQLsh()
+        self.mysql=SQL_driver()
         
     def jenis2debet(self, num_jenis):
         result=0

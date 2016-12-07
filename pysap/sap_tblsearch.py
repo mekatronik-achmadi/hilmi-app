@@ -3,15 +3,15 @@
 
 import sys
 from PyQt4 import QtCore, QtGui
-from sap_sqldata import SQLdata
-from sap_sqlsh import SQLsh
+from sql_driver import SQL_driver
+from sap_data import SAP_data
 
-class SearchTable(QtGui.QTableWidget):
+class Table_Search(QtGui.QTableWidget):
     def __init__(self, dbase, search_field, search_string, *args):
         QtGui.QTableWidget.__init__(self, *args)
         
-        self.mysql= SQLsh()
-        self.mydata=SQLdata()
+        self.mysql= SQL_driver()
+        self.mydata=SAP_data()
         
         self.setColumnCount(7)
 
@@ -99,6 +99,6 @@ class SearchTable(QtGui.QTableWidget):
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
-    tabelsearch =SearchTable(sys.argv[1], sys.argv[2], sys.argv[3])
+    tabelsearch =Table_Search(sys.argv[1], sys.argv[2], sys.argv[3])
     tabelsearch.show()
     sys.exit(app.exec_())

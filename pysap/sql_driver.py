@@ -3,7 +3,7 @@
 import platform
 from PyQt4 import QtCore, QtGui
 
-class SQLsh(object):
+class SQL_driver(object):
     def __init__ (self):
         
         self.txtProcOutput=QtGui.QPlainTextEdit()

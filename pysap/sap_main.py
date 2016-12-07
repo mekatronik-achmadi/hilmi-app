@@ -3,17 +3,17 @@
 import platform
 from PyQt4 import QtCore, QtGui
 from sap_ui import Ui_sap
-from sap_sqlsh import SQLsh
-from sap_sqldata import SQLdata
+from sql_driver import SQL_driver
+from sap_data import SAP_data
 
-class SAPprog(QtGui.QMainWindow):
+class SAP_main(QtGui.QMainWindow):
     def __init__ (self, parent=None):
         QtGui.QWidget.__init__(self, parent)
         self.ui = Ui_sap()
         self.ui.setupUi(self)
         
-        self.mysql= SQLsh()
-        self.mydata=SQLdata()
+        self.mysql= SQL_driver()
+        self.mydata=SAP_data()
         
         self.mysql.delete_default()
         
