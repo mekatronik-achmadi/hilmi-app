@@ -45,39 +45,46 @@ class Table_Search(QtGui.QTableWidget):
         self.setRowCount(datid.count())
         for i in range(0, datid.count()):
             isi = QtGui.QTableWidgetItem(datid[i])
+            isi.setFlags(isi.flags() ^ QtCore.Qt.ItemIsEditable )
             self.setItem(i,0,isi)
         
         dattanggal=self.mysql.data_get_one_column_search(dbase,"tanggal",search_field,search_string)
         for i in range(0,datid.count()):
             isi = QtGui.QTableWidgetItem(dattanggal[i])
+            isi.setFlags(isi.flags() ^ QtCore.Qt.ItemIsEditable )
             self.setItem(i,1,isi)
             
         dattransaksi=self.mysql.data_get_one_column_search(dbase,"transaksi",search_field,search_string)
         for i in range(0, datid.count()):
             isi = QtGui.QTableWidgetItem(dattransaksi[i])
+            isi.setFlags(isi.flags() ^ QtCore.Qt.ItemIsEditable )
             self.setItem(i,2,isi)
         
         datharga=self.mysql.data_get_one_column_search(dbase,"harga",search_field,search_string)
         for i in range(0, datid.count()):
             isi = QtGui.QTableWidgetItem(datharga[i])
+            isi.setFlags(isi.flags() ^ QtCore.Qt.ItemIsEditable )
             self.setItem(i,3,isi)
         
         datjenis=self.mysql.data_get_one_column_search(dbase,"jenis",search_field,search_string)
         for i in range(0, datid.count()):
             jenis_num = datjenis[i]
             isi = QtGui.QTableWidgetItem(self.mydata.jenis2text(jenis_num.toInt()[0]))
+            isi.setFlags(isi.flags() ^ QtCore.Qt.ItemIsEditable )
             self.setItem(i,4,isi)
             
         datdebet=self.mysql.data_get_one_column_search(dbase,"debet",search_field,search_string)
         for i in range(0, datid.count()):
             debet_num = datdebet[i]
             isi = QtGui.QTableWidgetItem(self.mydata.debet2text(debet_num.toInt()[0]))
+            isi.setFlags(isi.flags() ^ QtCore.Qt.ItemIsEditable )
             self.setItem(i,5,isi)
             
         datkredit=self.mysql.data_get_one_column_search(dbase,"kredit",search_field,search_string)
         for i in range(0, datid.count()):
             kredit_num = datkredit[i]
             isi = QtGui.QTableWidgetItem(self.mydata.kredit2text(kredit_num.toInt()[0]))
+            isi.setFlags(isi.flags() ^ QtCore.Qt.ItemIsEditable )
             self.setItem(i,6,isi)
 
 if __name__ == "__main__":
