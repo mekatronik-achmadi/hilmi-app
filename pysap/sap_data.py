@@ -160,14 +160,6 @@ class SAP_data(object):
             return
         if QtCore.QFileInfo(fileName).suffix().isEmpty():
             fileName.append(".csv")
-            
-        datid = QtCore.QStringList()
-        dattanggal = QtCore.QStringList()
-        dattransaksi = QtCore.QStringList()
-        datharga = QtCore.QStringList()
-        datjenis = QtCore.QStringList()
-        datdebet = QtCore.QStringList()
-        datkredit = QtCore.QStringList()
         
         datid = self.mysql.data_get_one_column(dbase,"id")
         dattanggal = self.mysql.data_get_one_column(dbase,"tanggal")

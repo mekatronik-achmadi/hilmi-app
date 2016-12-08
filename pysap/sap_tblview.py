@@ -41,46 +41,39 @@ class Table_View(QtGui.QTableWidget):
         self.setsqldata(dbase)
         
     def setsqldata(self, dbase):
-        datid=QtCore.QStringList()
         datid=self.mysql.data_get_one_column(dbase,"id")        
         self.setRowCount(datid.count())
         for i in range(0, datid.count()):
             isi = QtGui.QTableWidgetItem(datid[i])
             self.setItem(i,0,isi)
         
-        dattanggal=QtCore.QStringList()
         dattanggal=self.mysql.data_get_one_column(dbase,"tanggal")
         for i in range(0,datid.count()):
             isi = QtGui.QTableWidgetItem(dattanggal[i])
             self.setItem(i,1,isi)
             
-        dattransaksi=QtCore.QStringList()
         dattransaksi=self.mysql.data_get_one_column(dbase,"transaksi")
         for i in range(0, datid.count()):
             isi = QtGui.QTableWidgetItem(dattransaksi[i])
             self.setItem(i,2,isi)
         
-        datharga=QtCore.QStringList()
         datharga=self.mysql.data_get_one_column(dbase,"harga")
         for i in range(0, datid.count()):
             isi = QtGui.QTableWidgetItem(datharga[i])
             self.setItem(i,3,isi)
         
-        datjenis=QtCore.QStringList()
         datjenis=self.mysql.data_get_one_column(dbase,"jenis")
         for i in range(0, datid.count()):
             jenis_num = datjenis[i]
             isi = QtGui.QTableWidgetItem(self.mydata.jenis2text(jenis_num.toInt()[0]))
             self.setItem(i,4,isi)
             
-        datdebet=QtCore.QStringList()
         datdebet=self.mysql.data_get_one_column(dbase,"debet")
         for i in range(0, datid.count()):
             debet_num = datdebet[i]
             isi = QtGui.QTableWidgetItem(self.mydata.debet2text(debet_num.toInt()[0]))
             self.setItem(i,5,isi)
             
-        datkredit=QtCore.QStringList()
         datkredit=self.mysql.data_get_one_column(dbase,"kredit")
         for i in range(0, datid.count()):
             kredit_num = datkredit[i]

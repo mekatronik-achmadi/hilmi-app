@@ -63,7 +63,6 @@ class SQL_driver(object):
         elif platform.system() == "Windows":
             self.sqlProc.start("cmd /c ver")
             self.sqlProc.waitForFinished()
-            result_win=QtCore.QStringList()
             result_win=self.txtProcOutput.toPlainText().split(QtCore.QRegExp("\n"),QtCore.QString.SkipEmptyParts)
             return result_win[0]
         else:
@@ -134,7 +133,6 @@ class SQL_driver(object):
         self.sqlArgs.append("show databases;")
         self.procExec()
         
-        result=QtCore.QStringList()
         result=self.txtProcOutput.toPlainText().split(QtCore.QRegExp("\n"),QtCore.QString.SkipEmptyParts)
         return result
         
@@ -214,7 +212,6 @@ class SQL_driver(object):
         self.sqlArgs.append(getargs)
         self.procExec()
         
-        result=QtCore.QStringList()
         result=self.txtProcOutput.toPlainText().split(QtCore.QRegExp("\n"),QtCore.QString.SkipEmptyParts)
         return result
         
@@ -227,7 +224,6 @@ class SQL_driver(object):
         self.sqlArgs.append(searchargs)
         self.procExec()
         
-        result=QtCore.QStringList()
         result=self.txtProcOutput.toPlainText().split(QtCore.QRegExp("\n"),QtCore.QString.SkipEmptyParts)
         return result
         
@@ -240,7 +236,6 @@ class SQL_driver(object):
         self.sqlArgs.append(getargs)
         self.procExec()
 
-        result_sum=QtCore.QStringList()
         result_sum=self.txtProcOutput.toPlainText().split(QtCore.QRegExp("\n"),QtCore.QString.SkipEmptyParts)
 
         result=result_sum[0]        
