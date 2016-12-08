@@ -67,7 +67,6 @@ class SAP_data(object):
 #======================================================================================================
 
     def jenis2text(self, num_jenis):
-        result=QtCore.QString()
         if num_jenis == 0:result="PEMBELIAN BAHAN BAKU TUNAI"
         elif num_jenis == 1:result="PEMBELIAN BAHAN BAKU KREDIT"
         elif num_jenis == 2:result="RETUR PEMBELIAN TUNAI"
@@ -95,7 +94,6 @@ class SAP_data(object):
         return result
 
     def debet2text(self,  num_debet):
-        result=QtCore.QString()
         if num_debet == 0:result="PEMBELIAN"
         elif num_debet == 1:result="KAS DI TANGAN"
         elif num_debet == 2:result="UTANG USAHA"
@@ -114,7 +112,6 @@ class SAP_data(object):
         return result
     
     def kredit2text(self,  num_kredit):
-        result=QtCore.QString()
         if num_kredit == 0:result="KAS DI TANGAN"
         elif num_kredit == 1:result="UTANG USAHA "
         elif num_kredit == 2:result="RETUR PEMBELIAN "
