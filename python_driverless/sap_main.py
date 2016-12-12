@@ -98,7 +98,7 @@ class SAP_main(QtGui.QMainWindow):
         namadb = self.ui.txtDbNew.text()
         
         if namadb ==  "performance_schema" or namadb ==  "mysql" or namadb ==  "test" or namadb ==  "information_schema":
-            msg = QtGui.QMessageBox(QtGui.QMessageBox.Critical,"Nama terlarang","Nama database " + namadb + " dilarang digunakan.Silahkan pilih nama lain !!",QtGui.QMessageBox.Ok, self )
+            msg = QtGui.QMessageBox(QtGui.QMessageBox.Critical,"Nama terlarang","Nama database \"" + namadb + "\" dilarang digunakan.\nSilahkan pilih nama lain !!",QtGui.QMessageBox.Ok, self )
             msg.show()
             return
         

@@ -136,7 +136,7 @@ class SQL_driver(object):
         result=QtCore.QStringList()
         result_all=self.txtProcOutput.toPlainText().split(QtCore.QRegExp("\n"),QtCore.QString.SkipEmptyParts)
         
-        for i in result_all.count():
+        for i in range(0, result_all.count()):
             if result_all[i] == "performance_schema":
                 pass
             elif result_all[i] == "mysql":
