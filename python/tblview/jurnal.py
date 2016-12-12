@@ -18,7 +18,7 @@ class TableView(QtGui.QTableWidget):
         tabellabel.append("Kredit")
         
         self.setHorizontalHeaderLabels(tabellabel)
-        self.setWindowTitle("Rekap Data")
+        self.setWindowTitle("Tabel Jurnal")
         
         self.column_number=tabellabel.count()
         self.setColumnCount(self.column_number)

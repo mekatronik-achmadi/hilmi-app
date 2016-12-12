@@ -161,11 +161,11 @@ class SAP_storage(object):
         cur.close()
         db.close()
         
-    def search_tbl_jurnal(self, dbname, field, dataid):
+    def search_tbl_jurnal(self, dbname, dataid):
         db = MySQLdb.connect("localhost","root","", str(dbname))
         cur = db.cursor()
         
-        getargs = "select %s from tabel_jurnal where id='%s'" % (field, dataid)
+        getargs = "select * from tabel_jurnal where id='%s'" % dataid
         cur.execute(getargs)
         result=cur.fetchall()
 

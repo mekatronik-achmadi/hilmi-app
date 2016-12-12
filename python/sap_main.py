@@ -21,7 +21,8 @@ class SAP_main(QtGui.QMainWindow):
         self.tab_ability(False)
         
         self.cmb_debet()
-        self.cmb_kredit()
+        self.cmbTrsDebet_changed()
+        self.cmbEditDebet_changed()
         self.cmb_cari_kredit()
         
         self.ui.dateTrsTanggal.setDate(QtCore.QDate.currentDate ())
@@ -54,6 +55,12 @@ class SAP_main(QtGui.QMainWindow):
         QtCore.QObject.connect(self.ui.btnCariClear, QtCore.SIGNAL("clicked()"), self.btnCariClear_clicked)
         QtCore.QObject.connect(self.ui.btnCariNow, QtCore.SIGNAL("clicked()"), self.btnCariNow_clicked)
         QtCore.QObject.connect(self.ui.btnCari, QtCore.SIGNAL("clicked()"), self.btnCari_clicked)
+        
+        QtCore.QObject.connect(self.ui.btnEditNow, QtCore.SIGNAL("clicked()"), self.btnEditNow_clicked)
+        QtCore.QObject.connect(self.ui.btnEditShow, QtCore.SIGNAL("clicked()"), self.btnEditShow_clicked)
+        QtCore.QObject.connect(self.ui.cmbEditDebet, QtCore.SIGNAL("currentIndexChanged(int)"), self.cmbEditDebet_changed)
+        QtCore.QObject.connect(self.ui.btnEditChange, QtCore.SIGNAL("clicked()"), self.btnEditChange_clicked)
+        QtCore.QObject.connect(self.ui.btnEditDelete, QtCore.SIGNAL("clicked()"), self.btnEditDelete_clicked)
         
 #======================================================================================================
 
@@ -136,10 +143,6 @@ class SAP_main(QtGui.QMainWindow):
         if retval == QtGui.QMessageBox.Ok:
             self.my_storage.import_database(namadb,fileName)
             
-    def cmbTrsDebet_changed(self):
-        self.ui.cmbTrsKredit.clear()
-        self.ui.cmbTrsKredit.insertItems(0,self.my_jurnal.txtlst_kredit_debet(self.ui.cmbTrsDebet.currentText()))
-            
 #======================================================================================================
 
     def btnTrsClear_clicked(self):
@@ -147,6 +150,10 @@ class SAP_main(QtGui.QMainWindow):
         self.ui.txtTrsNilai.clear()
         self.ui.cmbTrsJenis.setCurrentIndex(0)
         self.ui.dateTrsTanggal.setDate(QtCore.QDate.currentDate ())
+        
+    def cmbTrsDebet_changed(self):
+        self.ui.cmbTrsKredit.clear()
+        self.ui.cmbTrsKredit.insertItems(0,self.my_jurnal.txtlst_kredit_debet(self.ui.cmbTrsDebet.currentText()))
     
     def btnTrsNow_clicked(self):
         self.ui.dateTrsTanggal.setDate(QtCore.QDate.currentDate ())
@@ -158,6 +165,12 @@ class SAP_main(QtGui.QMainWindow):
         strNilai=self.ui.txtTrsNilai.text()
         strDebet=self.ui.cmbTrsDebet.currentText()
         strKredit=self.ui.cmbTrsKredit.currentText()
+        
+        if strDebet == "-- pilih salah satu --":
+            msg = QtGui.QMessageBox(QtGui.QMessageBox.Critical,"Debet Kosong","Pilih alah satu jenis transaksi debet !!",QtGui.QMessageBox.Ok, self )
+            msg.show()
+            return
+        
         self.my_storage.insert_tbl_jurnal(namadb, strTgl, strDesk, strNilai, strDebet, strKredit)
         
         self.ui.txtTrsDeskrip.clear()
@@ -204,6 +217,68 @@ class SAP_main(QtGui.QMainWindow):
         
     def btnCari_clicked(self):
         self.cari_data()
+        
+#======================================================================================================
+
+    def btnEditNow_clicked(self):
+        self.ui.dateEditTanggal.setDate(QtCore.QDate.currentDate())
+    
+    def btnEditShow_clicked(self):
+        txtID=self.ui.txtEditID.text()
+        self.show_one_data(txtID)
+        
+        self.edit_ability(True)
+        self.ui.btnEditShow.setEnabled(False)
+        self.ui.txtEditID.setEnabled(False)
+        
+    def cmbEditDebet_changed(self):
+        self.ui.cmbEditKredit.clear()
+        self.ui.cmbEditKredit.insertItems(0,self.my_jurnal.txtlst_kredit_debet(self.ui.cmbEditDebet.currentText()))
+        
+    def btnEditChange_clicked(self):
+        namadb=self.ui.cmbDbExisting.currentText()
+        strID=self.ui.txtEditID.text()
+        strTgl=self.ui.dateEditTanggal.text()
+        strDesk=self.ui.txtEditDeskrip.text()
+        strNilai=self.ui.txtEditNilai.text()
+        strDebet=self.ui.cmbEditDebet.currentText()
+        strKredit=self.ui.cmbEditKredit.currentText()
+        
+        if strDebet == "-- pilih salah satu --":
+            msg = QtGui.QMessageBox(QtGui.QMessageBox.Critical,"Debet Kosong","Pilih alah satu jenis transaksi debet !!",QtGui.QMessageBox.Ok, self )
+            msg.show()
+            return
+        
+        self.my_storage.update_tbl_jurnal(namadb, strID, strTgl, strDesk, strNilai, strDebet, strKredit)
+        
+        self.ui.txtEditID.clear()
+        self.ui.txtEditDeskrip.clear()
+        self.ui.txtEditNilai.clear()
+        self.ui.dateEditTanggal.setDate(QtCore.QDate.currentDate())
+        self.ui.cmbEditDebet.setCurrentIndex(0)
+        self.cmbEditDebet_changed()
+        
+        self.edit_ability(False)
+        self.ui.btnEditShow.setEnabled(True)
+        self.ui.txtEditID.setEnabled(True)
+        
+    def btnEditDelete_clicked(self):
+        namadb=self.ui.cmbDbExisting.currentText()
+        strID=self.ui.txtEditID.text()
+        
+        self.my_storage.delete_tbl_jurnal(namadb, strID)
+        
+        self.ui.txtEditID.clear()
+        self.ui.txtEditDeskrip.clear()
+        self.ui.txtEditNilai.clear()
+        self.ui.dateEditTanggal.setDate(QtCore.QDate.currentDate())
+        self.ui.cmbEditDebet.setCurrentIndex(0)
+        self.cmbEditDebet_changed()
+        
+        self.edit_ability(False)
+        self.ui.btnEditShow.setEnabled(True)
+        self.ui.txtEditID.setEnabled(True)
+
 #======================================================================================================
 
     def msg_about(self):
@@ -281,12 +356,6 @@ class SAP_main(QtGui.QMainWindow):
         self.ui.cmbEditDebet.clear()
         self.ui.cmbEditDebet.insertItems(0,self.my_jurnal.txtlst_debet())
         
-    def cmb_kredit(self):
-        self.ui.cmbTrsKredit.clear()
-        self.ui.cmbTrsKredit.insertItems(0,self.my_jurnal.txtlst_kredit_debet(self.ui.cmbTrsDebet.currentText()))
-        self.ui.cmbEditKredit.clear()
-        self.ui.cmbEditKredit.insertItems(0,self.my_jurnal.txtlst_kredit_debet(self.ui.cmbEditDebet.currentText()))
-        
     def cmb_cari_kredit(self):
         self.ui.cmbCariKredit.clear()
         self.ui.cmbCariKredit.insertItems(0,self.my_jurnal.txtlst_kredit())
@@ -322,3 +391,12 @@ class SAP_main(QtGui.QMainWindow):
         if self.ui.rbtCariDebet.isChecked():self.my_info.search_tbl_jurnal(namadb,"debet",strDebet)
         if self.ui.rbtCariKredit.isChecked():self.my_info.search_tbl_jurnal(namadb,"kredit",strKredit)
         if self.ui.rbtCariTanggal.isChecked():self.my_info.search_tbl_jurnal(namadb,"tanggal",strDate)
+    
+    def show_one_data(self, dataid):
+        namadb=self.ui.cmbDbExisting.currentText()
+        odata=self.my_storage.search_tbl_jurnal(namadb, dataid)
+        self.ui.dateEditTanggal.setDate(QtCore.QDate.fromString(str(odata[0][1]),"yyyy-MM-dd"))
+        self.ui.txtEditDeskrip.setText(odata[0][2])
+        self.ui.txtEditNilai.setText(odata[0][3])
+        self.ui.cmbEditDebet.setCurrentIndex(self.my_jurnal.int_debet(odata[0][4]))
+        self.cmbEditDebet_changed()

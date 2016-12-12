@@ -45,5 +45,34 @@ class SAP_jurnal(object):
         elif debet == "kas di bank":
             kredit.append("kas di tangan")
             kredit.append("pinjaman")
-            
+        
         return kredit
+        
+#======================================================================================================
+
+    def int_debet(self, debet):
+        if debet == "kas di tangan":
+            result = 1
+        elif debet == "peralatan":
+            result = 2
+        elif debet == "biaya listrik":
+            result = 3
+        elif debet == "biaya telepon":
+            result = 4
+        elif debet == "biaya gaji":
+            result = 5
+        elif debet == "kas di bank":
+            result = 6
+        return result
+        
+    def int_kredit(self, kredit):
+        if kredit == "modal":
+            result=1
+        elif kredit == "penjualan":
+            result=2
+        elif kredit == "kas di tangan":
+            result=3
+        elif kredit == "pinjaman":
+            result=4
+        return result
+        
