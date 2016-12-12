@@ -41,6 +41,7 @@ class SAP_main(QtGui.QMainWindow):
         QtCore.QObject.connect(self.ui.btnDbNew, QtCore.SIGNAL("clicked()"), self.btnDbNew_clicked)
         QtCore.QObject.connect(self.ui.btnDbDelete, QtCore.SIGNAL("clicked()"), self.btnDbDelete_clicked)
         QtCore.QObject.connect(self.ui.btnDbExport, QtCore.SIGNAL("clicked()"), self.btnDbExport_clicked)
+        QtCore.QObject.connect(self.ui.btnDbImport, QtCore.SIGNAL("clicked()"), self.btnDbImport_clicked)
         
         QtCore.QObject.connect(self.ui.btnTrsClear, QtCore.SIGNAL("clicked()"), self.btnTrsClear_clicked)
         QtCore.QObject.connect(self.ui.btnTrsNow, QtCore.SIGNAL("clicked()"), self.btnTrsNow_clicked)
