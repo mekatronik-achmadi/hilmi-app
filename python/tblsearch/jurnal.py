@@ -5,8 +5,8 @@ import sys
 import MySQLdb
 from PyQt4 import QtCore, QtGui
 
-class TableView(QtGui.QTableWidget):
-    def __init__(self, dbase, *args):
+class TableSearch(QtGui.QTableWidget):
+    def __init__(self, dbase, search_field, search_string, *args):
         QtGui.QTableWidget.__init__(self, *args)
         
         tabellabel=QtCore.QStringList()
@@ -35,7 +35,7 @@ class TableView(QtGui.QTableWidget):
         self.setFixedWidth(1000)
         self.setFixedHeight(500)
         
-        self.sqlquery = "select * from tabel_jurnal"
+        self.sqlquery = "select * from tabel_jurnal where %s like '%%%s%%'" % (search_field,search_string)
         self.get_data(dbase)
         self.view_data()
         
@@ -50,7 +50,6 @@ class TableView(QtGui.QTableWidget):
         
     def view_data(self):
         self.setRowCount(self.row_number)
-        
         for i in range(0, self.row_number):
             for j in range(0, self.column_number):
                 isi = QtGui.QTableWidgetItem(str(self.result[i][j]))
@@ -59,6 +58,6 @@ class TableView(QtGui.QTableWidget):
             
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
-    my_app =TableView(sys.argv[1])
+    my_app =TableSearch(sys.argv[1], sys.argv[2], sys.argv[3])
     my_app.show()
     sys.exit(app.exec_())
