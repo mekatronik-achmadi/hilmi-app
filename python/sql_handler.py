@@ -134,7 +134,6 @@ class SQL_handler(object):
         cur.execute(dbargs)
         
         result_all=cur.fetchall()
-        
         result=QtCore.QStringList()
         for rowdata in result_all:
             if rowdata[0] == "performance_schema":
@@ -146,7 +145,7 @@ class SQL_handler(object):
             elif rowdata[0] == "information_schema":
                 pass
             else:
-                result.append(rowdata[0])
+                result.append(str(rowdata[0]))
                 
         cur.close()
         db.close()
@@ -157,7 +156,7 @@ class SQL_handler(object):
         db = MySQLdb.connect("localhost","root","", str(dbname))
         cur = db.cursor()
         
-        tblargs = """create table main_data(
+        tblargs = """create table tabel_jurnal(
                         id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
                         tanggal DATE NOT NULL,
                         transaksi VARCHAR(32) NOT NULL,
@@ -177,7 +176,7 @@ class SQL_handler(object):
         db = MySQLdb.connect("localhost","root","", str(dbname))
         cur = db.cursor()
         
-        insargs = "insert into main_data (id,tanggal,transaksi,harga,jenis,debet,kredit) values (NULL,'%s','%s','%s','%s','%s','%s')" % (
+        insargs = "insert into tabel_jurnal (id,tanggal,transaksi,harga,jenis,debet,kredit) values (NULL,'%s','%s','%s','%s','%s','%s')" % (
             tanggal,
             deskrip, 
             nilai, 
@@ -194,7 +193,7 @@ class SQL_handler(object):
         db = MySQLdb.connect("localhost","root","", str(dbname))
         cur = db.cursor()
         
-        updargs = "update main_data set tanggal= '%s',transaksi='%s',harga='%s',jenis='%s',debet='%s',kredit='%s' where id='%s'" % (
+        updargs = "update tabel_jurnal set tanggal= '%s',transaksi='%s',harga='%s',jenis='%s',debet='%s',kredit='%s' where id='%s'" % (
             tanggal, 
             deskrip, 
             nilai, 
@@ -212,7 +211,7 @@ class SQL_handler(object):
         db = MySQLdb.connect("localhost","root","", str(dbname))
         cur = db.cursor()
         
-        delargs = "delete from main_data where id='%s'" % dataid
+        delargs = "delete from tabel_jurnal where id='%s'" % dataid
         cur.execute(delargs)
         db.commit()
         
@@ -222,39 +221,43 @@ class SQL_handler(object):
 #======================================================================================================
 
     def data_get_one_column(self, dbname, field):
-        self.procArgs()
+        db = MySQLdb.connect("localhost","root","", str(dbname))
+        cur = db.cursor()
         
-        getargs = "use " + dbname +";"
-        getargs += "select " + field + " from main_data"
+        getargs = "select %s from tabel_jurnal" % field
+        cur.execute(getargs)
         
-        self.sqlArgs.append(getargs)
-        self.procExec()
-        
-        result=self.txtProcOutput.toPlainText().split(QtCore.QRegExp("\n"),QtCore.QString.SkipEmptyParts)
+        result_all=cur.fetchall()
+        result=QtCore.QStringList()
+        for rowdata in result_all:
+            result.append(str(rowdata[0]))
+
         return result
         
     def data_get_one_column_search(self,  dbname,field,search_field,search_string):
-        self.procArgs()
+        db = MySQLdb.connect("localhost","root","", str(dbname))
+        cur = db.cursor()
         
-        searchargs = "use " + dbname +";"
-        searchargs += "select " + field + " from main_data where " + search_field + " like " + "\"%" + search_string + "%\"";
+        searchargs = "select %s from tabel_jurnal where %s like '%%%s%%'" % (field,search_field,search_string)
+        cur.execute(searchargs)
         
-        self.sqlArgs.append(searchargs)
-        self.procExec()
-        
-        result=self.txtProcOutput.toPlainText().split(QtCore.QRegExp("\n"),QtCore.QString.SkipEmptyParts)
+        result_all=cur.fetchall()
+        result=QtCore.QStringList()
+        for rowdata in result_all:
+            result.append(str(rowdata[0]))
+
         return result
         
     def data_get_one(self, dbname, field, dataid):
-        self.procArgs()
+        db = MySQLdb.connect("localhost","root","", str(dbname))
+        cur = db.cursor()
         
-        getargs = "use " + dbname +";"
-        getargs += "select " + field + " from main_data where id=" + "\"" + dataid + "\""
+        getargs = "select %s from tabel_jurnal where id='%s'" % (field, dataid)
+        cur.execute(getargs)
         
-        self.sqlArgs.append(getargs)
-        self.procExec()
+        result_all=cur.fetchall()
+        result=QtCore.QStringList()
+        for rowdata in result_all:
+            result.append(str(rowdata[0]))
 
-        result_sum=self.txtProcOutput.toPlainText().split(QtCore.QRegExp("\n"),QtCore.QString.SkipEmptyParts)
-
-        result=result_sum[0]        
         return result
