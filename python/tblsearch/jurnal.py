@@ -17,9 +17,6 @@ class TableSearch(QtGui.QTableWidget):
         tabellabel.append("Debet")
         tabellabel.append("Kredit")
         
-        self.setHorizontalHeaderLabels(tabellabel)
-        self.setWindowTitle("Hasil Pencarian")
-        
         self.column_number=tabellabel.count()
         self.setColumnCount(self.column_number)
 
@@ -32,6 +29,9 @@ class TableSearch(QtGui.QTableWidget):
         
         self.setFixedWidth(700)
         self.setFixedHeight(500)
+        
+        self.setHorizontalHeaderLabels(tabellabel)
+        self.setWindowTitle("Hasil Pencarian")
         
         self.sqlquery = "select * from tabel_jurnal where %s like '%%%s%%'" % (search_field,search_string)
         self.get_data(dbase)

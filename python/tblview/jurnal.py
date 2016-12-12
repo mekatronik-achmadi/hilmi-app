@@ -17,9 +17,6 @@ class TableView(QtGui.QTableWidget):
         tabellabel.append("Debet")
         tabellabel.append("Kredit")
         
-        self.setHorizontalHeaderLabels(tabellabel)
-        self.setWindowTitle("Tabel Jurnal")
-        
         self.column_number=tabellabel.count()
         self.setColumnCount(self.column_number)
 
@@ -32,6 +29,9 @@ class TableView(QtGui.QTableWidget):
         
         self.setFixedWidth(700)
         self.setFixedHeight(500)
+        
+        self.setHorizontalHeaderLabels(tabellabel)
+        self.setWindowTitle("Tabel Jurnal")
         
         self.sqlquery = "select * from tabel_jurnal"
         self.get_data(dbase)
