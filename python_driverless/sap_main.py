@@ -15,8 +15,6 @@ class SAP_main(QtGui.QMainWindow):
         self.mysql= SQL_driver()
         self.mydata=SAP_data()
         
-        self.mysql.delete_default()
-        
         self.refresh_databases()
         self.tab_ability(False)
         
@@ -77,10 +75,6 @@ class SAP_main(QtGui.QMainWindow):
         self.mydata.print_csv(self.ui.cmbDbExisting.currentText())
         
     def btnDbExisting_clicked(self):
-        if self.ui.cmbDbExisting.currentText()=="information_schema": 
-            msg = QtGui.QMessageBox(QtGui.QMessageBox.Critical,"Database Terlarang",  "silahkan pilih database lain atau buat baru",QtGui.QMessageBox.Ok, self )
-            msg.show()
-            return
             
         if self.ui.cmbDbExisting.currentText().isEmpty():
             msg = QtGui.QMessageBox(QtGui.QMessageBox.Critical,"Database Tidak ada","Nama Database tidak ada",QtGui.QMessageBox.Ok, self )
@@ -102,6 +96,12 @@ class SAP_main(QtGui.QMainWindow):
             
     def btnDbNew_clicked(self):
         namadb = self.ui.txtDbNew.text()
+        
+        if namadb ==  "performance_schema" or namadb ==  "mysql" or namadb ==  "test" or namadb ==  "information_schema":
+            msg = QtGui.QMessageBox(QtGui.QMessageBox.Critical,"Nama terlarang","Nama database " + namadb + " dilarang digunakan.Silahkan pilih nama lain !!",QtGui.QMessageBox.Ok, self )
+            msg.show()
+            return
+        
         self.mysql.create_database(namadb)
         self.mysql.create_table(namadb)
         self.refresh_databases()
@@ -111,11 +111,6 @@ class SAP_main(QtGui.QMainWindow):
         
     def btnDbDelete_clicked(self):
         namadb=self.ui.cmbDbDelete.currentText()
-        
-        if namadb=="information_schema":
-            msg = QtGui.QMessageBox(QtGui.QMessageBox.Critical,"Database Terlarang",  "silahkan pilih database lain atau buat baru",QtGui.QMessageBox.Ok, self )
-            msg.show()
-            return
             
         msg = QtGui.QMessageBox(QtGui.QMessageBox.Warning,"Yakin?", "yakin akan mnghapus data " + namadb + " selamanya ?!!",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Cancel, self )
         retval = msg.exec_()
@@ -128,11 +123,6 @@ class SAP_main(QtGui.QMainWindow):
             
     def btnDbExport_clicked(self):
         namadb=self.ui.cmbDbExport.currentText()
-        
-        if namadb=="information_schema":
-            msg = QtGui.QMessageBox(QtGui.QMessageBox.Critical,"Database Terlarang",  "silahkan pilih database lain atau buat baru",QtGui.QMessageBox.Ok, self )
-            msg.show()
-            return
 
         fileName=QtGui.QFileDialog.getSaveFileName(None,"Export Database",QtCore.QString(),"*.sql")
         if fileName.isEmpty():
@@ -144,11 +134,6 @@ class SAP_main(QtGui.QMainWindow):
         
     def btnDbImport_clicked(self):
         namadb=self.ui.cmbDbImport.currentText()
-        
-        if namadb=="information_schema":
-            msg = QtGui.QMessageBox(QtGui.QMessageBox.Critical,"Database Terlarang",  "silahkan pilih database lain atau buat baru",QtGui.QMessageBox.Ok, self )
-            msg.show()
-            return
             
         fileName=QtGui.QFileDialog.getOpenFileName(self,"Import Data", QtCore.QString(), "*.sql")
         if fileName.isEmpty():

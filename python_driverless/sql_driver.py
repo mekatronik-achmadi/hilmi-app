@@ -133,13 +133,27 @@ class SQL_driver(object):
         self.sqlArgs.append("show databases;")
         self.procExec()
         
-        result=self.txtProcOutput.toPlainText().split(QtCore.QRegExp("\n"),QtCore.QString.SkipEmptyParts)
+        result=QtCore.QStringList()
+        result_all=self.txtProcOutput.toPlainText().split(QtCore.QRegExp("\n"),QtCore.QString.SkipEmptyParts)
+        
+        for i in result_all.count():
+            if result_all[i] == "performance_schema":
+                pass
+            elif result_all[i] == "mysql":
+                pass
+            elif result_all[i] == "test":
+                pass
+            elif result_all[i] == "information_schema":
+                pass
+            else:
+                result.append(result_all[i])
+        
         return result
         
-    def delete_default(self):
-        self.delete_database("performance_schema")
-        self.delete_database("mysql")
-        self.delete_database("test")
+    #def delete_default(self):
+        #self.delete_database("performance_schema")
+        #self.delete_database("mysql")
+        #self.delete_database("test")
         
     def create_table(self, dbname):
         self.procArgs()
