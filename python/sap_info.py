@@ -45,7 +45,7 @@ class SAP_info(object):
             
 #======================================================================================================
             
-    def view_tbl_jurnal(self, dbase,):
+    def view_tbl_jurnal(self, dbase):
         tblview=QtCore.QProcess()
         tblviewarg=QtCore.QStringList()
     

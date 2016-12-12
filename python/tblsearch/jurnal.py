@@ -14,25 +14,23 @@ class TableSearch(QtGui.QTableWidget):
         tabellabel.append("Tanggal")
         tabellabel.append("Transaksi")
         tabellabel.append("Harga")
-        tabellabel.append("Jenis")
         tabellabel.append("Debet")
         tabellabel.append("Kredit")
         
         self.setHorizontalHeaderLabels(tabellabel)
-        self.setWindowTitle("Rekap Data")
+        self.setWindowTitle("Hasil Pencarian")
         
         self.column_number=tabellabel.count()
         self.setColumnCount(self.column_number)
 
         self.setColumnWidth(0,50)
         self.setColumnWidth(1,100)
-        self.setColumnWidth(2,200)
+        self.setColumnWidth(2,230)
         self.setColumnWidth(3,100)
-        self.setColumnWidth(4,200)
-        self.setColumnWidth(5,150)
-        self.setColumnWidth(6,150)
+        self.setColumnWidth(4,100)
+        self.setColumnWidth(5,100)
         
-        self.setFixedWidth(1000)
+        self.setFixedWidth(700)
         self.setFixedHeight(500)
         
         self.sqlquery = "select * from tabel_jurnal where %s like '%%%s%%'" % (search_field,search_string)

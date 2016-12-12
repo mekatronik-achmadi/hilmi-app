@@ -11,7 +11,7 @@ class SAP_storage(object):
         
 #======================================================================================================
         
-    def SQLversion(self):
+    def sql_version(self):
         db = MySQLdb.connect("localhost","root","")
         cur = db.cursor()
         
@@ -107,9 +107,8 @@ class SAP_storage(object):
                         tanggal DATE NOT NULL,
                         transaksi VARCHAR(32) NOT NULL,
                         harga VARCHAR(32) NOT NULL,
-                        jenis INT NOT NULL,
-                        debet INT NOT NULL,
-                        kredit INT NOT NULL
+                        debet VARCHAR(32) NOT NULL,
+                        kredit VARCHAR(32) NOT NULL
                         )"""
         cur.execute(tblargs)
         
@@ -118,34 +117,32 @@ class SAP_storage(object):
         
 #======================================================================================================
         
-    def insert_tbl_jurnal(self, dbname, tanggal, deskrip, nilai, str_jenis, str_debet,str_kredit):
+    def insert_tbl_jurnal(self, dbname, tanggal, deskrip, nilai, debet,kredit):
         db = MySQLdb.connect("localhost","root","", str(dbname))
         cur = db.cursor()
         
-        insargs = "insert into tabel_jurnal (id,tanggal,transaksi,harga,jenis,debet,kredit) values (NULL,'%s','%s','%s','%s','%s','%s')" % (
+        insargs = "insert into tabel_jurnal (id,tanggal,transaksi,harga,debet,kredit) values (NULL,'%s','%s','%s','%s','%s')" % (
             tanggal,
             deskrip, 
             nilai, 
-            str_jenis, 
-            str_debet, 
-            str_kredit)
+            debet, 
+            kredit)
         cur.execute(insargs)
         db.commit()
         
         cur.close()
         db.close()
         
-    def update_tbl_jurnal(self, dbname, dataid, tanggal, deskrip, nilai, str_jenis, str_debet,str_kredit):
+    def update_tbl_jurnal(self, dbname, dataid, tanggal, deskrip, nilai, debet,kredit):
         db = MySQLdb.connect("localhost","root","", str(dbname))
         cur = db.cursor()
         
-        updargs = "update tabel_jurnal set tanggal= '%s',transaksi='%s',harga='%s',jenis='%s',debet='%s',kredit='%s' where id='%s'" % (
+        updargs = "update tabel_jurnal set tanggal= '%s',transaksi='%s',harga='%s',debet='%s',kredit='%s' where id='%s'" % (
             tanggal, 
             deskrip, 
             nilai, 
-            str_jenis, 
-            str_debet, 
-            str_kredit, 
+            debet, 
+            kredit, 
             dataid)
         cur.execute(updargs)
         db.commit()
