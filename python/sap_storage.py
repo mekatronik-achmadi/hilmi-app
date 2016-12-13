@@ -98,7 +98,9 @@ class SAP_storage(object):
         cur.close()
         db.close()
         
-    def create_table(self, dbname):
+#======================================================================================================
+        
+    def create_tbl_jurnal(self, dbname):
         db = MySQLdb.connect("localhost","root","", str(dbname))
         cur = db.cursor()
         
@@ -114,8 +116,6 @@ class SAP_storage(object):
         
         cur.close()
         db.close()
-        
-#======================================================================================================
         
     def insert_tbl_jurnal(self, dbname, tanggal, deskrip, nilai, debet,kredit):
         db = MySQLdb.connect("localhost","root","", str(dbname))

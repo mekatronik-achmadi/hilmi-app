@@ -102,8 +102,9 @@ class SAP_main(QtGui.QMainWindow):
             return
         
         self.my_storage.create_database(namadb)
-        self.my_storage.create_table(namadb)
         self.refresh_databases()
+        
+        self.my_storage.create_tbl_jurnal(namadb)
         
         msg = QtGui.QMessageBox(QtGui.QMessageBox.Information,"Sudah tercipta","Data " + namadb + " tercipta !!",QtGui.QMessageBox.Ok, self )
         msg.show()
