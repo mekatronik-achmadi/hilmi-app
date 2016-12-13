@@ -35,7 +35,8 @@ class SAP_main(QtGui.QMainWindow):
         
         QtCore.QObject.connect(self.ui.actionExit, QtCore.SIGNAL("triggered()"), self.actionExit_triggered)
         QtCore.QObject.connect(self.ui.actionAbout, QtCore.SIGNAL("triggered()"), self.actionAbout_triggered)
-        QtCore.QObject.connect(self.ui.actionMain_Data_as_Table, QtCore.SIGNAL("triggered()"), self.actionMain_Data_as_Table_triggered)
+        QtCore.QObject.connect(self.ui.actionTableJurnal, QtCore.SIGNAL("triggered()"), self.actionTableJurnal_triggered)
+        QtCore.QObject.connect(self.ui.actionTableAkun, QtCore.SIGNAL("triggered()"), self.actionTableAkun_triggered)
         
         QtCore.QObject.connect(self.ui.btnDbExisting, QtCore.SIGNAL("clicked()"), self.btnDbExisting_clicked)
         QtCore.QObject.connect(self.ui.btnDbNew, QtCore.SIGNAL("clicked()"), self.btnDbNew_clicked)
@@ -71,8 +72,12 @@ class SAP_main(QtGui.QMainWindow):
     def actionAbout_triggered(self):
         self.msg_about()
         
-    def actionMain_Data_as_Table_triggered(self):
+    def actionTableJurnal_triggered(self):
         self.my_info.view_tbl_jurnal(self.ui.cmbDbExisting.currentText())
+        
+    def actionTableAkun_triggered(self):
+        namadb=self.ui.cmbDbImport.currentText()
+        self.my_storage.reset_tbl_akun(namadb)
         
 #======================================================================================================
 
@@ -105,6 +110,7 @@ class SAP_main(QtGui.QMainWindow):
         self.refresh_databases()
         
         self.my_storage.create_tbl_jurnal(namadb)
+        self.my_storage.create_tbl_akun(namadb)
         
         msg = QtGui.QMessageBox(QtGui.QMessageBox.Information,"Sudah tercipta","Data " + namadb + " tercipta !!",QtGui.QMessageBox.Ok, self )
         msg.show()
@@ -348,7 +354,8 @@ class SAP_main(QtGui.QMainWindow):
         self.ui.tabMain.setTabEnabled(1,ability)
         self.ui.tabMain.setTabEnabled(2,ability)
         self.ui.tabMain.setTabEnabled(3,ability)
-        self.ui.actionMain_Data_as_Table.setEnabled(ability)
+        self.ui.actionTableJurnal.setEnabled(ability)
+        self.ui.actionTableAkun.setEnabled(ability)
         
     def cmb_debet(self):
         self.ui.cmbTrsDebet.clear()

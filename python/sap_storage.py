@@ -170,3 +170,49 @@ class SAP_storage(object):
         result=cur.fetchall()
 
         return result
+
+#======================================================================================================
+
+    def create_tbl_akun(self, dbname):
+        db = MySQLdb.connect("localhost","root","", str(dbname))
+        cur = db.cursor()
+        
+        tblargs = """create table tabel_akun(
+                        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                        kode VARCHAR(32) NOT NULL,
+                        nama VARCHAR(32) NOT NULL,
+                        debet VARCHAR(32) NOT NULL,
+                        kredit VARCHAR(32) NOT NULL
+                        )"""
+        cur.execute(tblargs)
+        
+        cur.close()
+        db.close()
+        
+    def reset_tbl_akun(self, dbname):
+        db = MySQLdb.connect("localhost","root","", str(dbname))
+        cur = db.cursor()
+        
+        rstargs = "truncate tabel_akun"
+        cur.execute(rstargs)
+        
+        cur.close()
+        db.close()
+        
+    def column_harga_jurnal(self, dbname, str_debkre,  str_search):
+        db = MySQLdb.connect("localhost","root","", str(dbname))
+        cur = db.cursor()
+        
+        getargs= "select harga from tabel_jurnal where %s='%s'" % (str_debkre,  str_search)
+        cur.execute(getargs)
+        
+        result = cur.fetchall()
+        
+        cur.close()
+        db.close()
+        
+        return result
+            
+        
+        
+        
