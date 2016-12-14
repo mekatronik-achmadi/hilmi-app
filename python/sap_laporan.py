@@ -41,6 +41,7 @@ class SAP_laporan(object):
             tblviewarg.append(str_laba)
             tblview.startDetached("./tblview/pendapatan.py",tblviewarg)
         elif platform.system() == "Windows":
+            tblviewarg.append("tblview\pendapatan.py")
             tblviewarg.append(str(penjualan))
             tblviewarg.append(str(biaya))
             tblviewarg.append(str(laba))

@@ -69,6 +69,6 @@ class SAP_akun(object):
             tblviewarg.append(dbase)
             tblview.startDetached("./tblview/akun.py",tblviewarg)
         elif platform.system() == "Windows":
-            tblviewarg.append("tblview\akun.py")
+            tblviewarg.append("tblview\\akun.py")
             tblviewarg.append(dbase)
             tblview.startDetached("pythonw",tblviewarg)
