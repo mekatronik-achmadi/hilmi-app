@@ -99,9 +99,9 @@ class SAP_jurnal(object):
             tblsearcharg.append(dbase)
             tblsearcharg.append(search_field)
             tblsearcharg.append(search_string)
-            tblsearch.startDetached("./tblsearch/jurnal.py",tblsearcharg)
+            tblsearch.startDetached("./tblview/search.py",tblsearcharg)
         elif platform.system() == "Windows":
-            tblsearcharg.append("tblsearch\jurnal.py")
+            tblsearcharg.append("tblview\search.py")
             tblsearcharg.append(dbase)
             tblsearcharg.append(search_field)
             tblsearcharg.append(search_string)

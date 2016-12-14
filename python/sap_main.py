@@ -77,6 +77,7 @@ class SAP_main(QtGui.QMainWindow):
     def actionAbout_triggered(self):
         self.msg_about()
         
+    
     def actionTableJurnal_triggered(self):
         self.my_jurnal.view_tabel(self.ui.cmbDbExisting.currentText())
         
