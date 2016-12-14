@@ -77,18 +77,16 @@ class SAP_main(QtGui.QMainWindow):
     def actionAbout_triggered(self):
         self.msg_about()
         
-    
     def actionTableJurnal_triggered(self):
         self.my_jurnal.view_tabel(self.ui.cmbDbExisting.currentText())
         
-    
     def actionTableAkun_triggered(self):
-        namadb=self.ui.cmbDbImport.currentText()
+        namadb=self.ui.cmbDbExisting.currentText()
         self.my_akun.refresh_tbl_akun(namadb)
         self.my_akun.view_tabel(namadb)
         
     def actionLaporanPendapatan_triggered(self):
-        namadb=self.ui.cmbDbImport.currentText()
+        namadb=self.ui.cmbDbExisting.currentText()
         self.my_akun.refresh_tbl_akun(namadb)
         self.my_laporan.pendapatan(namadb)
         
