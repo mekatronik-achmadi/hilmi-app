@@ -950,7 +950,7 @@
      <x>0</x>
      <y>0</y>
      <width>586</width>
-     <height>19</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -967,6 +967,7 @@
     </property>
     <addaction name="actionTableJurnal"/>
     <addaction name="actionTableAkun"/>
+    <addaction name="actionLaporanPendapatan"/>
     <addaction name="separator"/>
    </widget>
    <addaction name="menuFile"/>
@@ -990,6 +991,11 @@
   <action name="actionTableAkun">
    <property name="text">
     <string>Table Akun</string>
+   </property>
+  </action>
+  <action name="actionLaporanPendapatan">
+   <property name="text">
+    <string>Laporan Pendapatan</string>
    </property>
   </action>
  </widget>

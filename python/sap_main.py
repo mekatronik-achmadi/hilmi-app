@@ -6,6 +6,8 @@ from PyQt4 import QtCore, QtGui
 from sap_storage import SAP_storage
 from sap_info import SAP_info
 from sap_jurnal import SAP_jurnal
+from sap_akun import SAP_akun
+from sap_laporan import SAP_laporan
 
 class SAP_main(QtGui.QMainWindow):
     def __init__ (self, parent=None):
@@ -16,6 +18,8 @@ class SAP_main(QtGui.QMainWindow):
         self.my_storage=SAP_storage()
         self.my_info=SAP_info()
         self.my_jurnal=SAP_jurnal()
+        self.my_akun=SAP_akun()
+        self.my_laporan=SAP_laporan()
         
         self.refresh_databases()
         self.tab_ability(False)
@@ -37,6 +41,7 @@ class SAP_main(QtGui.QMainWindow):
         QtCore.QObject.connect(self.ui.actionAbout, QtCore.SIGNAL("triggered()"), self.actionAbout_triggered)
         QtCore.QObject.connect(self.ui.actionTableJurnal, QtCore.SIGNAL("triggered()"), self.actionTableJurnal_triggered)
         QtCore.QObject.connect(self.ui.actionTableAkun, QtCore.SIGNAL("triggered()"), self.actionTableAkun_triggered)
+        QtCore.QObject.connect(self.ui.actionLaporanPendapatan, QtCore.SIGNAL("triggered()"), self.actionLaporanPendapatan_triggered)
         
         QtCore.QObject.connect(self.ui.btnDbExisting, QtCore.SIGNAL("clicked()"), self.btnDbExisting_clicked)
         QtCore.QObject.connect(self.ui.btnDbNew, QtCore.SIGNAL("clicked()"), self.btnDbNew_clicked)
@@ -73,11 +78,18 @@ class SAP_main(QtGui.QMainWindow):
         self.msg_about()
         
     def actionTableJurnal_triggered(self):
-        self.my_info.view_tbl_jurnal(self.ui.cmbDbExisting.currentText())
+        self.my_jurnal.view_tabel(self.ui.cmbDbExisting.currentText())
         
+    
     def actionTableAkun_triggered(self):
         namadb=self.ui.cmbDbImport.currentText()
-        self.my_storage.reset_tbl_akun(namadb)
+        self.my_akun.refresh_tbl_akun(namadb)
+        self.my_akun.view_tabel(namadb)
+        
+    def actionLaporanPendapatan_triggered(self):
+        namadb=self.ui.cmbDbImport.currentText()
+        self.my_akun.refresh_tbl_akun(namadb)
+        self.my_laporan.pendapatan(namadb)
         
 #======================================================================================================
 
@@ -109,8 +121,7 @@ class SAP_main(QtGui.QMainWindow):
         self.my_storage.create_database(namadb)
         self.refresh_databases()
         
-        self.my_storage.create_tbl_jurnal(namadb)
-        self.my_storage.create_tbl_akun(namadb)
+        self.my_storage.create_tabel_all(namadb)
         
         msg = QtGui.QMessageBox(QtGui.QMessageBox.Information,"Sudah tercipta","Data " + namadb + " tercipta !!",QtGui.QMessageBox.Ok, self )
         msg.show()
@@ -356,6 +367,7 @@ class SAP_main(QtGui.QMainWindow):
         self.ui.tabMain.setTabEnabled(3,ability)
         self.ui.actionTableJurnal.setEnabled(ability)
         self.ui.actionTableAkun.setEnabled(ability)
+        self.ui.actionLaporanPendapatan.setEnabled(ability)
         
     def cmb_debet(self):
         self.ui.cmbTrsDebet.clear()
@@ -395,11 +407,11 @@ class SAP_main(QtGui.QMainWindow):
         strKredit=self.ui.cmbCariKredit.currentText()
         strDate=self.ui.dateCariTanggal.text()
         
-        if self.ui.rbtCariDeskrip.isChecked():self.my_info.search_tbl_jurnal(namadb,"transaksi",strDesk)
-        if self.ui.rbtCariNilai.isChecked():self.my_info.search_tbl_jurnal(namadb,"harga",strNilai)
-        if self.ui.rbtCariDebet.isChecked():self.my_info.search_tbl_jurnal(namadb,"debet",strDebet)
-        if self.ui.rbtCariKredit.isChecked():self.my_info.search_tbl_jurnal(namadb,"kredit",strKredit)
-        if self.ui.rbtCariTanggal.isChecked():self.my_info.search_tbl_jurnal(namadb,"tanggal",strDate)
+        if self.ui.rbtCariDeskrip.isChecked():self.my_jurnal.search_tabel(namadb,"transaksi",strDesk)
+        if self.ui.rbtCariNilai.isChecked():self.my_jurnal.search_tabel(namadb,"harga",strNilai)
+        if self.ui.rbtCariDebet.isChecked():self.my_jurnal.search_tabel(namadb,"debet",strDebet)
+        if self.ui.rbtCariKredit.isChecked():self.my_jurnal.search_tabel(namadb,"kredit",strKredit)
+        if self.ui.rbtCariTanggal.isChecked():self.my_jurnal.search_tabel(namadb,"tanggal",strDate)
     
     def show_one_data(self, dataid):
         namadb=self.ui.cmbDbExisting.currentText()

@@ -42,33 +42,3 @@ class SAP_info(object):
         else:
             result = "Unknown Operating System"
             return result
-            
-#======================================================================================================
-            
-    def view_tbl_jurnal(self, dbase):
-        tblview=QtCore.QProcess()
-        tblviewarg=QtCore.QStringList()
-    
-        if platform.system() == "Linux":
-            tblviewarg.append(dbase)
-            tblview.startDetached("./tblview/jurnal.py",tblviewarg)
-        elif platform.system() == "Windows":
-            tblviewarg.append("tblview\jurnal.py")
-            tblviewarg.append(dbase)
-            tblview.startDetached("pythonw",tblviewarg)
-            
-    def search_tbl_jurnal(self,  dbase, search_field, search_string):
-        tblsearch=QtCore.QProcess()
-        tblsearcharg=QtCore.QStringList()
-        
-        if platform.system() == "Linux":
-            tblsearcharg.append(dbase)
-            tblsearcharg.append(search_field)
-            tblsearcharg.append(search_string)
-            tblsearch.startDetached("./tblsearch/jurnal.py",tblsearcharg)
-        elif platform.system() == "Windows":
-            tblsearcharg.append("tblsearch\jurnal.py")
-            tblsearcharg.append(dbase)
-            tblsearcharg.append(search_field)
-            tblsearcharg.append(search_string)
-            tblsearch.startDetached("pythonw",tblsearcharg)

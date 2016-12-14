@@ -100,7 +100,7 @@ class SAP_storage(object):
         
 #======================================================================================================
         
-    def create_tbl_jurnal(self, dbname):
+    def create_tabel_all(self, dbname):
         db = MySQLdb.connect("localhost","root","", str(dbname))
         cur = db.cursor()
         
@@ -114,8 +114,58 @@ class SAP_storage(object):
                         )"""
         cur.execute(tblargs)
         
+        tblargs = """create table tabel_akun(
+                        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                        kode VARCHAR(32) NOT NULL,
+                        nama VARCHAR(32) NOT NULL,
+                        debet VARCHAR(32) NOT NULL,
+                        kredit VARCHAR(32) NOT NULL,
+                        saldo VARCHAR(32) NOT NULL
+                        )"""
+        cur.execute(tblargs)
+        
         cur.close()
         db.close()
+        
+    def reset_tabel(self, dbname, tblname):
+        db = MySQLdb.connect("localhost","root","", str(dbname))
+        cur = db.cursor()
+        
+        rstargs = "truncate %s" % tblname
+        cur.execute(rstargs)
+        
+        cur.close()
+        db.close()
+        
+    def tabel_column(self, dbname, tblname, str_field, str_column,  str_search):
+        db = MySQLdb.connect("localhost","root","", str(dbname))
+        cur = db.cursor()
+        
+        getargs= "select %s from %s where %s='%s'" % (str_field,  tblname,  str_column,  str_search)
+        cur.execute(getargs)
+        
+        result = cur.fetchall()
+        
+        cur.close()
+        db.close()
+        
+        return result
+        
+    def tabel_row(self, dbname, tblname, str_field, str_column,  str_search):
+        db = MySQLdb.connect("localhost","root","", str(dbname))
+        cur = db.cursor()
+        
+        getargs= "select %s from %s where %s='%s'" % (str_field,  tblname,  str_column,  str_search)
+        cur.execute(getargs)
+        
+        result = cur.fetchone()
+        
+        cur.close()
+        db.close()
+        
+        return result
+        
+#======================================================================================================
         
     def insert_tbl_jurnal(self, dbname, tanggal, deskrip, nilai, debet,kredit):
         db = MySQLdb.connect("localhost","root","", str(dbname))
@@ -170,49 +220,21 @@ class SAP_storage(object):
         result=cur.fetchall()
 
         return result
-
+        
 #======================================================================================================
 
-    def create_tbl_akun(self, dbname):
+    def insert_tbl_akun(self, dbname, kode, nama, debet,kredit, saldo):
         db = MySQLdb.connect("localhost","root","", str(dbname))
         cur = db.cursor()
         
-        tblargs = """create table tabel_akun(
-                        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                        kode VARCHAR(32) NOT NULL,
-                        nama VARCHAR(32) NOT NULL,
-                        debet VARCHAR(32) NOT NULL,
-                        kredit VARCHAR(32) NOT NULL
-                        )"""
-        cur.execute(tblargs)
+        insargs = "insert into tabel_akun (id,kode,nama,debet,kredit,saldo) values (NULL,'%s','%s','%s','%s','%s')" % (
+            kode, 
+            nama, 
+            debet, 
+            kredit, 
+            saldo)
+        cur.execute(insargs)
+        db.commit()
         
         cur.close()
         db.close()
-        
-    def reset_tbl_akun(self, dbname):
-        db = MySQLdb.connect("localhost","root","", str(dbname))
-        cur = db.cursor()
-        
-        rstargs = "truncate tabel_akun"
-        cur.execute(rstargs)
-        
-        cur.close()
-        db.close()
-        
-    def column_harga_jurnal(self, dbname, str_debkre,  str_search):
-        db = MySQLdb.connect("localhost","root","", str(dbname))
-        cur = db.cursor()
-        
-        getargs= "select harga from tabel_jurnal where %s='%s'" % (str_debkre,  str_search)
-        cur.execute(getargs)
-        
-        result = cur.fetchall()
-        
-        cur.close()
-        db.close()
-        
-        return result
-            
-        
-        
-        
