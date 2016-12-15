@@ -22,7 +22,7 @@ class TableView(QtGui.QTableWidget):
         self.setFixedHeight(350)
         
         self.setHorizontalHeaderLabels(tabellabel)
-        self.setWindowTitle("Laporan Kas")
+        self.setWindowTitle("Neraca")
         
         self.view_data(kas_tangan, kas_bank,peralatan, aset, modal, pinjaman,kewajiban)
         
