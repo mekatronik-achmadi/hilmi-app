@@ -42,6 +42,7 @@ class SAP_main(QtGui.QMainWindow):
         QtCore.QObject.connect(self.ui.actionTableJurnal, QtCore.SIGNAL("triggered()"), self.actionTableJurnal_triggered)
         QtCore.QObject.connect(self.ui.actionTableAkun, QtCore.SIGNAL("triggered()"), self.actionTableAkun_triggered)
         QtCore.QObject.connect(self.ui.actionLaporanPendapatan, QtCore.SIGNAL("triggered()"), self.actionLaporanPendapatan_triggered)
+        QtCore.QObject.connect(self.ui.actionLaporanModal, QtCore.SIGNAL("triggered()"), self.actionLaporanModal_triggered)
         
         QtCore.QObject.connect(self.ui.btnDbExisting, QtCore.SIGNAL("clicked()"), self.btnDbExisting_clicked)
         QtCore.QObject.connect(self.ui.btnDbNew, QtCore.SIGNAL("clicked()"), self.btnDbNew_clicked)
@@ -77,6 +78,8 @@ class SAP_main(QtGui.QMainWindow):
     def actionAbout_triggered(self):
         self.msg_about()
         
+#======================================================================================================
+        
     def actionTableJurnal_triggered(self):
         self.my_jurnal.view_tabel(self.ui.cmbDbExisting.currentText())
         
@@ -88,7 +91,12 @@ class SAP_main(QtGui.QMainWindow):
     def actionLaporanPendapatan_triggered(self):
         namadb=self.ui.cmbDbExisting.currentText()
         self.my_akun.refresh_tbl_akun(namadb)
-        self.my_laporan.pendapatan(namadb)
+        self.my_laporan.view_pendapatan(namadb)
+        
+    def actionLaporanModal_triggered(self):
+        namadb=self.ui.cmbDbExisting.currentText()
+        self.my_akun.refresh_tbl_akun(namadb)
+        self.my_laporan.view_modal(namadb)
         
 #======================================================================================================
 

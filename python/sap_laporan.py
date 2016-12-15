@@ -10,40 +10,63 @@ class SAP_laporan(object):
         
     def pendapatan(self, dbname):
         str_penjualan = "%s" % self.my_storage.tabel_row(dbname, "tabel_akun", "kredit", "nama","penjualan")
-        penjualan = long(str_penjualan)
+        self.penjualan = long(str_penjualan)
         
         str_biaya_listrik = "%s" % self.my_storage.tabel_row(dbname, "tabel_akun", "debet", "nama","biaya listrik")
         str_biaya_telepon = "%s" % self.my_storage.tabel_row(dbname, "tabel_akun", "debet", "nama","biaya telepon")
         str_biaya_gaji = "%s" % self.my_storage.tabel_row(dbname, "tabel_akun", "debet", "nama","biaya gaji")
-        total_biaya = long(str_biaya_listrik) + long(str_biaya_telepon) + long(str_biaya_gaji)
+        self.total_biaya = long(str_biaya_listrik) + long(str_biaya_telepon) + long(str_biaya_gaji)
         
-        
-        if penjualan > total_biaya:
-            laba = penjualan - total_biaya
-            str_laba = "Untung"
-        elif penjualan < total_biaya:
-            laba = total_biaya - penjualan
-            str_laba = "Rugi"
+        if self.penjualan > self.total_biaya:
+            self.laba = self.penjualan - self.total_biaya
+            self.str_laba = "Untung"
+        elif self.penjualan < self.total_biaya:
+            self.laba = self.total_biaya - self.penjualan
+            self.str_laba = "Rugi"
         else:
-            laba = 0
-            str_laba = "Impas"
+            self.laba = 0
+            self.str_laba = "Impas"
             
-        self.view_pendapatan(penjualan, total_biaya, laba, str_laba)
-            
-    def view_pendapatan(self, penjualan, biaya, laba, str_laba):
+    def view_pendapatan(self, dbname):
+        self.pendapatan(dbname)
+        
         tblview=QtCore.QProcess()
         tblviewarg=QtCore.QStringList()
     
         if platform.system() == "Linux":
-            tblviewarg.append(str(penjualan))
-            tblviewarg.append(str(biaya))
-            tblviewarg.append(str(laba))
-            tblviewarg.append(str_laba)
+            tblviewarg.append(str(self.penjualan))
+            tblviewarg.append(str(self.total_biaya))
+            tblviewarg.append(str(self.laba))
+            tblviewarg.append(self.str_laba)
             tblview.startDetached("./tblview/pendapatan.py",tblviewarg)
         elif platform.system() == "Windows":
             tblviewarg.append("tblview\pendapatan.py")
-            tblviewarg.append(str(penjualan))
-            tblviewarg.append(str(biaya))
-            tblviewarg.append(str(laba))
-            tblviewarg.append(str_laba)
+            tblviewarg.append(str(self.penjualan))
+            tblviewarg.append(str(self.total_biaya))
+            tblviewarg.append(str(self.laba))
+            tblviewarg.append(self.str_laba)
+            tblview.startDetached("pythonw",tblviewarg)
+            
+#======================================================================================================
+
+    def modal(self, dbname):
+        self.pendapatan(dbname)
+        
+        str_invest = "%s" % self.my_storage.tabel_row(dbname, "tabel_akun", "kredit", "nama","modal")
+        self.invest = long(str_invest)
+        
+    def view_modal(self, dbname):
+        self.modal(dbname)
+        
+        tblview=QtCore.QProcess()
+        tblviewarg=QtCore.QStringList()
+        
+        if platform.system() == "Linux":
+            tblviewarg.append(str(self.invest))
+            tblviewarg.append(str(self.laba))
+            tblview.startDetached("./tblview/modal.py",tblviewarg)
+        elif platform.system() == "Windows":
+            tblviewarg.append("tblview\modal.py")
+            tblviewarg.append(str(self.invest))
+            tblviewarg.append(str(self.laba))
             tblview.startDetached("pythonw",tblviewarg)
