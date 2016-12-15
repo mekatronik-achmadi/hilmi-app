@@ -969,6 +969,8 @@
     <addaction name="actionTableAkun"/>
     <addaction name="actionLaporanPendapatan"/>
     <addaction name="actionLaporanModal"/>
+    <addaction name="actionLaporanKas"/>
+    <addaction name="actionLaporanNeraca"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
@@ -1001,6 +1003,16 @@
   <action name="actionLaporanModal">
    <property name="text">
     <string>Laporan Modal</string>
+   </property>
+  </action>
+  <action name="actionLaporanKas">
+   <property name="text">
+    <string>Laporan Kas</string>
+   </property>
+  </action>
+  <action name="actionLaporanNeraca">
+   <property name="text">
+    <string>Laporan Neraca</string>
    </property>
   </action>
  </widget>

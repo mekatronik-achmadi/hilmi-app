@@ -39,10 +39,13 @@ class SAP_main(QtGui.QMainWindow):
         
         QtCore.QObject.connect(self.ui.actionExit, QtCore.SIGNAL("triggered()"), self.actionExit_triggered)
         QtCore.QObject.connect(self.ui.actionAbout, QtCore.SIGNAL("triggered()"), self.actionAbout_triggered)
+        
         QtCore.QObject.connect(self.ui.actionTableJurnal, QtCore.SIGNAL("triggered()"), self.actionTableJurnal_triggered)
         QtCore.QObject.connect(self.ui.actionTableAkun, QtCore.SIGNAL("triggered()"), self.actionTableAkun_triggered)
         QtCore.QObject.connect(self.ui.actionLaporanPendapatan, QtCore.SIGNAL("triggered()"), self.actionLaporanPendapatan_triggered)
         QtCore.QObject.connect(self.ui.actionLaporanModal, QtCore.SIGNAL("triggered()"), self.actionLaporanModal_triggered)
+        QtCore.QObject.connect(self.ui.actionLaporanKas, QtCore.SIGNAL("triggered()"), self.actionLaporanKas_triggered)
+        QtCore.QObject.connect(self.ui.actionLaporanNeraca, QtCore.SIGNAL("triggered()"), self.actionLaporanNeraca_triggered)
         
         QtCore.QObject.connect(self.ui.btnDbExisting, QtCore.SIGNAL("clicked()"), self.btnDbExisting_clicked)
         QtCore.QObject.connect(self.ui.btnDbNew, QtCore.SIGNAL("clicked()"), self.btnDbNew_clicked)
@@ -97,6 +100,16 @@ class SAP_main(QtGui.QMainWindow):
         namadb=self.ui.cmbDbExisting.currentText()
         self.my_akun.refresh_tbl_akun(namadb)
         self.my_laporan.view_modal(namadb)
+        
+    def actionLaporanKas_triggered(self):
+        namadb=self.ui.cmbDbExisting.currentText()
+        self.my_akun.refresh_tbl_akun(namadb)
+        self.my_laporan.view_kas(namadb)
+        
+    def actionLaporanNeraca_triggered(self):
+        namadb=self.ui.cmbDbExisting.currentText()
+        self.my_akun.refresh_tbl_akun(namadb)
+        self.my_laporan.view_neraca(namadb)
         
 #======================================================================================================
 

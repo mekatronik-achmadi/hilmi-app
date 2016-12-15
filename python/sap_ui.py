@@ -304,6 +304,10 @@ class Ui_sap(object):
         self.actionLaporanPendapatan.setObjectName(_fromUtf8("actionLaporanPendapatan"))
         self.actionLaporanModal = QtGui.QAction(sap)
         self.actionLaporanModal.setObjectName(_fromUtf8("actionLaporanModal"))
+        self.actionLaporanKas = QtGui.QAction(sap)
+        self.actionLaporanKas.setObjectName(_fromUtf8("actionLaporanKas"))
+        self.actionLaporanNeraca = QtGui.QAction(sap)
+        self.actionLaporanNeraca.setObjectName(_fromUtf8("actionLaporanNeraca"))
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionExit)
         self.menuFile.addAction(self.actionAbout)
@@ -311,6 +315,8 @@ class Ui_sap(object):
         self.menuView.addAction(self.actionTableAkun)
         self.menuView.addAction(self.actionLaporanPendapatan)
         self.menuView.addAction(self.actionLaporanModal)
+        self.menuView.addAction(self.actionLaporanKas)
+        self.menuView.addAction(self.actionLaporanNeraca)
         self.menuBar.addAction(self.menuFile.menuAction())
         self.menuBar.addAction(self.menuView.menuAction())
 
@@ -376,4 +382,6 @@ class Ui_sap(object):
         self.actionTableAkun.setText(_translate("sap", "Table Akun", None))
         self.actionLaporanPendapatan.setText(_translate("sap", "Laporan Pendapatan", None))
         self.actionLaporanModal.setText(_translate("sap", "Laporan Modal", None))
+        self.actionLaporanKas.setText(_translate("sap", "Laporan Kas", None))
+        self.actionLaporanNeraca.setText(_translate("sap", "Laporan Neraca", None))
 
