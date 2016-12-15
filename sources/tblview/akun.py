@@ -28,7 +28,7 @@ class TableView(QtGui.QTableWidget):
         self.setColumnWidth(5,100)
         
         self.setFixedWidth(700)
-        self.setFixedHeight(500)
+        self.setFixedHeight(300)
         
         self.setHorizontalHeaderLabels(tabellabel)
         self.setWindowTitle("Tabel Akun")

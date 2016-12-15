@@ -168,7 +168,7 @@ class SAP_laporan(object):
             
             tblreport.startDetached("./tblreport/neraca.py",tblreportarg)
         elif platform.system() == "Windows":
-            tblreportarg.append("tblreport\neraca.py")
+            tblreportarg.append("tblreport\\neraca.py")
             
             tblreportarg.append(str(self.kas_tangan))
             tblreportarg.append(str(self.kas_bank))
@@ -180,6 +180,3 @@ class SAP_laporan(object):
             tblreportarg.append(str(self.kewajiban))
             
             tblreport.startDetached("pythonw",tblreportarg)
-        
-        
-    

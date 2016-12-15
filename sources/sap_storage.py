@@ -100,7 +100,7 @@ class SAP_storage(object):
         
 #======================================================================================================
         
-    def create_tabel_all(self, dbname):
+    def create_tabel(self, dbname):
         db = MySQLdb.connect("localhost","root","", str(dbname))
         cur = db.cursor()
         
@@ -136,6 +136,8 @@ class SAP_storage(object):
         
         cur.close()
         db.close()
+        
+#======================================================================================================
         
     def tabel_column(self, dbname, tblname, str_field, str_column,  str_search):
         db = MySQLdb.connect("localhost","root","", str(dbname))
@@ -183,6 +185,24 @@ class SAP_storage(object):
         cur.close()
         db.close()
         
+    def insert_tbl_akun(self, dbname, kode, nama, debet,kredit, saldo):
+        db = MySQLdb.connect("localhost","root","", str(dbname))
+        cur = db.cursor()
+        
+        insargs = "insert into tabel_akun (id,kode,nama,debet,kredit,saldo) values (NULL,'%s','%s','%s','%s','%s')" % (
+            kode, 
+            nama, 
+            debet, 
+            kredit, 
+            saldo)
+        cur.execute(insargs)
+        db.commit()
+        
+        cur.close()
+        db.close()
+        
+#======================================================================================================
+        
     def update_tbl_jurnal(self, dbname, dataid, tanggal, deskrip, nilai, debet,kredit):
         db = MySQLdb.connect("localhost","root","", str(dbname))
         cur = db.cursor()
@@ -220,21 +240,3 @@ class SAP_storage(object):
         result=cur.fetchall()
 
         return result
-        
-#======================================================================================================
-
-    def insert_tbl_akun(self, dbname, kode, nama, debet,kredit, saldo):
-        db = MySQLdb.connect("localhost","root","", str(dbname))
-        cur = db.cursor()
-        
-        insargs = "insert into tabel_akun (id,kode,nama,debet,kredit,saldo) values (NULL,'%s','%s','%s','%s','%s')" % (
-            kode, 
-            nama, 
-            debet, 
-            kredit, 
-            saldo)
-        cur.execute(insargs)
-        db.commit()
-        
-        cur.close()
-        db.close()

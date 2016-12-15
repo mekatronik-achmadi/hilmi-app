@@ -120,14 +120,10 @@ class SAP_main(QtGui.QMainWindow):
         if self.ui.btnDbExisting.text()=="Use":
             self.tab_ability(True)
             self.ui.cmbDbExisting.setEnabled(False)
-            self.ui.btnDbDelete.setEnabled(False)
-            self.ui.cmbDbDelete.setEnabled(False)
             self.ui.btnDbExisting.setText("Unuse")
         elif self.ui.btnDbExisting.text()=="Unuse":
             self.tab_ability(False)
             self.ui.cmbDbExisting.setEnabled(True)
-            self.ui.btnDbDelete.setEnabled(True)
-            self.ui.cmbDbDelete.setEnabled(True)
             self.ui.btnDbExisting.setText("Use")
             
     def btnDbNew_clicked(self):
@@ -141,7 +137,7 @@ class SAP_main(QtGui.QMainWindow):
         self.my_storage.create_database(namadb)
         self.refresh_databases()
         
-        self.my_storage.create_tabel_all(namadb)
+        self.my_storage.create_tabel(namadb)
         
         msg = QtGui.QMessageBox(QtGui.QMessageBox.Information,"Sudah tercipta","Data " + namadb + " tercipta !!",QtGui.QMessageBox.Ok, self )
         msg.show()
@@ -149,6 +145,11 @@ class SAP_main(QtGui.QMainWindow):
         
     def btnDbDelete_clicked(self):
         namadb=self.ui.cmbDbDelete.currentText()
+        
+        if namadb == self.ui.cmbDbExisting.currentText() and self.ui.btnDbExisting.text()=="Unuse":
+            msg = QtGui.QMessageBox(QtGui.QMessageBox.Critical,"Database masih dipakai","Database yang diminta hapus masih dipakai !!",QtGui.QMessageBox.Ok, self )
+            msg.show()
+            return
             
         msg = QtGui.QMessageBox(QtGui.QMessageBox.Warning,"Yakin?", "yakin akan mnghapus data " + namadb + " selamanya ?!!",QtGui.QMessageBox.Ok | QtGui.QMessageBox.Cancel, self )
         retval = msg.exec_()
@@ -388,6 +389,9 @@ class SAP_main(QtGui.QMainWindow):
         self.ui.actionTableJurnal.setEnabled(ability)
         self.ui.actionTableAkun.setEnabled(ability)
         self.ui.actionLaporanPendapatan.setEnabled(ability)
+        self.ui.actionLaporanModal.setEnabled(ability)
+        self.ui.actionLaporanKas.setEnabled(ability)
+        self.ui.actionLaporanNeraca.setEnabled(ability)
         
     def cmb_debet(self):
         self.ui.cmbTrsDebet.clear()

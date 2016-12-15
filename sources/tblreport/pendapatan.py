@@ -15,11 +15,11 @@ class TableView(QtGui.QTableWidget):
         self.column_number=tabellabel.count()
         self.setColumnCount(self.column_number)
 
-        self.setColumnWidth(0,200)
+        self.setColumnWidth(0,180)
         self.setColumnWidth(1,100)
         
         self.setFixedWidth(300)
-        self.setFixedHeight(180)
+        self.setFixedHeight(150)
         
         self.setHorizontalHeaderLabels(tabellabel)
         self.setWindowTitle("Laporan Pendapatan")

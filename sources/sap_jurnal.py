@@ -106,4 +106,3 @@ class SAP_jurnal(object):
             tblsearcharg.append(search_field)
             tblsearcharg.append(search_string)
             tblsearch.startDetached("pythonw",tblsearcharg)
-        
