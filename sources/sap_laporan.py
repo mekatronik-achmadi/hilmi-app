@@ -12,6 +12,7 @@ from sap_storage import SAP_storage
 # self.invest 
 # self.modal_akhir
 # self.kas_in
+# self.kas_add
 # self.kas_akhir
 # self.kas_tangan
 # self.kas_bank
@@ -97,7 +98,13 @@ class SAP_laporan(object):
         self.modal(dbname)
         
         self.kas_in = self.penjualan + self.invest
-        self.kas_akhir = self.laba + self.invest
+        
+        if self.kas_in > self.total_biaya:
+            self.kas_add = self.kas_in - self.total_biaya
+            self.kas_akhir = self.invest + self.kas_add 
+        elif self.kas_in > self.total_biaya:
+            self.kas_add = self.total_biaya - self.kas_in
+            self.kas_akhir = self.invest - self.kas_add 
         
     def view_kas(self, dbname):
         self.kas(dbname)
@@ -112,7 +119,7 @@ class SAP_laporan(object):
             
             tblreportarg.append(str(self.total_biaya))
                         
-            tblreportarg.append(str(self.laba))
+            tblreportarg.append(str(self.kas_add))
             tblreportarg.append(str(self.kas_akhir))
             
             tblreport.startDetached("./tblreport/kas.py",tblreportarg)
@@ -125,7 +132,7 @@ class SAP_laporan(object):
             
             tblreportarg.append(str(self.total_biaya))
                         
-            tblreportarg.append(str(self.laba))
+            tblreportarg.append(str(self.kas_add))
             tblreportarg.append(str(self.kas_akhir))
             
             tblreport.startDetached("pythonw",tblreportarg)
